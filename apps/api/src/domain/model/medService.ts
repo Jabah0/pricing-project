@@ -1,4 +1,4 @@
-export interface medService {
+export class MedService {
   id: string;
   name: string;
   dalilName: string;

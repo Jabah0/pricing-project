@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/passport-local": "^1.0.38",
     "turbo": "^1.13.0"
   },
   "workspaces": [
@@ -9,5 +10,11 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build"
+  },
+  "dependencies": {
+    "@nestjs/passport": "^10.0.3",
+    "@nestjs/swagger": "^7.3.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
   }
 }
