@@ -2,7 +2,7 @@ import { ILogger } from '../../domain/logger/logger.interface';
 import { MedService } from '../../domain/model/medService';
 import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
 
-export class addMedServiceUseCase {
+export class AddMedServiceUseCase {
   constructor(
     private readonly logger: ILogger,
     private readonly medServiceRepository: MedServiceRepository,
