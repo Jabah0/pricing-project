@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id                Int @default(autoincrement()) @id
+  password          String
   username          String @unique
   createDate        DateTime @default(now())
   updateDate        DateTime @updatedAt
