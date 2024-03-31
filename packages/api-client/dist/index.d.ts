@@ -1,99 +1,154 @@
 import { z } from "zod";
-export declare const TodoSchema: z.ZodObject<{
-    id: z.ZodNumber;
-    title: z.ZodString;
-    description: z.ZodString;
+export declare const MedServiceSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    code: z.ZodString;
+    dalilName: z.ZodString;
+    nationalCode: z.ZodString;
+    price: z.ZodNumber;
+    unitSize: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    id: number;
-    title: string;
-    description: string;
+    id: string;
+    name: string;
+    code: string;
+    dalilName: string;
+    nationalCode: string;
+    price: number;
+    unitSize: number;
 }, {
-    id: number;
-    title: string;
-    description: string;
+    id: string;
+    name: string;
+    code: string;
+    dalilName: string;
+    nationalCode: string;
+    price: number;
+    unitSize: number;
 }>;
-export type Todo = z.infer<typeof TodoSchema>;
+export type MedService = z.infer<typeof MedServiceSchema>;
 export declare const contract: {
-    todos: {
+    medServices: {
         create: {
             responses: {
                 201: z.ZodObject<{
-                    id: z.ZodNumber;
-                    title: z.ZodString;
-                    description: z.ZodString;
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilName: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }>;
             };
             method: "POST";
-            body: z.ZodObject<Omit<{
-                id: z.ZodNumber;
-                title: z.ZodString;
-                description: z.ZodString;
-            }, "id">, "strip", z.ZodTypeAny, {
-                title: string;
-                description: string;
+            body: z.ZodObject<{
+                id: z.ZodString;
+                name: z.ZodString;
+                code: z.ZodString;
+                dalilName: z.ZodString;
+                nationalCode: z.ZodString;
+                price: z.ZodNumber;
+                unitSize: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                id: string;
+                name: string;
+                code: string;
+                dalilName: string;
+                nationalCode: string;
+                price: number;
+                unitSize: number;
             }, {
-                title: string;
-                description: string;
+                id: string;
+                name: string;
+                code: string;
+                dalilName: string;
+                nationalCode: string;
+                price: number;
+                unitSize: number;
             }>;
-            path: "/api/todos";
+            path: "/api/med-services";
             strictStatusCodes: true;
         };
         getAll: {
-            query: z.ZodObject<{
-                title: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                title?: string | undefined;
-            }, {
-                title?: string | undefined;
-            }>;
             responses: {
                 200: z.ZodArray<z.ZodObject<{
-                    id: z.ZodNumber;
-                    title: z.ZodString;
-                    description: z.ZodString;
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilName: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }>, "many">;
             };
             method: "GET";
-            path: "/api/todos";
+            path: "/api/med-services";
             strictStatusCodes: true;
         };
         getOne: {
             pathParams: z.ZodObject<{
-                id: z.ZodNumber;
+                id: z.ZodString;
             }, "strip", z.ZodTypeAny, {
-                id: number;
+                id: string;
             }, {
-                id: number;
+                id: string;
             }>;
             responses: {
                 200: z.ZodObject<{
-                    id: z.ZodNumber;
-                    title: z.ZodString;
-                    description: z.ZodString;
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilName: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }, {
-                    id: number;
-                    title: string;
-                    description: string;
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -104,60 +159,16 @@ export declare const contract: {
                 }>;
             };
             method: "GET";
-            path: "/api/todos/:id";
-            strictStatusCodes: true;
-        };
-        update: {
-            pathParams: z.ZodObject<{
-                id: z.ZodNumber;
-            }, "strip", z.ZodTypeAny, {
-                id: number;
-            }, {
-                id: number;
-            }>;
-            responses: {
-                200: z.ZodObject<{
-                    id: z.ZodNumber;
-                    title: z.ZodString;
-                    description: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    title: string;
-                    description: string;
-                }, {
-                    id: number;
-                    title: string;
-                    description: string;
-                }>;
-                404: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-            };
-            method: "PATCH";
-            body: z.ZodObject<{
-                title: z.ZodOptional<z.ZodString>;
-                description: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                title?: string | undefined;
-                description?: string | undefined;
-            }, {
-                title?: string | undefined;
-                description?: string | undefined;
-            }>;
-            path: "/api/todos/:id";
+            path: "/api/med-services/:id";
             strictStatusCodes: true;
         };
         remove: {
             pathParams: z.ZodObject<{
-                id: z.ZodNumber;
+                id: z.ZodString;
             }, "strip", z.ZodTypeAny, {
-                id: number;
+                id: string;
             }, {
-                id: number;
+                id: string;
             }>;
             responses: {
                 204: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
@@ -171,7 +182,7 @@ export declare const contract: {
             };
             method: "DELETE";
             body: z.ZodAny;
-            path: "/api/todos/:id";
+            path: "/api/med-services/:id";
             strictStatusCodes: true;
         };
     };

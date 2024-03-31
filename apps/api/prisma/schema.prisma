@@ -19,7 +19,7 @@ model User {
   username          String @unique
   createDate        DateTime @default(now())
   updateDate        DateTime @updatedAt
-  lastLogin         DateTime
+  lastLogin         DateTime?
   hashRefreshToken  String
 }
 

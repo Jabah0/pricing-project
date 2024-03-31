@@ -23,7 +23,7 @@ export class LoginUseCases {
     );
     const payload: IJwtServicePayload = { username: username };
     const secret = this.jwtConfig.getJwtSecret();
-    const expiresIn = this.jwtConfig.getJwtExpirationTime() + 's';
+    const expiresIn = this.jwtConfig.getJwtExpirationTime();
     const token = this.jwtTokenService.createToken(payload, secret, expiresIn);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.jwtConfig.getJwtExpirationTime()}`;
   }
@@ -42,12 +42,13 @@ export class LoginUseCases {
     return cookie;
   }
 
-  async validateUserForLocalStrategy(username: string, pass: string) {
+  async validateUserForLocalStrategy(username: string, password: string) {
     const user = await this.userRepository.getUserByUsername(username);
     if (!user) {
       return null;
     }
-    const match = await this.bcryptService.compare(pass, user.password);
+
+    const match = await this.bcryptService.compare(password, user.password);
     if (user && match) {
       await this.updateLoginTime(user.username);
       const result = user.toUserWithoutPassword();

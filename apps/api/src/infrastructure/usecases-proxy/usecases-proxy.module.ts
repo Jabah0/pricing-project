@@ -6,6 +6,7 @@ import { GetMedServicesUseCase } from '../../usecases/medService/getMedServices.
 import { IsAuthenticatedUseCases } from '../../usecases/auth/isAuthenticated.usecase';
 import { LoginUseCases } from '../../usecases/auth/login.usecase';
 import { LogoutUseCases } from '../../usecases/auth/logout.usecase';
+import { AddNewUserUseCases } from '../../usecases/user/addNewUser.usecase';
 
 import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { LoggerModule } from '../logger/logger.module';
@@ -17,12 +18,13 @@ import { JwtModule } from '../services/jwt/jwt.module';
 import { JwtTokenService } from '../services/jwt/jwt.service';
 import { RepositoriesModule } from '../repositories/repositories.module';
 
-import { DatabaseTodoRepository } from '../repositories/todo.repository';
+import { DatabaseMedServiceRepository } from '../repositories/medService.repository';
 import { DatabaseUserRepository } from '../repositories/user.repository';
 
 import { EnvironmentConfigModule } from '../config/environment-config/environment-config.module';
 import { EnvironmentConfigService } from '../config/environment-config/environment-config.service';
 import { UseCaseProxy } from './usecases-proxy';
+import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
 
 @Module({
   imports: [
@@ -40,16 +42,38 @@ export class UsecasesProxyModule {
   static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy';
   static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy';
 
-  static GET_TODO_USECASES_PROXY = 'getTodoUsecasesProxy';
-  static GET_TODOS_USECASES_PROXY = 'getTodosUsecasesProxy';
-  static POST_TODO_USECASES_PROXY = 'postTodoUsecasesProxy';
-  static DELETE_TODO_USECASES_PROXY = 'deleteTodoUsecasesProxy';
-  static PUT_TODO_USECASES_PROXY = 'putTodoUsecasesProxy';
+  // User
+  static ADD_NEW_USER_USECASES_PROXY = 'addNewUserUsecasesProxy';
+  static GET_USERS_USECASES_PROXY = 'getUsersUsecasesProxy';
+
+  // MedService
+  static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
+  static GET_MED_SERVICES_USECASES_PROXY = 'getMedServicesUsecasesProxy';
+  static POST_MED_SERVICE_USECASES_PROXY = 'postMedServiceUsecasesProxy';
+  static DELETE_MED_SERVICE_USECASES_PROXY = 'deleteMedServiceUsecasesProxy';
 
   static register(): DynamicModule {
     return {
       module: UsecasesProxyModule,
       providers: [
+        {
+          inject: [LoggerService, DatabaseUserRepository, BcryptService],
+          provide: UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            userRepository: DatabaseUserRepository,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new AddNewUserUseCases(logger, userRepository, bcryptService),
+            ),
+        },
+        {
+          inject: [DatabaseUserRepository],
+          provide: UsecasesProxyModule.GET_USERS_USECASES_PROXY,
+          useFactory: (userRepository: DatabaseUserRepository) =>
+            new UseCaseProxy(new GetUsersUseCase(userRepository)),
+        },
         {
           inject: [
             LoggerService,
@@ -88,51 +112,50 @@ export class UsecasesProxyModule {
           useFactory: () => new UseCaseProxy(new LogoutUseCases()),
         },
         {
-          inject: [DatabaseTodoRepository],
-          provide: UsecasesProxyModule.GET_TODO_USECASES_PROXY,
-          useFactory: (todoRepository: DatabaseTodoRepository) =>
-            new UseCaseProxy(new GetTodoUseCases(todoRepository)),
+          inject: [DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.GET_MED_SERVICE_USECASES_PROXY,
+          useFactory: (medServiceRepository: DatabaseMedServiceRepository) =>
+            new UseCaseProxy(new GetMedServiceUseCase(medServiceRepository)),
         },
         {
-          inject: [DatabaseTodoRepository],
-          provide: UsecasesProxyModule.GET_TODOS_USECASES_PROXY,
-          useFactory: (todoRepository: DatabaseTodoRepository) =>
-            new UseCaseProxy(new getTodosUseCases(todoRepository)),
+          inject: [DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.GET_MED_SERVICES_USECASES_PROXY,
+          useFactory: (medServiceRepository: DatabaseMedServiceRepository) =>
+            new UseCaseProxy(new GetMedServicesUseCase(medServiceRepository)),
         },
         {
-          inject: [LoggerService, DatabaseTodoRepository],
-          provide: UsecasesProxyModule.POST_TODO_USECASES_PROXY,
+          inject: [LoggerService, DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
           useFactory: (
             logger: LoggerService,
-            todoRepository: DatabaseTodoRepository,
-          ) => new UseCaseProxy(new addTodoUseCases(logger, todoRepository)),
+            medServiceRepository: DatabaseMedServiceRepository,
+          ) =>
+            new UseCaseProxy(
+              new AddMedServiceUseCase(logger, medServiceRepository),
+            ),
         },
         {
-          inject: [LoggerService, DatabaseTodoRepository],
-          provide: UsecasesProxyModule.PUT_TODO_USECASES_PROXY,
+          inject: [LoggerService, DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY,
           useFactory: (
             logger: LoggerService,
-            todoRepository: DatabaseTodoRepository,
-          ) => new UseCaseProxy(new updateTodoUseCases(logger, todoRepository)),
-        },
-        {
-          inject: [LoggerService, DatabaseTodoRepository],
-          provide: UsecasesProxyModule.DELETE_TODO_USECASES_PROXY,
-          useFactory: (
-            logger: LoggerService,
-            todoRepository: DatabaseTodoRepository,
-          ) => new UseCaseProxy(new deleteTodoUseCases(logger, todoRepository)),
+            medServiceRepository: DatabaseMedServiceRepository,
+          ) =>
+            new UseCaseProxy(
+              new DeleteMedServiceUseCase(logger, medServiceRepository),
+            ),
         },
       ],
       exports: [
-        UsecasesProxyModule.GET_TODO_USECASES_PROXY,
-        UsecasesProxyModule.GET_TODOS_USECASES_PROXY,
-        UsecasesProxyModule.POST_TODO_USECASES_PROXY,
-        UsecasesProxyModule.PUT_TODO_USECASES_PROXY,
-        UsecasesProxyModule.DELETE_TODO_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICE_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICES_USECASES_PROXY,
+        UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
+        UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.LOGIN_USECASES_PROXY,
         UsecasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
+        UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
+        UsecasesProxyModule.GET_USERS_USECASES_PROXY,
       ],
     };
   }

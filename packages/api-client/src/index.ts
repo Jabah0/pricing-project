@@ -3,60 +3,46 @@ import { z } from "zod";
 
 const c = initContract();
 
-export const TodoSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  description: z.string(),
+export const MedServiceSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  code: z.string(),
+  dalilName: z.string(),
+  nationalCode: z.string(),
+  price: z.number(),
+  unitSize: z.number(),
 });
 
-export type Todo = z.infer<typeof TodoSchema>;
+export type MedService = z.infer<typeof MedServiceSchema>;
 
 export const contract = c.router(
   {
-    todos: {
+    medServices: {
       create: {
         method: "POST",
-        path: "/todos",
-        body: TodoSchema.omit({ id: true }),
+        path: "/med-services",
+        body: MedServiceSchema,
         responses: {
-          201: TodoSchema,
+          201: MedServiceSchema,
         },
       },
 
       getAll: {
         method: "GET",
-        path: "/todos",
-        query: z.object({
-          title: z.string().optional(),
-        }),
+        path: "/med-services",
         responses: {
-          200: TodoSchema.array(),
+          200: MedServiceSchema.array(),
         },
       },
 
       getOne: {
         method: "GET",
-        path: "/todos/:id",
+        path: "/med-services/:id",
         pathParams: z.object({
-          id: z.coerce.number(),
+          id: z.coerce.string(),
         }),
         responses: {
-          200: TodoSchema,
-          404: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-
-      update: {
-        method: "PATCH",
-        path: "/todos/:id",
-        pathParams: z.object({
-          id: z.coerce.number(),
-        }),
-        body: TodoSchema.omit({ id: true }).partial(),
-        responses: {
-          200: TodoSchema,
+          200: MedServiceSchema,
           404: z.object({
             message: z.string(),
           }),
@@ -65,9 +51,9 @@ export const contract = c.router(
 
       remove: {
         method: "DELETE",
-        path: "/todos/:id",
+        path: "/med-services/:id",
         pathParams: z.object({
-          id: z.coerce.number(),
+          id: z.coerce.string(),
         }),
         body: z.any(),
         responses: {
@@ -78,6 +64,7 @@ export const contract = c.router(
         },
       },
     },
+    auth: {},
   },
   { pathPrefix: "/api", strictStatusCodes: true }
 );

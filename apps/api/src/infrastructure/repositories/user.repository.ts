@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/domain/repositories/userRepository.interface';
+import { UserRepository } from '../../domain/repositories/userRepository.interface';
 import { PrismaService } from '../config/prisma-orm/prisma.service';
-import { UserM } from 'src/domain/model/user';
+import { UserM } from '../../domain/model/user';
 import { User } from '@prisma/client';
+import { formatISO } from 'date-fns';
 
 @Injectable()
 export class DatabaseUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getUsers(): Promise<UserM[]> {
+    const users = await this.prisma.user.findMany();
+
+    if (!users) return null;
+
+    return users.map((user) => this.toUser(user));
+  }
+
   async getUserByUsername(username: string): Promise<UserM> {
     const adminUserEntity = await this.prisma.user.findFirst({
       where: { username: username },
@@ -18,13 +28,27 @@ export class DatabaseUserRepository implements UserRepository {
 
     return this.toUser(adminUserEntity);
   }
+
+  async addNewUser(username: string, password: string): Promise<UserM> {
+    const newUser = await this.prisma.user.create({
+      data: {
+        password,
+        username,
+        lastLogin: formatISO(new Date().toDateString()),
+        hashRefreshToken: '',
+      },
+    });
+
+    return this.toUser(newUser);
+  }
+
   async updateLastLogin(username: string): Promise<void> {
     await this.prisma.user.update({
       where: {
         username,
       },
       data: {
-        lastLogin: 'CURRENT_TIMESTAMP',
+        lastLogin: formatISO(new Date().toDateString()),
       },
     });
   }
@@ -48,7 +72,8 @@ export class DatabaseUserRepository implements UserRepository {
 
     adminUser.id = adminUserEntity.id;
     adminUser.username = adminUserEntity.username;
-    adminUser.createDate = adminUserEntity.createDate;
+    (adminUser.password = adminUserEntity.password),
+      (adminUser.createDate = adminUserEntity.createDate);
     adminUser.updatedDate = adminUserEntity.updateDate;
     adminUser.lastLogin = adminUserEntity.lastLogin;
     adminUser.hashRefreshToken = adminUserEntity.hashRefreshToken;

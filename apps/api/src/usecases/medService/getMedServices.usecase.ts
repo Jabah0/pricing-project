@@ -1,5 +1,5 @@
-import { MedService } from 'src/domain/model/medService';
-import { MedServiceRepository } from 'src/domain/repositories/medServiceRepository.interface';
+import { MedService } from '../../domain/model/medService';
+import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
 
 export class GetMedServicesUseCase {
   constructor(private readonly medServiceRepository: MedServiceRepository) {}
