@@ -15,6 +15,13 @@ export const MedServiceSchema = z.object({
 
 export type MedService = z.infer<typeof MedServiceSchema>;
 
+export const CredentialSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+export type Credential = z.infer<typeof CredentialSchema>;
+
 export const contract = c.router(
   {
     medServices: {
@@ -64,7 +71,38 @@ export const contract = c.router(
         },
       },
     },
-    auth: {},
+    auth: {
+      login: {
+        method: "POST",
+        path: "/auth/login",
+        body: CredentialSchema,
+        responses: {
+          200: z.string(),
+        },
+      },
+      logout: {
+        method: "POST",
+        path: "/auth/logout",
+        body: z.any(),
+        responses: {
+          200: z.string(),
+        },
+      },
+      isAuthenticated: {
+        method: "GET",
+        path: "/auth/is_authenticated",
+        responses: {
+          200: z.string(),
+        },
+      },
+      refresh: {
+        method: "GET",
+        path: "/auth/refresh",
+        responses: {
+          200: z.string(),
+        },
+      },
+    },
   },
   { pathPrefix: "/api", strictStatusCodes: true }
 );

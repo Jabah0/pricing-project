@@ -5,7 +5,6 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
 import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor';
-import { ResponseInterceptor } from './infrastructure/common/interceptors/response.interceptor';
 import { LoggerService } from './infrastructure/logger/logger.service';
 import { generateOpenApi } from '@ts-rest/open-api';
 import { contract } from 'api-contract';
@@ -24,7 +23,7 @@ async function bootstrap() {
 
   // interceptors
   app.useGlobalInterceptors(new LoggingInterceptor(new LoggerService()));
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  //app.useGlobalInterceptors(new ResponseInterceptor());
 
   // swagger config
   if (env !== 'production') {

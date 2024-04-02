@@ -25,6 +25,17 @@ export declare const MedServiceSchema: z.ZodObject<{
     unitSize: number;
 }>;
 export type MedService = z.infer<typeof MedServiceSchema>;
+export declare const CredentialSchema: z.ZodObject<{
+    username: z.ZodString;
+    password: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    username: string;
+    password: string;
+}, {
+    username: string;
+    password: string;
+}>;
+export type Credential = z.infer<typeof CredentialSchema>;
 export declare const contract: {
     medServices: {
         create: {
@@ -183,6 +194,51 @@ export declare const contract: {
             method: "DELETE";
             body: z.ZodAny;
             path: "/api/med-services/:id";
+            strictStatusCodes: true;
+        };
+    };
+    auth: {
+        login: {
+            responses: {
+                200: z.ZodString;
+            };
+            method: "POST";
+            body: z.ZodObject<{
+                username: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                username: string;
+                password: string;
+            }, {
+                username: string;
+                password: string;
+            }>;
+            path: "/api/auth/login";
+            strictStatusCodes: true;
+        };
+        logout: {
+            responses: {
+                200: z.ZodString;
+            };
+            method: "POST";
+            body: z.ZodAny;
+            path: "/api/auth/logout";
+            strictStatusCodes: true;
+        };
+        isAuthenticated: {
+            responses: {
+                200: z.ZodString;
+            };
+            method: "GET";
+            path: "/api/auth/is_authenticated";
+            strictStatusCodes: true;
+        };
+        refresh: {
+            responses: {
+                200: z.ZodString;
+            };
+            method: "GET";
+            path: "/api/auth/refresh";
             strictStatusCodes: true;
         };
     };

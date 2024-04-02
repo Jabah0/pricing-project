@@ -1,24 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Req,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiExtraModels,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { AuthLoginDto } from './auth-dto.class';
-import { IsAuthPresenter } from './auth.presenter';
+import { Controller, Inject, Req, Request, UseGuards } from '@nestjs/common';
 
 import JwtRefreshGuard from '../../common/guards/jwtRefresh.guard';
 import { JwtAuthGuard } from '../../common/guards/jwtAuth.guard';
@@ -29,17 +9,10 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { LoginUseCases } from '../../../usecases/auth/login.usecase';
 import { IsAuthenticatedUseCases } from '../../../usecases/auth/isAuthenticated.usecase';
 import { LogoutUseCases } from '../../../usecases/auth/logout.usecase';
+import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
+import { contract } from 'api-contract';
 
-import { ApiResponseType } from '../../common/swagger/response.decorator';
-
-@Controller('auth')
-@ApiTags('auth')
-@ApiResponse({
-  status: 401,
-  description: 'No authorization token was found',
-})
-@ApiResponse({ status: 500, description: 'Internal error' })
-@ApiExtraModels(IsAuthPresenter)
+@Controller()
 export class AuthController {
   constructor(
     @Inject(UsecasesProxyModule.LOGIN_USECASES_PROXY)
@@ -50,57 +23,56 @@ export class AuthController {
     private readonly isAuthUsecaseProxy: UseCaseProxy<IsAuthenticatedUseCases>,
   ) {}
 
-  @Post('login')
   @UseGuards(LoginGuard)
-  @ApiBearerAuth()
-  @ApiBody({ type: AuthLoginDto })
-  @ApiOperation({ description: 'login' })
-  async login(@Body() auth: AuthLoginDto, @Request() request: any) {
-    const accessTokenCookie = await this.loginUsecaseProxy
-      .getInstance()
-      .getCookieWithJwtToken(auth.username);
-    console.log('accessTokenCookie executed successfully');
-    const refreshTokenCookie = await this.loginUsecaseProxy
-      .getInstance()
-      .getCookieWithJwtRefreshToken(auth.username);
-    request.res.setHeader('Set-Cookie', [
-      accessTokenCookie,
-      refreshTokenCookie,
-    ]);
-    return 'Login successful';
+  @TsRestHandler(contract.auth.login)
+  async login(@Request() request: any) {
+    return tsRestHandler(contract.auth.login, async ({ body }) => {
+      const accessTokenCookie = await this.loginUsecaseProxy
+        .getInstance()
+        .getCookieWithJwtToken(body.username);
+      console.log('accessTokenCookie executed successfully');
+      const refreshTokenCookie = await this.loginUsecaseProxy
+        .getInstance()
+        .getCookieWithJwtRefreshToken(body.username);
+      request.res.setHeader('Set-Cookie', [
+        accessTokenCookie,
+        refreshTokenCookie,
+      ]);
+
+      return { status: 200, body: 'Login successful' };
+    });
   }
 
-  @Post('logout')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ description: 'logout' })
-  async logout(@Request() request: any) {
-    const cookie = await this.logoutUsecaseProxy.getInstance().execute();
-    request.res.setHeader('Set-Cookie', cookie);
-    return 'Logout successful';
-  }
-
-  @Get('is_authenticated')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ description: 'is_authenticated' })
-  @ApiResponseType(IsAuthPresenter, false)
+  @TsRestHandler(contract.auth.isAuthenticated)
   async isAuthenticated(@Req() request: any) {
-    const user = await this.isAuthUsecaseProxy
-      .getInstance()
-      .execute(request.user.username);
-    const response = new IsAuthPresenter();
-    response.username = user.username;
-    return response;
+    return tsRestHandler(contract.auth.isAuthenticated, async () => {
+      const user = await this.isAuthUsecaseProxy
+        .getInstance()
+        .execute(request.user.username);
+      return { status: 200, body: user.username };
+    });
   }
 
-  @Get('refresh')
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.auth.logout)
+  async logout(@Req() request: any) {
+    return tsRestHandler(contract.auth.logout, async () => {
+      const cookie = await this.logoutUsecaseProxy.getInstance().execute();
+      request.res.setHeader('Set-Cookie', cookie);
+      return { status: 200, body: 'Logout successful' };
+    });
+  }
+
   @UseGuards(JwtRefreshGuard)
-  @ApiBearerAuth()
+  @TsRestHandler(contract.auth)
   async refresh(@Req() request: any) {
-    const accessTokenCookie = await this.loginUsecaseProxy
-      .getInstance()
-      .getCookieWithJwtToken(request.user.username);
-    request.res.setHeader('Set-Cookie', accessTokenCookie);
-    return 'Refresh successful';
+    return tsRestHandler(contract.auth.refresh, async () => {
+      const accessTokenCookie = await this.loginUsecaseProxy
+        .getInstance()
+        .getCookieWithJwtToken(request.user.username);
+      request.res.setHeader('Set-Cookie', accessTokenCookie);
+      return { status: 200, body: 'Refresh successful' };
+    });
   }
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contract = exports.MedServiceSchema = void 0;
+exports.contract = exports.CredentialSchema = exports.MedServiceSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var c = (0, core_1.initContract)();
@@ -12,6 +12,10 @@ exports.MedServiceSchema = zod_1.z.object({
     nationalCode: zod_1.z.string(),
     price: zod_1.z.number(),
     unitSize: zod_1.z.number(),
+});
+exports.CredentialSchema = zod_1.z.object({
+    username: zod_1.z.string(),
+    password: zod_1.z.string(),
 });
 exports.contract = c.router({
     medServices: {
@@ -55,6 +59,38 @@ exports.contract = c.router({
                 404: zod_1.z.object({
                     message: zod_1.z.string(),
                 }),
+            },
+        },
+    },
+    auth: {
+        login: {
+            method: "POST",
+            path: "/auth/login",
+            body: exports.CredentialSchema,
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        logout: {
+            method: "POST",
+            path: "/auth/logout",
+            body: zod_1.z.any(),
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        isAuthenticated: {
+            method: "GET",
+            path: "/auth/is_authenticated",
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        refresh: {
+            method: "GET",
+            path: "/auth/refresh",
+            responses: {
+                200: zod_1.z.string(),
             },
         },
     },

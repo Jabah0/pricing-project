@@ -12,4 +12,12 @@ export default defineConfig({
   optimizeDeps: {
     include: ["api-contract/**/*"],
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
+  },
 });

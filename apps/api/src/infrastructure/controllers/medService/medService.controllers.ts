@@ -23,11 +23,13 @@ export class MedServiceController {
 
   @TsRestHandler(contract.medServices)
   async handler() {
+    const data = await this.getMedServicesUseCaseProxy.getInstance().execute();
+
     return tsRestHandler(contract.medServices, {
       getAll: async () => {
         return {
           status: 200,
-          body: await this.getMedServicesUseCaseProxy.getInstance().execute(),
+          body: data,
         };
       },
       getOne: async ({ params: { id } }) => {
