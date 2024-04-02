@@ -1,50 +1,52 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiExtraModels,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-
+import { Body, Controller, Inject, UseGuards } from '@nestjs/common';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { AddNewUserUseCases } from '../../../usecases/user/addNewUser.usecase';
 import { AddUserDto } from './user-dto.class';
-import { UserPresenters } from './user.presenters';
 import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
+import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
+import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
+import { contract } from 'api-contract';
+import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
 
-@Controller('users')
-@ApiTags('users')
-@ApiResponse({ status: 500, description: 'Internal error' })
-@ApiExtraModels()
+@Controller('')
 export class UserController {
   constructor(
     @Inject(UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY)
     private readonly addUserUsecaseProxy: UseCaseProxy<AddNewUserUseCases>,
     @Inject(UsecasesProxyModule.GET_USERS_USECASES_PROXY)
     private readonly getUsersUsecaseProxy: UseCaseProxy<GetUsersUseCase>,
+    @Inject(UsecasesProxyModule.GET_USER_USECASES_PROXY)
+    private readonly getUserUsecaseProxy: UseCaseProxy<GetUserUseCase>,
   ) {}
 
-  @Get()
-  @ApiBearerAuth()
-  @ApiOperation({ description: 'add new user' })
-  async getUsers() {
-    const users = await this.getUsersUsecaseProxy.getInstance().execute();
-
-    return users.map((user) => new UserPresenters(user));
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.create)
+  async addNewUser(@Body() user: AddUserDto) {
+    return tsRestHandler(contract.users.create, async () => {
+      const newUser = await this.addUserUsecaseProxy
+        .getInstance()
+        .execute(user.username, user.password);
+      return { status: 201, body: newUser };
+    });
   }
 
-  @Post()
-  @ApiBearerAuth()
-  @ApiBody({ type: AddUserDto })
-  @ApiOperation({ description: 'add new user' })
-  async addUser(@Body() user: AddUserDto) {
-    const newUser = await this.addUserUsecaseProxy
-      .getInstance()
-      .execute(user.username, user.password);
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.getAll)
+  async getUsers() {
+    return tsRestHandler(contract.users.getAll, async () => {
+      const users = await this.getUsersUsecaseProxy.getInstance().execute();
+      return { status: 200, body: users };
+    });
+  }
 
-    return new UserPresenters(newUser);
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.getOne)
+  async getUser() {
+    return tsRestHandler(contract.users.getOne, async ({ params: { id } }) => {
+      const user = await this.getUserUsecaseProxy.getInstance().execute(id);
+
+      return { status: 200, body: user };
+    });
   }
 }

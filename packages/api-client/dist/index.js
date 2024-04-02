@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contract = exports.CredentialSchema = exports.MedServiceSchema = void 0;
+exports.contract = exports.UserSchema = exports.CredentialSchema = exports.MedServiceSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var c = (0, core_1.initContract)();
@@ -16,6 +16,15 @@ exports.MedServiceSchema = zod_1.z.object({
 exports.CredentialSchema = zod_1.z.object({
     username: zod_1.z.string(),
     password: zod_1.z.string(),
+});
+exports.UserSchema = zod_1.z.object({
+    id: zod_1.z.number(),
+    username: zod_1.z.string(),
+    password: zod_1.z.string(),
+    createDate: zod_1.z.date(),
+    updatedDate: zod_1.z.date(),
+    lastLogin: zod_1.z.date(),
+    hashRefreshToken: zod_1.z.string(),
 });
 exports.contract = c.router({
     medServices: {
@@ -91,6 +100,36 @@ exports.contract = c.router({
             path: "/auth/refresh",
             responses: {
                 200: zod_1.z.string(),
+            },
+        },
+    },
+    users: {
+        getAll: {
+            method: "GET",
+            path: "/users",
+            responses: {
+                200: exports.UserSchema.omit({ id: true }).array(),
+            },
+        },
+        getOne: {
+            method: "GET",
+            path: "/users/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.number(),
+            }),
+            responses: {
+                200: exports.UserSchema.omit({ id: true }),
+                404: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
+            },
+        },
+        create: {
+            method: "POST",
+            path: "/users",
+            body: zod_1.z.object({ username: zod_1.z.string(), password: zod_1.z.string() }),
+            responses: {
+                201: exports.UserSchema.omit({ id: true }),
             },
         },
     },

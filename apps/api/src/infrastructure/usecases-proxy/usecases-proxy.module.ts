@@ -24,7 +24,8 @@ import { DatabaseUserRepository } from '../repositories/user.repository';
 import { EnvironmentConfigModule } from '../config/environment-config/environment-config.module';
 import { EnvironmentConfigService } from '../config/environment-config/environment-config.service';
 import { UseCaseProxy } from './usecases-proxy';
-import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
+import { GetUsersUseCase } from '../../usecases/user/getUsers.usecase';
+import { GetUserUseCase } from '../../usecases/user/getUser.usecase';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ export class UsecasesProxyModule {
   // User
   static ADD_NEW_USER_USECASES_PROXY = 'addNewUserUsecasesProxy';
   static GET_USERS_USECASES_PROXY = 'getUsersUsecasesProxy';
+  static GET_USER_USECASES_PROXY = 'getUserUsecasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
@@ -73,6 +75,12 @@ export class UsecasesProxyModule {
           provide: UsecasesProxyModule.GET_USERS_USECASES_PROXY,
           useFactory: (userRepository: DatabaseUserRepository) =>
             new UseCaseProxy(new GetUsersUseCase(userRepository)),
+        },
+        {
+          inject: [DatabaseUserRepository],
+          provide: UsecasesProxyModule.GET_USER_USECASES_PROXY,
+          useFactory: (userRepository: DatabaseUserRepository) =>
+            new UseCaseProxy(new GetUserUseCase(userRepository)),
         },
         {
           inject: [
@@ -156,6 +164,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
         UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
+        UsecasesProxyModule.GET_USER_USECASES_PROXY,
       ],
     };
   }

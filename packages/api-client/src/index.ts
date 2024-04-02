@@ -22,6 +22,18 @@ export const CredentialSchema = z.object({
 
 export type Credential = z.infer<typeof CredentialSchema>;
 
+export const UserSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  password: z.string(),
+  createDate: z.date(),
+  updatedDate: z.date(),
+  lastLogin: z.date(),
+  hashRefreshToken: z.string(),
+});
+
+export type User = z.infer<typeof UserSchema>;
+
 export const contract = c.router(
   {
     medServices: {
@@ -100,6 +112,37 @@ export const contract = c.router(
         path: "/auth/refresh",
         responses: {
           200: z.string(),
+        },
+      },
+    },
+
+    users: {
+      getAll: {
+        method: "GET",
+        path: "/users",
+        responses: {
+          200: UserSchema.omit({ id: true }).array(),
+        },
+      },
+      getOne: {
+        method: "GET",
+        path: "/users/:id",
+        pathParams: z.object({
+          id: z.coerce.number(),
+        }),
+        responses: {
+          200: UserSchema.omit({ id: true, password: true }),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+      create: {
+        method: "POST",
+        path: "/users",
+        body: z.object({ username: z.string(), password: z.string() }),
+        responses: {
+          201: UserSchema.omit({ id: true }),
         },
       },
     },

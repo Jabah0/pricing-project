@@ -17,6 +17,30 @@ export class DatabaseUserRepository implements UserRepository {
     return users.map((user) => this.toUser(user));
   }
 
+  async getUser(id: number): Promise<UserM> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) return null;
+
+    return this.toUser(user);
+  }
+
+  async deleteUser(id: number): Promise<UserM> {
+    const deletedUser = await this.prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+
+    if (!deletedUser) return null;
+
+    return this.toUser(deletedUser);
+  }
+
   async getUserByUsername(username: string): Promise<UserM> {
     const adminUserEntity = await this.prisma.user.findFirst({
       where: { username: username },

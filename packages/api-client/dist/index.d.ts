@@ -36,6 +36,32 @@ export declare const CredentialSchema: z.ZodObject<{
     password: string;
 }>;
 export type Credential = z.infer<typeof CredentialSchema>;
+export declare const UserSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    username: z.ZodString;
+    password: z.ZodString;
+    createDate: z.ZodDate;
+    updatedDate: z.ZodDate;
+    lastLogin: z.ZodDate;
+    hashRefreshToken: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    id: number;
+    username: string;
+    password: string;
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}, {
+    id: number;
+    username: string;
+    password: string;
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}>;
+export type User = z.infer<typeof UserSchema>;
 export declare const contract: {
     medServices: {
         create: {
@@ -239,6 +265,122 @@ export declare const contract: {
             };
             method: "GET";
             path: "/api/auth/refresh";
+            strictStatusCodes: true;
+        };
+    };
+    users: {
+        getAll: {
+            responses: {
+                200: z.ZodArray<z.ZodObject<Omit<{
+                    id: z.ZodNumber;
+                    username: z.ZodString;
+                    password: z.ZodString;
+                    createDate: z.ZodDate;
+                    updatedDate: z.ZodDate;
+                    lastLogin: z.ZodDate;
+                    hashRefreshToken: z.ZodString;
+                }, "id">, "strip", z.ZodTypeAny, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }>, "many">;
+            };
+            method: "GET";
+            path: "/api/users";
+            strictStatusCodes: true;
+        };
+        getOne: {
+            pathParams: z.ZodObject<{
+                id: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: number;
+            }>;
+            responses: {
+                200: z.ZodObject<Omit<{
+                    id: z.ZodNumber;
+                    username: z.ZodString;
+                    password: z.ZodString;
+                    createDate: z.ZodDate;
+                    updatedDate: z.ZodDate;
+                    lastLogin: z.ZodDate;
+                    hashRefreshToken: z.ZodString;
+                }, "id">, "strip", z.ZodTypeAny, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            method: "GET";
+            path: "/api/users/:id";
+            strictStatusCodes: true;
+        };
+        create: {
+            responses: {
+                201: z.ZodObject<Omit<{
+                    id: z.ZodNumber;
+                    username: z.ZodString;
+                    password: z.ZodString;
+                    createDate: z.ZodDate;
+                    updatedDate: z.ZodDate;
+                    lastLogin: z.ZodDate;
+                    hashRefreshToken: z.ZodString;
+                }, "id">, "strip", z.ZodTypeAny, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }, {
+                    username: string;
+                    password: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }>;
+            };
+            method: "POST";
+            body: z.ZodObject<{
+                username: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                username: string;
+                password: string;
+            }, {
+                username: string;
+                password: string;
+            }>;
+            path: "/api/users";
             strictStatusCodes: true;
         };
     };
