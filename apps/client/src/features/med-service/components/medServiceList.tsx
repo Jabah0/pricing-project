@@ -1,5 +1,5 @@
 import { For, Match, Switch } from "solid-js";
-import { apiClient } from "../../../api-client";
+import { apiClient } from "../../../api/api-client";
 
 export const MedServiceList = () => {
   const servicesQuery = apiClient.medServices.getAll.createQuery(

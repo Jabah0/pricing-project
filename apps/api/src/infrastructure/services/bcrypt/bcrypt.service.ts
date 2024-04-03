@@ -11,7 +11,6 @@ export class BcryptService implements IBcryptService {
   }
 
   async compare(password: string, hashPassword: string): Promise<boolean> {
-    console.log(password, hashPassword);
     return await bcrypt.compare(password, hashPassword);
   }
 }

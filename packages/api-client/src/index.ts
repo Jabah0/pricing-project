@@ -121,7 +121,7 @@ export const contract = c.router(
         method: "GET",
         path: "/users",
         responses: {
-          200: UserSchema.omit({ id: true }).array(),
+          200: UserSchema.omit({ password: true }).array(),
         },
       },
       getOne: {
@@ -131,7 +131,7 @@ export const contract = c.router(
           id: z.coerce.number(),
         }),
         responses: {
-          200: UserSchema.omit({ id: true, password: true }),
+          200: UserSchema.omit({ password: true }),
           404: z.object({
             message: z.string(),
           }),
@@ -142,7 +142,7 @@ export const contract = c.router(
         path: "/users",
         body: z.object({ username: z.string(), password: z.string() }),
         responses: {
-          201: UserSchema.omit({ id: true }),
+          201: UserSchema.omit({ password: true }),
         },
       },
     },

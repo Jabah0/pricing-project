@@ -1,6 +1,6 @@
 import { IBcryptService } from '../../domain/adapters/bcrypt.interface';
 import { ILogger } from '../../domain/logger/logger.interface';
-import { UserM } from '../../domain/model/user';
+import { UserWithoutPassword } from '../../domain/model/user';
 import { UserRepository } from '../../domain/repositories/userRepository.interface';
 
 export class AddNewUserUseCases {
@@ -10,7 +10,10 @@ export class AddNewUserUseCases {
     private readonly bcryptService: IBcryptService,
   ) {}
 
-  async execute(username: string, password: string): Promise<UserM> {
+  async execute(
+    username: string,
+    password: string,
+  ): Promise<UserWithoutPassword> {
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userRepository.addNewUser(
       username,
@@ -22,7 +25,7 @@ export class AddNewUserUseCases {
       `New User: ${newUser.username} have been inserted`,
     );
 
-    return newUser;
+    return newUser.toUserWithoutPassword();
   }
 
   async hashPassword(password: string) {

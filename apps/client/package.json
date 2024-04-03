@@ -9,14 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kobalte/core": "^0.12.6",
+    "@solidjs/router": "^0.13.1",
     "@tanstack/solid-query": "^4.36.1",
     "@ts-rest/core": "^3.40.1",
     "@ts-rest/solid-query": "^3.39.1",
     "api-contract": "*",
-    "solid-js": "^1.8.15"
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "solid-js": "^1.8.15",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@types/node": "^20.12.3",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",

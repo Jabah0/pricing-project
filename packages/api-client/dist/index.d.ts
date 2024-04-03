@@ -279,16 +279,16 @@ export declare const contract: {
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
-                }, "id">, "strip", z.ZodTypeAny, {
+                }, "password">, "strip", z.ZodTypeAny, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -316,16 +316,16 @@ export declare const contract: {
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
-                }, "id">, "strip", z.ZodTypeAny, {
+                }, "password">, "strip", z.ZodTypeAny, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -353,16 +353,16 @@ export declare const contract: {
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
-                }, "id">, "strip", z.ZodTypeAny, {
+                }, "password">, "strip", z.ZodTypeAny, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
+                    id: number;
                     username: string;
-                    password: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;

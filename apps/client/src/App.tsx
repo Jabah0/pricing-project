@@ -1,12 +1,7 @@
 import "./App.css";
-import { MedServiceList } from "./features/med-service/components/medServiceList";
 
 function App() {
-  return (
-    <>
-      <MedServiceList />
-    </>
-  );
+  return <></>;
 }
 
 export default App;

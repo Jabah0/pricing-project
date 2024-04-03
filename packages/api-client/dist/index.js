@@ -108,7 +108,7 @@ exports.contract = c.router({
             method: "GET",
             path: "/users",
             responses: {
-                200: exports.UserSchema.omit({ id: true }).array(),
+                200: exports.UserSchema.omit({ password: true }).array(),
             },
         },
         getOne: {
@@ -118,7 +118,7 @@ exports.contract = c.router({
                 id: zod_1.z.coerce.number(),
             }),
             responses: {
-                200: exports.UserSchema.omit({ id: true }),
+                200: exports.UserSchema.omit({ password: true }),
                 404: zod_1.z.object({
                     message: zod_1.z.string(),
                 }),
@@ -129,7 +129,7 @@ exports.contract = c.router({
             path: "/users",
             body: zod_1.z.object({ username: zod_1.z.string(), password: zod_1.z.string() }),
             responses: {
-                201: exports.UserSchema.omit({ id: true }),
+                201: exports.UserSchema.omit({ password: true }),
             },
         },
     },
