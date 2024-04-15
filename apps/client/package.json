@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.12.6",
+    "@mbarzda/solid-i18next": "^1.4.1",
     "@solidjs/router": "^0.13.1",
     "@tanstack/solid-query": "^4.36.1",
     "@ts-rest/core": "^3.40.1",
@@ -17,9 +18,18 @@
     "api-contract": "*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "i18next": "^23.11.1",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-http-backend": "^2.5.0",
+    "i18next-xhr-backend": "^3.2.2",
+    "install": "^0.13.0",
+    "npm": "^10.5.2",
+    "solid-icons": "^1.1.0",
     "solid-js": "^1.8.15",
+    "solid-sonner": "^0.2.5",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uninstall": "^0.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",

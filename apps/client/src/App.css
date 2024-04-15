@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply bg-background select-none;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -111,4 +115,16 @@
   .container {
     @apply px-4;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: unset;
 }

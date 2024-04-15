@@ -1,5 +1,6 @@
 import { For, Match, Switch } from "solid-js";
 import { apiClient } from "../../../api/api-client";
+import { MedServiceItem } from "./MedServiceItem";
 
 export const MedServiceList = () => {
   const servicesQuery = apiClient.medServices.getAll.createQuery(
@@ -9,7 +10,6 @@ export const MedServiceList = () => {
 
   return (
     <div>
-      <h1 class="text-2xl text-red-700">Hello</h1>
       <Switch>
         <Match when={servicesQuery.isLoading}>
           <p>isLoading</p>
@@ -18,9 +18,11 @@ export const MedServiceList = () => {
           <p>Error: {servicesQuery.error?.body as string}</p>
         </Match>
         <Match when={servicesQuery.isSuccess}>
-          <For each={servicesQuery.data?.body}>
-            {(ser) => <h1>{ser.name}</h1>}
-          </For>
+          <div class="flex flex-col gap-4">
+            <For each={servicesQuery.data?.body}>
+              {(ser) => <MedServiceItem medService={ser} />}
+            </For>
+          </div>
         </Match>
       </Switch>
     </div>
