@@ -34,9 +34,11 @@ export const MainLayout: ParentComponent = (props) => {
           </div>
         </div>
       </Sidebar>
-      <div class="flex flex-col gap-4 w-full h-full p-5">
-        <Navbar />
-        <div>{props.children}</div>
+      <div class="flex flex-col items-center w-full h-full py-5 2xl:px-20 sm:px-2  overflow-auto">
+        <div class="flex flex-col gap-8 w-full">
+          <Navbar />
+          <div>{props.children}</div>
+        </div>
       </div>
       <Toaster richColors />
     </div>

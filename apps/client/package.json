@@ -12,7 +12,7 @@
     "@kobalte/core": "^0.12.6",
     "@mbarzda/solid-i18next": "^1.4.1",
     "@solidjs/router": "^0.13.1",
-    "@tanstack/solid-query": "^4.36.1",
+    "@tanstack/solid-query": "^5.30.3",
     "@ts-rest/core": "^3.40.1",
     "@ts-rest/solid-query": "^3.39.1",
     "api-contract": "*",

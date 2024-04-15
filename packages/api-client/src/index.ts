@@ -49,6 +49,11 @@ export const contract = c.router(
       getAll: {
         method: "GET",
         path: "/med-services",
+        query: z.object({
+          name: z.string().optional(),
+          code: z.string().optional(),
+          dalilCode: z.string().optional(),
+        }),
         responses: {
           200: MedServiceSchema.array(),
         },
@@ -76,7 +81,9 @@ export const contract = c.router(
         }),
         body: z.any(),
         responses: {
-          204: z.object({}),
+          204: z.object({
+            message: z.string(),
+          }),
           404: z.object({
             message: z.string(),
           }),

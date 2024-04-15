@@ -20,7 +20,7 @@ export const locale = i18next
         loadPath: "./translations/{{lng}}.json",
       },
     },
-    (err, t) => {
+    (err, _) => {
       if (err) return console.error(err);
     }
   );

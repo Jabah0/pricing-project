@@ -27,7 +27,7 @@ export const Navbar = () => {
   });
 
   return (
-    <div ref={navbarRef} class="flex items-center justify-between h-fit w-full">
+    <div ref={navbarRef} class="flex items-center justify-between h-fit">
       <p class="text-white font-bold">Title</p>
       <div class="flex gap-4">
         <LanguageSwitcher />

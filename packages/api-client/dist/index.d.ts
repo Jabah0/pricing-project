@@ -122,6 +122,19 @@ export declare const contract: {
             strictStatusCodes: true;
         };
         getAll: {
+            query: z.ZodObject<{
+                name: z.ZodOptional<z.ZodString>;
+                code: z.ZodOptional<z.ZodString>;
+                dalilCode: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                name?: string | undefined;
+                code?: string | undefined;
+                dalilCode?: string | undefined;
+            }, {
+                name?: string | undefined;
+                code?: string | undefined;
+                dalilCode?: string | undefined;
+            }>;
             responses: {
                 200: z.ZodArray<z.ZodObject<{
                     id: z.ZodString;
@@ -208,7 +221,13 @@ export declare const contract: {
                 id: string;
             }>;
             responses: {
-                204: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
+                204: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
                 }, "strip", z.ZodTypeAny, {

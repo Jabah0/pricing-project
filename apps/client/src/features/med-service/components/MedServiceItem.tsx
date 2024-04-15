@@ -1,7 +1,6 @@
 import { useLocale } from "@/features/locale/locale.context";
 import { MedService } from "api-contract";
-import { FaSolidPlus, FaSolidMinus } from "solid-icons/fa";
-import { Match, Show, Switch, createSignal } from "solid-js";
+import { Match, Switch, createSignal } from "solid-js";
 import { EditPriceButton } from "./EditPriceButton";
 
 type Props = {
@@ -26,8 +25,8 @@ export const MedServiceItem = (props: Props) => {
 
   return (
     <div
-      class="flex justify-between gap-12 items-center p-4 bg-backPrimary border
-     border-gray-400 rounded-lg min-h-16"
+      class="flex justify-between gap-12 items-center p-4 shadow-lg bg-backPrimary border-[0.01rem]
+     border-gray-600 rounded-lg min-h-16 w-full"
     >
       <div class="flex gap-8">
         <div class="flex flex-col justify-center items-center">
@@ -44,7 +43,7 @@ export const MedServiceItem = (props: Props) => {
         </div>
       </div>
       <div class="flex justify-center items-center gap-4">
-        <Show when={isEdit()}>
+        {/* <Show when={isEdit()}>
           <div class="flex flex-col gap-2">
             <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
               <FaSolidPlus class="text-white" />
@@ -53,16 +52,20 @@ export const MedServiceItem = (props: Props) => {
               <FaSolidMinus class="text-white" />
             </button>
           </div>
-        </Show>
+        </Show> */}
         <Switch>
           <Match when={!isEdit()}>
             <div class="flex flex-col justify-center items-center">
-              <p class="text-white font-bold">{props.medService.price}</p>
+              <p class="text-white font-bold w-16 text-center">
+                {props.medService.price}
+              </p>
               <p class="text-gray-400 font-bold">{locale.t("price")}</p>
             </div>
             <div class="w-[0.05rem] h-10 bg-gray-300"></div>
             <div class="flex flex-col justify-center items-center">
-              <p class="text-white font-bold">{props.medService.unitSize}</p>
+              <p class="text-white font-bold w-16 text-center">
+                {props.medService.unitSize}
+              </p>
               <p class="text-gray-400 font-bold">{locale.t("unitSize")}</p>
             </div>
           </Match>
@@ -89,7 +92,7 @@ export const MedServiceItem = (props: Props) => {
             </div>
           </Match>
         </Switch>
-        <Show when={isEdit()}>
+        {/* <Show when={isEdit()}>
           <div class="flex flex-col gap-2">
             <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
               <FaSolidPlus class="text-white" />
@@ -98,7 +101,7 @@ export const MedServiceItem = (props: Props) => {
               <FaSolidMinus class="text-white" />
             </button>
           </div>
-        </Show>
+        </Show> */}
         <EditPriceButton
           onEdit={onClickEdit}
           onCancel={onClickCancel}

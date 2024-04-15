@@ -39,6 +39,11 @@ exports.contract = c.router({
         getAll: {
             method: "GET",
             path: "/med-services",
+            query: zod_1.z.object({
+                name: zod_1.z.string().optional(),
+                code: zod_1.z.string().optional(),
+                dalilCode: zod_1.z.string().optional(),
+            }),
             responses: {
                 200: exports.MedServiceSchema.array(),
             },
@@ -64,7 +69,9 @@ exports.contract = c.router({
             }),
             body: zod_1.z.any(),
             responses: {
-                204: zod_1.z.object({}),
+                204: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
                 404: zod_1.z.object({
                     message: zod_1.z.string(),
                 }),

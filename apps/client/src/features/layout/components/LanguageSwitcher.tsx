@@ -17,7 +17,7 @@ export const LanguageSwitcher = () => {
     },
   ];
 
-  const [lang, setLang] = createSignal<Lang>(languages[0]);
+  const [lang] = createSignal<Lang>(languages[0]);
 
   return (
     <div>

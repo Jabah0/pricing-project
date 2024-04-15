@@ -21,22 +21,31 @@ export class MedServiceController {
     private readonly deleteMedServiceUseCaseProxy: UseCaseProxy<DeleteMedServiceUseCase>,
   ) {}
 
-  @TsRestHandler(contract.medServices)
-  async handler() {
-    const data = await this.getMedServicesUseCaseProxy.getInstance().execute();
-
-    return tsRestHandler(contract.medServices, {
-      getAll: async () => {
+  @TsRestHandler(contract.medServices.getAll)
+  async getAll() {
+    console.log('getAll executed');
+    return tsRestHandler(
+      contract.medServices.getAll,
+      async ({ query: { name, code, dalilCode } }) => {
+        const users = await this.getMedServicesUseCaseProxy
+          .getInstance()
+          .execute(name, code, dalilCode);
         return {
           status: 200,
-          body: data,
+          body: users,
         };
       },
-      getOne: async ({ params: { id } }) => {
+    );
+  }
+
+  @TsRestHandler(contract.medServices)
+  async getOne() {
+    return tsRestHandler(
+      contract.medServices.getOne,
+      async ({ params: { id } }) => {
         const service = await this.getMedServiceUseCaseProxy
           .getInstance()
           .execute(id);
-
         if (!service) {
           return {
             status: 404,
@@ -51,18 +60,27 @@ export class MedServiceController {
           body: service,
         };
       },
+    );
+  }
 
-      create: async ({ body }) => {
-        const service = await this.addMedServiceUseCaseProxy
-          .getInstance()
-          .execute(body);
-        return {
-          status: 201,
-          body: service,
-        };
-      },
+  @TsRestHandler(contract.medServices.create)
+  async create() {
+    return tsRestHandler(contract.medServices.create, async ({ body }) => {
+      const service = await this.addMedServiceUseCaseProxy
+        .getInstance()
+        .execute(body);
+      return {
+        status: 201,
+        body: service,
+      };
+    });
+  }
 
-      remove: async ({ params: { id } }) => {
+  @TsRestHandler(contract.medServices.remove)
+  async remove() {
+    return tsRestHandler(
+      contract.medServices.remove,
+      async ({ params: { id } }) => {
         const service = await this.deleteMedServiceUseCaseProxy
           .getInstance()
           .execute(id);
@@ -73,7 +91,12 @@ export class MedServiceController {
             body: { message: 'MedService not found' },
           };
         }
+
+        return {
+          status: 204,
+          body: { message: 'The service deleted successfully' },
+        };
       },
-    });
+    );
   }
 }

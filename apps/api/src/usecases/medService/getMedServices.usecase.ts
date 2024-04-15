@@ -4,7 +4,11 @@ import { MedServiceRepository } from '../../domain/repositories/medServiceReposi
 export class GetMedServicesUseCase {
   constructor(private readonly medServiceRepository: MedServiceRepository) {}
 
-  async execute(): Promise<MedService[]> {
-    return await this.medServiceRepository.findAll();
+  async execute(
+    name: string,
+    code: string,
+    dalilCode: string,
+  ): Promise<MedService[]> {
+    return await this.medServiceRepository.findAll(name, code, dalilCode);
   }
 }

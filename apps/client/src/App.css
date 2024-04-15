@@ -128,3 +128,9 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: unset;
 }
+
+button:focus,
+select:focus,
+input:focus {
+  outline: none;
+}

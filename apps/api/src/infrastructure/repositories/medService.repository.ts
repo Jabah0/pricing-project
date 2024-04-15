@@ -23,8 +23,25 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     return newMedService;
   }
 
-  async findAll(): Promise<MedService[]> {
-    return await this.prisma.medService.findMany();
+  async findAll(
+    name: string,
+    code: string,
+    dalilCode: string,
+  ): Promise<MedService[]> {
+    console.log('name', name);
+    return await this.prisma.medService.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+        code: {
+          contains: code,
+        },
+        dalilName: {
+          contains: dalilCode,
+        },
+      },
+    });
   }
 
   async findById(id: string): Promise<MedService> {

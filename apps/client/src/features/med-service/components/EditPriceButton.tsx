@@ -1,5 +1,7 @@
-import { useLocale } from "@/features/locale/locale.context";
 import { Match, Switch } from "solid-js";
+import { useLocale } from "@/features/locale/locale.context";
+import { FiSave } from "solid-icons/fi";
+import { ImCross } from "solid-icons/im";
 
 export const EditPriceButton = (props: {
   isEdit?: boolean;
@@ -27,7 +29,7 @@ export const EditPriceButton = (props: {
             border-l border-t border-b border-gray-400"
             onClick={props.onSave}
           >
-            <p>{locale.t("save")}</p>
+            <FiSave class="text-white scale-150" />
           </button>
           <div class="h-11 w-0.5 bg-gray-400" />
           <button
@@ -35,7 +37,7 @@ export const EditPriceButton = (props: {
             border-r border-t border-b border-gray-400"
             onClick={props.onCancel}
           >
-            <p>{locale.t("cancel")}</p>
+            <ImCross />
           </button>
         </div>
       </Match>
