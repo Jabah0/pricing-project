@@ -1,4 +1,11 @@
-import { For, Match, Switch, createSignal } from "solid-js";
+import {
+  For,
+  Match,
+  Switch,
+  createEffect,
+  createMemo,
+  createSignal,
+} from "solid-js";
 import { MedServiceItem } from "./MedServiceItem";
 import { useLocale } from "@/features/locale/locale.context";
 import { BiRegularSearchAlt } from "solid-icons/bi";
@@ -7,15 +14,19 @@ import { apiClient } from "@/api/api-client";
 export const MedServiceList = () => {
   const locale = useLocale();
 
-  const [name, setName] = createSignal("");
-  const [code] = createSignal("");
-  const [dalilCode] = createSignal("");
+  const [name, setName] = createSignal<string>();
+  const [code] = createSignal<string>();
+  const [dalilCode] = createSignal<string>();
 
-  console.log("name", name());
+  const querySignal = createMemo(() => ({
+    name: name(),
+    code: code(),
+    dalilCode: dalilCode(),
+  }));
 
   const servicesQuery = apiClient.medServices.getAll.createQuery(
-    () => ["services", code(), name(), dalilCode()], // Function returning an array
-    { query: { code: code(), name: name(), dalilCode: dalilCode() } }
+    () => ["services", code(), name(), dalilCode()],
+    { query: { name: name(), code: code(), dalilCode: dalilCode() } }
   );
 
   return (
@@ -30,11 +41,10 @@ export const MedServiceList = () => {
             type="text"
             class="bg-transparent flex-1 text-white"
             placeholder={locale.t("filterService")}
-            onChange={(e) => {
-              console.log("name", name());
-              setName(e.currentTarget.value);
+            onInput={(e) => {
+              console.log(querySignal());
+              setName(e.target.value);
             }}
-            value={name()}
           />
         </div>
       </div>

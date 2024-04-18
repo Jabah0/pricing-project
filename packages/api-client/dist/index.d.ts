@@ -65,33 +65,6 @@ export type User = z.infer<typeof UserSchema>;
 export declare const contract: {
     medServices: {
         create: {
-            responses: {
-                201: z.ZodObject<{
-                    id: z.ZodString;
-                    name: z.ZodString;
-                    code: z.ZodString;
-                    dalilName: z.ZodString;
-                    nationalCode: z.ZodString;
-                    price: z.ZodNumber;
-                    unitSize: z.ZodNumber;
-                }, "strip", z.ZodTypeAny, {
-                    id: string;
-                    name: string;
-                    code: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    unitSize: number;
-                }, {
-                    id: string;
-                    name: string;
-                    code: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    unitSize: number;
-                }>;
-            };
             method: "POST";
             body: z.ZodObject<{
                 id: z.ZodString;
@@ -119,6 +92,33 @@ export declare const contract: {
                 unitSize: number;
             }>;
             path: "/api/med-services";
+            responses: {
+                201: z.ZodObject<{
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilName: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    unitSize: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
+                }, {
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
+                }>;
+            };
             strictStatusCodes: true;
         };
         getAll: {
@@ -135,6 +135,8 @@ export declare const contract: {
                 code?: string | undefined;
                 dalilCode?: string | undefined;
             }>;
+            method: "GET";
+            path: "/api/med-services";
             responses: {
                 200: z.ZodArray<z.ZodObject<{
                     id: z.ZodString;
@@ -162,8 +164,6 @@ export declare const contract: {
                     unitSize: number;
                 }>, "many">;
             };
-            method: "GET";
-            path: "/api/med-services";
             strictStatusCodes: true;
         };
         getOne: {
@@ -174,6 +174,8 @@ export declare const contract: {
             }, {
                 id: string;
             }>;
+            method: "GET";
+            path: "/api/med-services/:id";
             responses: {
                 200: z.ZodObject<{
                     id: z.ZodString;
@@ -208,8 +210,6 @@ export declare const contract: {
                     message: string;
                 }>;
             };
-            method: "GET";
-            path: "/api/med-services/:id";
             strictStatusCodes: true;
         };
         remove: {
@@ -220,6 +220,9 @@ export declare const contract: {
             }, {
                 id: string;
             }>;
+            method: "DELETE";
+            body: z.ZodAny;
+            path: "/api/med-services/:id";
             responses: {
                 204: z.ZodObject<{
                     message: z.ZodString;
@@ -236,17 +239,11 @@ export declare const contract: {
                     message: string;
                 }>;
             };
-            method: "DELETE";
-            body: z.ZodAny;
-            path: "/api/med-services/:id";
             strictStatusCodes: true;
         };
     };
     auth: {
         login: {
-            responses: {
-                200: z.ZodString;
-            };
             method: "POST";
             body: z.ZodObject<{
                 username: z.ZodString;
@@ -259,36 +256,41 @@ export declare const contract: {
                 password: string;
             }>;
             path: "/api/auth/login";
+            responses: {
+                200: z.ZodString;
+            };
             strictStatusCodes: true;
         };
         logout: {
-            responses: {
-                200: z.ZodString;
-            };
             method: "POST";
             body: z.ZodAny;
             path: "/api/auth/logout";
+            responses: {
+                200: z.ZodString;
+            };
             strictStatusCodes: true;
         };
         isAuthenticated: {
+            method: "GET";
+            path: "/api/auth/is_authenticated";
             responses: {
                 200: z.ZodString;
             };
-            method: "GET";
-            path: "/api/auth/is_authenticated";
             strictStatusCodes: true;
         };
         refresh: {
+            method: "GET";
+            path: "/api/auth/refresh";
             responses: {
                 200: z.ZodString;
             };
-            method: "GET";
-            path: "/api/auth/refresh";
             strictStatusCodes: true;
         };
     };
     users: {
         getAll: {
+            method: "GET";
+            path: "/api/users";
             responses: {
                 200: z.ZodArray<z.ZodObject<Omit<{
                     id: z.ZodNumber;
@@ -314,8 +316,6 @@ export declare const contract: {
                     hashRefreshToken: string;
                 }>, "many">;
             };
-            method: "GET";
-            path: "/api/users";
             strictStatusCodes: true;
         };
         getOne: {
@@ -326,6 +326,8 @@ export declare const contract: {
             }, {
                 id: number;
             }>;
+            method: "GET";
+            path: "/api/users/:id";
             responses: {
                 200: z.ZodObject<Omit<{
                     id: z.ZodNumber;
@@ -358,11 +360,21 @@ export declare const contract: {
                     message: string;
                 }>;
             };
-            method: "GET";
-            path: "/api/users/:id";
             strictStatusCodes: true;
         };
         create: {
+            method: "POST";
+            body: z.ZodObject<{
+                username: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                username: string;
+                password: string;
+            }, {
+                username: string;
+                password: string;
+            }>;
+            path: "/api/users";
             responses: {
                 201: z.ZodObject<Omit<{
                     id: z.ZodNumber;
@@ -388,18 +400,6 @@ export declare const contract: {
                     hashRefreshToken: string;
                 }>;
             };
-            method: "POST";
-            body: z.ZodObject<{
-                username: z.ZodString;
-                password: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                username: string;
-                password: string;
-            }, {
-                username: string;
-                password: string;
-            }>;
-            path: "/api/users";
             strictStatusCodes: true;
         };
     };

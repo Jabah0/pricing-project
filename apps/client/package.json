@@ -10,9 +10,8 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.12.6",
-    "@mbarzda/solid-i18next": "^1.4.1",
+    "@tanstack/solid-query": "^4.35.7",
     "@solidjs/router": "^0.13.1",
-    "@tanstack/solid-query": "^5.30.3",
     "@ts-rest/core": "^3.40.1",
     "@ts-rest/solid-query": "^3.39.1",
     "api-contract": "*",
@@ -23,7 +22,6 @@
     "i18next-http-backend": "^2.5.0",
     "i18next-xhr-backend": "^3.2.2",
     "install": "^0.13.0",
-    "npm": "^10.5.2",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.15",
     "solid-sonner": "^0.2.5",
