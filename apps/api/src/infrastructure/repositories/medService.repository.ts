@@ -28,7 +28,6 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     code: string,
     dalilCode: string,
   ): Promise<MedService[]> {
-    console.log('name', name);
     return await this.prisma.medService.findMany({
       where: {
         name: {

@@ -110,6 +110,7 @@ export const contract = c.router(
         },
       },
     },
+
     auth: {
       login: {
         method: "POST",
@@ -174,5 +175,6 @@ export const contract = c.router(
       },
     },
   },
+
   { pathPrefix: "/api", strictStatusCodes: true }
 );

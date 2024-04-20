@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect, createSignal } from "solid-js";
+import { For, Match, Switch, createSignal } from "solid-js";
 import { BiRegularSearchAlt } from "solid-icons/bi";
 import { useLocale } from "@/features/locale/locale.context";
 import { apiClient } from "@/api/api-client";
@@ -7,8 +7,8 @@ import { MedServiceItem } from "./MedServiceItem";
 export const MedServiceList = () => {
   const locale = useLocale();
 
-  const [serviceName, setServiceName] = createSignal<string>("");
-  const [serviceCode, setServiceCode] = createSignal<string>("");
+  const [serviceName, setServiceName] = createSignal<string>();
+  const [serviceCode, setServiceCode] = createSignal<string>();
 
   const servicesQuery = apiClient.medServices.getAll.createQuery(
     () => ["services", serviceName(), serviceCode()],

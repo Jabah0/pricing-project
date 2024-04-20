@@ -13,9 +13,7 @@ export const Navbar = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) {
-          // Navbar is not visible in the viewport
           setIsVisible(true);
-          console.log("Navbar disappeared!");
         }
         if (entry.isIntersecting) setIsVisible(false);
       });
