@@ -26,6 +26,7 @@ import { EnvironmentConfigService } from '../config/environment-config/environme
 import { UseCaseProxy } from './usecases-proxy';
 import { GetUsersUseCase } from '../../usecases/user/getUsers.usecase';
 import { GetUserUseCase } from '../../usecases/user/getUser.usecase';
+import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ export class UsecasesProxyModule {
   static GET_MED_SERVICES_USECASES_PROXY = 'getMedServicesUsecasesProxy';
   static POST_MED_SERVICE_USECASES_PROXY = 'postMedServiceUsecasesProxy';
   static DELETE_MED_SERVICE_USECASES_PROXY = 'deleteMedServiceUsecasesProxy';
+  static UPDATE_MED_SERVICE_USEcASES_PROXY = 'updateMedServiceUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -153,6 +155,17 @@ export class UsecasesProxyModule {
               new DeleteMedServiceUseCase(logger, medServiceRepository),
             ),
         },
+        {
+          inject: [LoggerService, DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            medServiceRepository: DatabaseMedServiceRepository,
+          ) =>
+            new UseCaseProxy(
+              new UpdateMedServiceUseCase(logger, medServiceRepository),
+            ),
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_MED_SERVICE_USECASES_PROXY,
@@ -165,6 +178,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY,
       ],
     };
   }

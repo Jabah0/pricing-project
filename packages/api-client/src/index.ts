@@ -89,6 +89,26 @@ export const contract = c.router(
           }),
         },
       },
+
+      patchOne: {
+        method: "PATCH",
+        path: "/med-services/:id",
+        pathParams: z.object({
+          id: z.coerce.string(),
+        }),
+        body: z.object({
+          price: z.number().optional(),
+          unitSize: z.number().optional(),
+        }),
+        responses: {
+          200: z.object({
+            message: z.string(),
+          }),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
     },
     auth: {
       login: {

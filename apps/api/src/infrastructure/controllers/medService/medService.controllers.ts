@@ -7,6 +7,7 @@ import { GetMedServiceUseCase } from 'src/usecases/medService/getMedService.usec
 import { GetMedServicesUseCase } from 'src/usecases/medService/getMedServices.usecase';
 import { AddMedServiceUseCase } from 'src/usecases/medService/addMedService.usecase';
 import { DeleteMedServiceUseCase } from 'src/usecases/medService/deleteMedService.usecase';
+import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 
 @Controller()
 export class MedServiceController {
@@ -19,11 +20,12 @@ export class MedServiceController {
     private readonly addMedServiceUseCaseProxy: UseCaseProxy<AddMedServiceUseCase>,
     @Inject(UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY)
     private readonly deleteMedServiceUseCaseProxy: UseCaseProxy<DeleteMedServiceUseCase>,
+    @Inject(UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY)
+    private readonly updateMedServiceUseCaseProxy: UseCaseProxy<UpdateMedServiceUseCase>,
   ) {}
 
   @TsRestHandler(contract.medServices.getAll)
   async getAll() {
-    console.log('getAll executed');
     return tsRestHandler(
       contract.medServices.getAll,
       async ({ query: { name, code, dalilCode } }) => {
@@ -38,7 +40,7 @@ export class MedServiceController {
     );
   }
 
-  @TsRestHandler(contract.medServices)
+  @TsRestHandler(contract.medServices.getOne)
   async getOne() {
     return tsRestHandler(
       contract.medServices.getOne,
@@ -95,6 +97,27 @@ export class MedServiceController {
         return {
           status: 204,
           body: { message: 'The service deleted successfully' },
+        };
+      },
+    );
+  }
+
+  @TsRestHandler(contract.medServices.patchOne)
+  async patchOne() {
+    return tsRestHandler(
+      contract.medServices.patchOne,
+      async ({ params: { id }, body }) => {
+        const updatedService = await this.updateMedServiceUseCaseProxy
+          .getInstance()
+          .execute(id, body);
+
+        if (!updatedService) {
+          return { status: 404, body: { message: 'MedService not found' } };
+        }
+
+        return {
+          status: 200,
+          body: { message: 'The service updated successfully' },
         };
       },
     );

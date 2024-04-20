@@ -11,7 +11,7 @@ import { contract } from 'api-contract';
 
 async function bootstrap() {
   const env = process.env.NODE_ENV;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.use(cookieParser());
 

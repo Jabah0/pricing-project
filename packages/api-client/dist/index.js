@@ -77,6 +77,25 @@ exports.contract = c.router({
                 }),
             },
         },
+        patchOne: {
+            method: "PATCH",
+            path: "/med-services/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.string(),
+            }),
+            body: zod_1.z.object({
+                price: zod_1.z.number().optional(),
+                unitSize: zod_1.z.number().optional(),
+            }),
+            responses: {
+                200: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
+                404: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
+            },
+        },
     },
     auth: {
         login: {

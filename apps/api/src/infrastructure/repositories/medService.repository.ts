@@ -65,4 +65,18 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
 
     return deletedService;
   }
+
+  async patch(
+    id: string,
+    updateBody: Partial<MedService>,
+  ): Promise<MedService> {
+    const updatedService = await this.prisma.medService.update({
+      where: { id },
+      data: { ...updateBody },
+    });
+
+    if (!updatedService) return null;
+
+    return updatedService;
+  }
 }
