@@ -3,12 +3,79 @@ import { BiRegularSearchAlt } from "solid-icons/bi";
 import { useLocale } from "@/features/locale/locale.context";
 import { apiClient } from "@/api/api-client";
 import { MedServiceItem } from "./MedServiceItem";
+import toast from "solid-toast";
+import { useQueryClient } from "@tanstack/solid-query";
+import { ClientInferResponses } from "@ts-rest/core";
+import { contract } from "api-contract";
+
+type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
 export const MedServiceList = () => {
   const locale = useLocale();
 
   const [serviceName, setServiceName] = createSignal<string>();
   const [serviceCode, setServiceCode] = createSignal<string>();
+
+  const queryClient = useQueryClient();
+
+  const medServiceMutation = apiClient.medServices.patchOne.createMutation({
+    onMutate: async (newService) => {
+      await queryClient.cancelQueries({
+        queryKey: ["services", serviceName(), serviceCode()],
+      });
+
+      console.log(newService);
+
+      const previousDate = {
+        ...queryClient.getQueryData<MedServices>([
+          "services",
+          serviceName(),
+          serviceCode(),
+        ]),
+      };
+
+      queryClient.setQueryData<MedServices>(
+        ["services", serviceName(), serviceCode()],
+        (old) => {
+          if (!old) return undefined;
+
+          const targetService = old.body.find(
+            (item) => item.id === newService.params.id
+          );
+
+          if (targetService) {
+            targetService.price = newService.body?.price || targetService.price;
+          }
+
+          return {
+            ...old,
+            body: [...old.body],
+          };
+        }
+      );
+
+      console.log(previousDate);
+
+      return { previousDate };
+    },
+    onError: (err, newService, context) => {
+      queryClient.setQueryData(
+        ["services", serviceName(), serviceCode()],
+        context.previousDate
+      );
+      toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
+    },
+    onSuccess: () => {
+      toast.success(locale.t("servicePriceUpdatedSuccessfully"));
+    },
+  });
+
+  const onUpdateServicePrice = (id: string, price: number) => {
+    medServiceMutation.mutate({
+      params: { id },
+      body: { price },
+    });
+  };
 
   const servicesQuery = apiClient.medServices.getAll.createQuery(
     () => ["services", serviceName(), serviceCode()],
@@ -75,7 +142,13 @@ export const MedServiceList = () => {
               </Match>
               <Match when={servicesQuery.data?.body.length !== 0}>
                 <For each={servicesQuery.data?.body}>
-                  {(ser) => <MedServiceItem medService={ser} />}
+                  {(ser) => (
+                    <MedServiceItem
+                      updateServicePrice={onUpdateServicePrice}
+                      updateServiceUnitSize={onUpdateServicePrice}
+                      medService={ser}
+                    />
+                  )}
                 </For>
               </Match>
             </Switch>

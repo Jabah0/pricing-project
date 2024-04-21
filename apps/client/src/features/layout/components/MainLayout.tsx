@@ -1,5 +1,4 @@
 import { ParentComponent } from "solid-js";
-import { Toaster } from "solid-sonner";
 import { FiHome, FiSettings } from "solid-icons/fi";
 import { RiHealthMedicalCapsuleFill } from "solid-icons/ri";
 import { FaSolidBuildingColumns } from "solid-icons/fa";
@@ -8,6 +7,7 @@ import { Sidebar } from "./Sidebar";
 import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
 import { useLocale } from "@/features/locale/locale.context";
+import { Toaster } from "solid-toast";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
@@ -40,7 +40,7 @@ export const MainLayout: ParentComponent = (props) => {
           <div>{props.children}</div>
         </div>
       </div>
-      <Toaster richColors />
+      <Toaster />
     </div>
   );
 };

@@ -2,10 +2,11 @@ import { useLocale } from "@/features/locale/locale.context";
 import { MedService } from "api-contract";
 import { Match, Switch, createSignal } from "solid-js";
 import { EditPriceButton } from "./EditPriceButton";
-import { apiClient } from "@/api/api-client";
 
 type Props = {
   medService: MedService;
+  updateServicePrice: (id: string, price: number) => void;
+  updateServiceUnitSize: (id: string, unitSize: number) => void;
 };
 
 export const MedServiceItem = (props: Props) => {
@@ -14,10 +15,6 @@ export const MedServiceItem = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
 
   let priceInputRef: HTMLInputElement | undefined;
-
-  const medServiceMutation = apiClient.medServices.patchOne.createMutation({
-    onError: () => {},
-  });
 
   const onClickEdit = () => {
     setIsEdit(true);
@@ -30,10 +27,10 @@ export const MedServiceItem = (props: Props) => {
 
   const onClickSave = () => {
     setIsEdit(false);
-    medServiceMutation.mutate({
-      params: { id: props.medService.id },
-      body: { price: parseInt(priceInputRef?.value || "0") },
-    });
+    props.updateServicePrice(
+      props.medService.id,
+      parseInt(priceInputRef?.value || "0")
+    );
   };
 
   return (

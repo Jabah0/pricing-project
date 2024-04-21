@@ -23,7 +23,7 @@
     "i18next-xhr-backend": "^3.2.2",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.15",
-    "solid-sonner": "^0.2.5",
+    "solid-toast": "^0.5.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7"
   },
