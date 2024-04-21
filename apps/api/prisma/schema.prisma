@@ -21,6 +21,7 @@ model User {
   updateDate        DateTime @updatedAt
   lastLogin         DateTime?
   hashRefreshToken  String
+  medServices UserMedServies[]
 }
 
 model MedService {
@@ -31,4 +32,15 @@ model MedService {
   nationalCode      String
   price             Float
   unitSize          Int
+  numberOfPricing   Int
+}
+
+model UserMedServies {
+  userId        Int
+  user          User  @relation(fields: [userId], references: [id])
+  medServcieId  Int  
+  createDate        DateTime @default(now())
+  updateDate        DateTime @updatedAt
+
+  @@id([userId, medServcieId])
 }

@@ -40,7 +40,7 @@ export const MainLayout: ParentComponent = (props) => {
           <div>{props.children}</div>
         </div>
       </div>
-      <Toaster />
+      <Toaster position="bottom-right" />
     </div>
   );
 };

@@ -40,6 +40,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           contains: dalilCode,
         },
       },
+      orderBy: { id: 'asc' },
     });
   }
 

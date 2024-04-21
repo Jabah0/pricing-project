@@ -19,20 +19,18 @@ export const MedServiceList = () => {
   const queryClient = useQueryClient();
 
   const medServiceMutation = apiClient.medServices.patchOne.createMutation({
-    onMutate: async (newService) => {
+    onMutate: async (
+      newService
+    ): Promise<{ previousData: MedServices | undefined }> => {
       await queryClient.cancelQueries({
         queryKey: ["services", serviceName(), serviceCode()],
       });
 
-      console.log(newService);
-
-      const previousDate = {
-        ...queryClient.getQueryData<MedServices>([
-          "services",
-          serviceName(),
-          serviceCode(),
-        ]),
-      };
+      const previousData = queryClient.getQueryData<MedServices>([
+        "services",
+        serviceName(),
+        serviceCode(),
+      ]);
 
       queryClient.setQueryData<MedServices>(
         ["services", serviceName(), serviceCode()],
@@ -54,19 +52,22 @@ export const MedServiceList = () => {
         }
       );
 
-      console.log(previousDate);
-
-      return { previousDate };
+      return { previousData };
     },
-    onError: (err, newService, context) => {
+    onError: (_, __, context) => {
+      const typedContext = context as { previousData: MedServices | undefined };
+
       queryClient.setQueryData(
         ["services", serviceName(), serviceCode()],
-        context.previousDate
+        typedContext.previousData
       );
       toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
     },
     onSuccess: () => {
       toast.success(locale.t("servicePriceUpdatedSuccessfully"));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["services", serviceName(), serviceCode()]);
     },
   });
 
