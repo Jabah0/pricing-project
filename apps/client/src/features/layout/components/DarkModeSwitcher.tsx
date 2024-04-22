@@ -1,5 +1,6 @@
 import { Match, Switch, createSignal } from "solid-js";
-import { FaSolidMoon, FaSolidSun } from "solid-icons/fa";
+import ClearDayFill from "@/assets/icons/ClearDayFill";
+import ClearNightFill from "@/assets/icons/ClearNightFill";
 
 export const DarkModeSwitcher = () => {
   const [isDark, setIsDark] = createSignal(true);
@@ -16,7 +17,7 @@ export const DarkModeSwitcher = () => {
               justify-center items-center"
             onClick={onClick}
           >
-            <FaSolidMoon class="fill-moon h-6 w-6" />
+            <ClearNightFill />
           </button>
         </Match>
         <Match when={!isDark()}>
@@ -25,7 +26,7 @@ export const DarkModeSwitcher = () => {
             justify-center items-center"
             onClick={onClick}
           >
-            <FaSolidSun class="fill-sun h-6 w-6" />
+            <ClearDayFill />
           </button>
         </Match>
       </Switch>

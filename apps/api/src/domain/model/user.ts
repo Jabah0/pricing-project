@@ -1,3 +1,5 @@
+import { MedService } from 'api-contract';
+
 export class UserWithoutPassword {
   id: number;
   username: string;
@@ -5,6 +7,7 @@ export class UserWithoutPassword {
   updatedDate: Date;
   lastLogin: Date;
   hashRefreshToken: string;
+  medServices: MedService[];
 }
 
 export class UserM extends UserWithoutPassword {
@@ -18,6 +21,7 @@ export class UserM extends UserWithoutPassword {
       updatedDate: this.updatedDate,
       lastLogin: this.lastLogin,
       hashRefreshToken: this.hashRefreshToken,
+      medServices: this.medServices,
     };
   }
 }
