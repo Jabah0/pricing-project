@@ -14,33 +14,35 @@ datasource db {
 }
 
 model User {
-  id                Int @default(autoincrement()) @id
+  id                Int       @default(autoincrement()) @id
   password          String
-  username          String @unique
-  createDate        DateTime @default(now())
-  updateDate        DateTime @updatedAt
+  username          String    @unique
+  createDate        DateTime  @default(now())
+  updatedDate        DateTime  @updatedAt
   lastLogin         DateTime?
   hashRefreshToken  String
-  medServices UserMedServies[]
+  medServices       MedService[]
 }
 
 model MedService {
-  id                String @id
+  id                String  @id
   name              String
   dalilName         String
   code              String
   nationalCode      String
   price             Float
   unitSize          Int
-  numberOfPricing   Int
+  numberOfPricing   Int     @default(0)
+  users             User[]
 }
 
-model UserMedServies {
-  userId        Int
-  user          User  @relation(fields: [userId], references: [id])
-  medServcieId  Int  
-  createDate        DateTime @default(now())
-  updateDate        DateTime @updatedAt
+// model UserMedServies {
+//   userId            Int
+//   user              User        @relation(fields: [userId], references: [id])
+//   medServcieId      String
+//   medService        MedService  @relation(fields: [medServcieId], references: [id])  
+//   createDate        DateTime    @default(now())
+//   updateDate        DateTime    @updatedAt
 
-  @@id([userId, medServcieId])
-}
+//   @@id([userId, medServcieId])
+// }

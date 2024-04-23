@@ -11,6 +11,7 @@ exports.MedServiceSchema = zod_1.z.object({
     dalilName: zod_1.z.string(),
     nationalCode: zod_1.z.string(),
     price: zod_1.z.number(),
+    numberOfPricing: zod_1.z.number().default(0),
     unitSize: zod_1.z.number(),
 });
 exports.CredentialSchema = zod_1.z.object({

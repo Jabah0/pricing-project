@@ -6,6 +6,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     dalilName: z.ZodString;
     nationalCode: z.ZodString;
     price: z.ZodNumber;
+    numberOfPricing: z.ZodDefault<z.ZodNumber>;
     unitSize: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     id: string;
@@ -14,6 +15,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     dalilName: string;
     nationalCode: string;
     price: number;
+    numberOfPricing: number;
     unitSize: number;
 }, {
     id: string;
@@ -23,6 +25,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     nationalCode: string;
     price: number;
     unitSize: number;
+    numberOfPricing?: number | undefined;
 }>;
 export type MedService = z.infer<typeof MedServiceSchema>;
 export declare const CredentialSchema: z.ZodObject<{
@@ -73,6 +76,7 @@ export declare const contract: {
                 dalilName: z.ZodString;
                 nationalCode: z.ZodString;
                 price: z.ZodNumber;
+                numberOfPricing: z.ZodDefault<z.ZodNumber>;
                 unitSize: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
                 id: string;
@@ -81,6 +85,7 @@ export declare const contract: {
                 dalilName: string;
                 nationalCode: string;
                 price: number;
+                numberOfPricing: number;
                 unitSize: number;
             }, {
                 id: string;
@@ -90,6 +95,7 @@ export declare const contract: {
                 nationalCode: string;
                 price: number;
                 unitSize: number;
+                numberOfPricing?: number | undefined;
             }>;
             path: "/api/med-services";
             responses: {
@@ -100,6 +106,7 @@ export declare const contract: {
                     dalilName: z.ZodString;
                     nationalCode: z.ZodString;
                     price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: string;
@@ -108,6 +115,7 @@ export declare const contract: {
                     dalilName: string;
                     nationalCode: string;
                     price: number;
+                    numberOfPricing: number;
                     unitSize: number;
                 }, {
                     id: string;
@@ -117,6 +125,7 @@ export declare const contract: {
                     nationalCode: string;
                     price: number;
                     unitSize: number;
+                    numberOfPricing?: number | undefined;
                 }>;
             };
             strictStatusCodes: true;
@@ -145,6 +154,7 @@ export declare const contract: {
                     dalilName: z.ZodString;
                     nationalCode: z.ZodString;
                     price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: string;
@@ -153,6 +163,7 @@ export declare const contract: {
                     dalilName: string;
                     nationalCode: string;
                     price: number;
+                    numberOfPricing: number;
                     unitSize: number;
                 }, {
                     id: string;
@@ -162,6 +173,7 @@ export declare const contract: {
                     nationalCode: string;
                     price: number;
                     unitSize: number;
+                    numberOfPricing?: number | undefined;
                 }>, "many">;
             };
             strictStatusCodes: true;
@@ -184,6 +196,7 @@ export declare const contract: {
                     dalilName: z.ZodString;
                     nationalCode: z.ZodString;
                     price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: string;
@@ -192,6 +205,7 @@ export declare const contract: {
                     dalilName: string;
                     nationalCode: string;
                     price: number;
+                    numberOfPricing: number;
                     unitSize: number;
                 }, {
                     id: string;
@@ -201,6 +215,7 @@ export declare const contract: {
                     nationalCode: string;
                     price: number;
                     unitSize: number;
+                    numberOfPricing?: number | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;

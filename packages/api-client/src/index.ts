@@ -10,6 +10,7 @@ export const MedServiceSchema = z.object({
   dalilName: z.string(),
   nationalCode: z.string(),
   price: z.number(),
+  numberOfPricing: z.number().default(0),
   unitSize: z.number(),
 });
 

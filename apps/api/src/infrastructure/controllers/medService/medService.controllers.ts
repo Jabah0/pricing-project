@@ -1,6 +1,6 @@
 import { contract } from 'api-contract';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { Controller, Inject } from '@nestjs/common';
+import { Controller, Inject, Req } from '@nestjs/common';
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecases-proxy.module';
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecases-proxy';
 import { GetMedServiceUseCase } from 'src/usecases/medService/getMedService.usecase';
@@ -103,10 +103,12 @@ export class MedServiceController {
   }
 
   @TsRestHandler(contract.medServices.patchOne)
-  async patchOne() {
+  async patchOne(@Req() req) {
     return tsRestHandler(
       contract.medServices.patchOne,
       async ({ params: { id }, body }) => {
+        console.log(req);
+
         const updatedService = await this.updateMedServiceUseCaseProxy
           .getInstance()
           .execute(id, body);

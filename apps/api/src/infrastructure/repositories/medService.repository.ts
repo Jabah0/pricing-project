@@ -17,6 +17,12 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         nationalCode: medService.nationalCode,
         price: medService.price,
         unitSize: medService.unitSize,
+        numberOfPricing: medService.numberOfPricing,
+        users: {
+          connect: {
+            id: 20,
+          },
+        },
       },
     });
 
@@ -40,6 +46,9 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           contains: dalilCode,
         },
       },
+      include: {
+        users: true,
+      },
       orderBy: { id: 'asc' },
     });
   }
@@ -48,6 +57,9 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     const selectedMedService = await this.prisma.medService.findUnique({
       where: {
         id,
+      },
+      include: {
+        users: true,
       },
     });
 
@@ -72,7 +84,14 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
   ): Promise<MedService> {
     const updatedService = await this.prisma.medService.update({
       where: { id },
-      data: { ...updateBody },
+      data: {
+        ...updateBody,
+        users: {
+          connect: {
+            id: 20,
+          },
+        },
+      },
     });
 
     if (!updatedService) return null;
