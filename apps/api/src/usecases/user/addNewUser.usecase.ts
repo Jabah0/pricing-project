@@ -25,7 +25,14 @@ export class AddNewUserUseCases {
       `New User: ${newUser.username} have been inserted`,
     );
 
-    return newUser.toUserWithoutPassword();
+    return {
+      id: newUser.id,
+      username: newUser.username,
+      lastLogin: newUser.lastLogin,
+      hashRefreshToken: newUser.hashRefreshToken,
+      createDate: newUser.createDate,
+      updatedDate: newUser.updatedDate,
+    };
   }
 
   async hashPassword(password: string) {

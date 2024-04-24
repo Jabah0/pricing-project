@@ -1,6 +1,6 @@
 import { contract } from 'api-contract';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { Controller, Inject, Req } from '@nestjs/common';
+import { Controller, Inject, Req, UseGuards } from '@nestjs/common';
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecases-proxy.module';
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecases-proxy';
 import { GetMedServiceUseCase } from 'src/usecases/medService/getMedService.usecase';
@@ -8,6 +8,8 @@ import { GetMedServicesUseCase } from 'src/usecases/medService/getMedServices.us
 import { AddMedServiceUseCase } from 'src/usecases/medService/addMedService.usecase';
 import { DeleteMedServiceUseCase } from 'src/usecases/medService/deleteMedService.usecase';
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
+import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class MedServiceController {
@@ -24,6 +26,7 @@ export class MedServiceController {
     private readonly updateMedServiceUseCaseProxy: UseCaseProxy<UpdateMedServiceUseCase>,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.medServices.getAll)
   async getAll() {
     return tsRestHandler(
@@ -102,16 +105,15 @@ export class MedServiceController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.medServices.patchOne)
   async patchOne(@Req() req) {
     return tsRestHandler(
       contract.medServices.patchOne,
       async ({ params: { id }, body }) => {
-        console.log(req);
-
         const updatedService = await this.updateMedServiceUseCaseProxy
           .getInstance()
-          .execute(id, body);
+          .execute(req.user.id, id, body);
 
         if (!updatedService) {
           return { status: 404, body: { message: 'MedService not found' } };

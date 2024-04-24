@@ -5,5 +5,9 @@ export interface MedServiceRepository {
   findAll(name: string, code: string, dalilCode: string): Promise<MedService[]>;
   findById(id: string): Promise<MedService>;
   deleteById(id: string): Promise<MedService>;
-  patch(id: string, updateBody: Partial<MedService>): Promise<MedService>;
+  patch(
+    userId: number,
+    serviceId: string,
+    updateBody: Partial<MedService>,
+  ): Promise<MedService>;
 }

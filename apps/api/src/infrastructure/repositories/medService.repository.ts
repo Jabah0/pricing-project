@@ -18,11 +18,6 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         price: medService.price,
         unitSize: medService.unitSize,
         numberOfPricing: medService.numberOfPricing,
-        users: {
-          connect: {
-            id: 20,
-          },
-        },
       },
     });
 
@@ -79,16 +74,17 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
   }
 
   async patch(
-    id: string,
+    userId: number,
+    serviceId: string,
     updateBody: Partial<MedService>,
   ): Promise<MedService> {
     const updatedService = await this.prisma.medService.update({
-      where: { id },
+      where: { id: serviceId },
       data: {
         ...updateBody,
         users: {
           connect: {
-            id: 20,
+            id: userId,
           },
         },
       },

@@ -51,8 +51,14 @@ export class LoginUseCases {
     const match = await this.bcryptService.compare(password, user.password);
     if (user && match) {
       await this.updateLoginTime(user.username);
-      const result = user.toUserWithoutPassword();
-      return result;
+      return {
+        id: user.id,
+        username: user.username,
+        lastLogin: user.lastLogin,
+        hashRefreshToken: user.hashRefreshToken,
+        createDate: user.createDate,
+        updatedDate: user.updatedDate,
+      };
     }
     return null;
   }

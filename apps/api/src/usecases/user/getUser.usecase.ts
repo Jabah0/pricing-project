@@ -6,6 +6,13 @@ export class GetUserUseCase {
 
   async execute(id: number): Promise<UserWithoutPassword> {
     const user = await this.userRepository.getUser(id);
-    return user.toUserWithoutPassword();
+    return {
+      id: user.id,
+      username: user.username,
+      lastLogin: user.lastLogin,
+      hashRefreshToken: user.hashRefreshToken,
+      createDate: user.createDate,
+      updatedDate: user.updatedDate,
+    };
   }
 }

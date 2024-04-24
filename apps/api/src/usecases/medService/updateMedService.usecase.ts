@@ -9,17 +9,19 @@ export class UpdateMedServiceUseCase {
   ) {}
 
   async execute(
-    id: string,
+    userId,
+    serviceId: string,
     updateBody: { price?: number; unitSize?: number },
   ): Promise<MedService> {
     const updatedService = await this.medServiceRepository.patch(
-      id,
+      userId,
+      serviceId,
       updateBody,
     );
 
     this.logger.log(
       'updateMedServiceUseCase execute',
-      `MedService ${id} have been Updated`,
+      `MedService ${serviceId} have been Updated`,
     );
 
     return updatedService;

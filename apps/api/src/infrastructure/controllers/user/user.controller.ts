@@ -1,3 +1,5 @@
+import { contract } from 'api-contract';
+import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { Body, Controller, Inject, UseGuards } from '@nestjs/common';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
@@ -5,8 +7,6 @@ import { AddNewUserUseCases } from '../../../usecases/user/addNewUser.usecase';
 import { AddUserDto } from './user-dto.class';
 import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
-import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { contract } from 'api-contract';
 import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
 
 @Controller('')

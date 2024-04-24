@@ -7,8 +7,13 @@ export class IsAuthenticatedUseCases {
   async execute(username: string): Promise<UserWithoutPassword> {
     const user: UserM = await this.adminUserRepo.getUserByUsername(username);
 
-    const info = user.toUserWithoutPassword();
-
-    return info;
+    return {
+      id: user.id,
+      username: user.username,
+      lastLogin: user.lastLogin,
+      hashRefreshToken: user.hashRefreshToken,
+      createDate: user.createDate,
+      updatedDate: user.updatedDate,
+    };
   }
 }

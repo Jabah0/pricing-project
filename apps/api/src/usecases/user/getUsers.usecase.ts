@@ -6,6 +6,13 @@ export class GetUsersUseCase {
 
   async execute(): Promise<UserWithoutPassword[]> {
     const users = await this.userRepository.getUsers();
-    return users.map((user) => user.toUserWithoutPassword());
+    return users.map((user) => ({
+      id: user.id,
+      username: user.username,
+      lastLogin: user.lastLogin,
+      hashRefreshToken: user.hashRefreshToken,
+      createDate: user.createDate,
+      updatedDate: user.updatedDate,
+    }));
   }
 }
