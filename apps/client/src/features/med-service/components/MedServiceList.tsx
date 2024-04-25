@@ -1,12 +1,12 @@
+import { contract } from "api-contract";
+import toast from "solid-toast";
 import { For, Match, Switch, createSignal } from "solid-js";
 import { BiRegularSearchAlt } from "solid-icons/bi";
+import { useQueryClient } from "@tanstack/solid-query";
 import { useLocale } from "@/features/locale/locale.context";
 import { apiClient } from "@/api/api-client";
-import { MedServiceItem } from "./MedServiceItem";
-import toast from "solid-toast";
-import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
-import { contract } from "api-contract";
+import { MedServiceItem } from "./MedServiceItem";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
@@ -18,61 +18,69 @@ export const MedServiceList = () => {
 
   const queryClient = useQueryClient();
 
-  const medServiceMutation = apiClient.medServices.patchOne.createMutation({
-    onMutate: async (
-      newService
-    ): Promise<{ previousData: MedServices | undefined }> => {
-      await queryClient.cancelQueries({
-        queryKey: ["services", serviceName(), serviceCode()],
-      });
+  const updateMedServiceMutation =
+    apiClient.medServices.patchOne.createMutation({
+      onMutate: async (
+        newService
+      ): Promise<{ previousData: MedServices | undefined }> => {
+        await queryClient.cancelQueries({
+          queryKey: ["services", serviceName(), serviceCode()],
+        });
 
-      const previousData = queryClient.getQueryData<MedServices>([
-        "services",
-        serviceName(),
-        serviceCode(),
-      ]);
+        const previousData = queryClient.getQueryData<MedServices>([
+          "services",
+          serviceName(),
+          serviceCode(),
+        ]);
 
-      queryClient.setQueryData<MedServices>(
-        ["services", serviceName(), serviceCode()],
-        (old) => {
-          if (!old) return undefined;
+        queryClient.setQueryData<MedServices>(
+          ["services", serviceName(), serviceCode()],
+          (old) => {
+            if (!old) return undefined;
 
-          const targetService = old.body.find(
-            (item) => item.id === newService.params.id
-          );
+            const targetService = old.body.find(
+              (item) => item.id === newService.params.id
+            );
 
-          if (targetService) {
-            targetService.price = newService.body?.price || targetService.price;
+            if (targetService) {
+              targetService.price =
+                newService.body?.price || targetService.price;
+            }
+
+            return {
+              ...old,
+              body: [...old.body],
+            };
           }
+        );
 
-          return {
-            ...old,
-            body: [...old.body],
-          };
-        }
-      );
+        return { previousData };
+      },
+      onError: (_, __, context) => {
+        const typedContext = context as {
+          previousData: MedServices | undefined;
+        };
 
-      return { previousData };
-    },
-    onError: (_, __, context) => {
-      const typedContext = context as { previousData: MedServices | undefined };
-
-      queryClient.setQueryData(
-        ["services", serviceName(), serviceCode()],
-        typedContext.previousData
-      );
-      toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
-    },
-    onSuccess: () => {
-      toast.success(locale.t("servicePriceUpdatedSuccessfully"));
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(["services", serviceName(), serviceCode()]);
-    },
-  });
+        queryClient.setQueryData(
+          ["services", serviceName(), serviceCode()],
+          typedContext.previousData
+        );
+        toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
+      },
+      onSuccess: () => {
+        toast.success(locale.t("servicePriceUpdatedSuccessfully"));
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries([
+          "services",
+          serviceName(),
+          serviceCode(),
+        ]);
+      },
+    });
 
   const onUpdateServicePrice = (id: string, price: number) => {
-    medServiceMutation.mutate({
+    updateMedServiceMutation.mutate({
       params: { id },
       body: { price },
     });

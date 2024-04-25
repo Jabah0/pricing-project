@@ -63,7 +63,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-
+        primary: "#8B5CF6",
         secondary: "#4C1D95",
         backPrimary: "#1E293B",
         elementBack: "#1E293B",

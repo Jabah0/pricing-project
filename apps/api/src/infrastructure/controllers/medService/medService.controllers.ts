@@ -9,8 +9,6 @@ import { AddMedServiceUseCase } from 'src/usecases/medService/addMedService.usec
 import { DeleteMedServiceUseCase } from 'src/usecases/medService/deleteMedService.usecase';
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
-import { AuthGuard } from '@nestjs/passport';
-
 @Controller()
 export class MedServiceController {
   constructor(

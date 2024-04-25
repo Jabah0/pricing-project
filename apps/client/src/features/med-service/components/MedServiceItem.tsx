@@ -71,7 +71,7 @@ export const MedServiceItem = (props: Props) => {
               </p>
               <p class="text-gray-400 font-bold">{locale.t("price")}</p>
             </div>
-            <div class="w-[0.05rem] h-10 bg-gray-300"></div>
+            <div class="w-[0.05rem] h-10 bg-gray-300" />
             <div class="flex flex-col justify-center items-center">
               <p class="text-white font-bold w-16 text-center">
                 {props.medService.unitSize}
@@ -90,7 +90,7 @@ export const MedServiceItem = (props: Props) => {
               />
               <p class="text-gray-400 font-bold">{locale.t("price")}</p>
             </div>
-            <div class="w-[0.05rem] h-10 bg-gray-300"></div>
+            <div class="w-[0.05rem] h-10 bg-gray-300" />
             <div class="flex flex-col justify-center items-center">
               <input
                 class="text-white font-bold w-16 bg-transparent 

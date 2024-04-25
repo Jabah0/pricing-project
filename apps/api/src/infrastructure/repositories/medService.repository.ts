@@ -29,6 +29,37 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     code: string,
     dalilCode: string,
   ): Promise<MedService[]> {
+    const medServices = await this.prisma.medService.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+        code: {
+          contains: code,
+        },
+        dalilName: {
+          contains: dalilCode,
+        },
+      },
+      include: {
+        users: true,
+      },
+      orderBy: { id: 'asc' },
+    });
+
+    const filteredMedServices = medServices.filter(
+      (medService) => medService.users.length < 3,
+    );
+
+    return filteredMedServices;
+  }
+
+  async findByUser(
+    userId: number,
+    name: string,
+    code: string,
+    dalilCode: string,
+  ): Promise<MedService[]> {
     return await this.prisma.medService.findMany({
       where: {
         name: {
@@ -39,6 +70,11 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         },
         dalilName: {
           contains: dalilCode,
+        },
+        users: {
+          some: {
+            id: userId,
+          },
         },
       },
       include: {

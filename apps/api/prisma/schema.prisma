@@ -35,14 +35,3 @@ model MedService {
   numberOfPricing   Int     @default(0)
   users             User[]
 }
-
-// model UserMedServies {
-//   userId            Int
-//   user              User        @relation(fields: [userId], references: [id])
-//   medServcieId      String
-//   medService        MedService  @relation(fields: [medServcieId], references: [id])  
-//   createDate        DateTime    @default(now())
-//   updateDate        DateTime    @updatedAt
-
-//   @@id([userId, medServcieId])
-// }

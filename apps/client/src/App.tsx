@@ -7,6 +7,8 @@ import { Match, Switch, createSignal, onMount } from "solid-js";
 import { locale } from "./features/locale/locale.config";
 import { LocaleProvider } from "./features/locale/LocaleProvider";
 import i18next from "i18next";
+import { AuthLayout } from "./features/layout/components/AuthLayout";
+import { Login } from "./features/auth/pages/Login";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);
@@ -20,8 +22,13 @@ function App() {
     <Switch>
       <Match when={loaded()}>
         <LocaleProvider i18n={i18next}>
-          <Router root={MainLayout}>
-            <Route path="/" component={MedServiceList} />
+          <Router>
+            <Route path="/" component={MainLayout}>
+              <Route path="/" component={MedServiceList} />
+            </Route>
+            <Route path="/auth" component={AuthLayout}>
+              <Route path="/login" component={Login} />
+            </Route>
           </Router>
         </LocaleProvider>
       </Match>
