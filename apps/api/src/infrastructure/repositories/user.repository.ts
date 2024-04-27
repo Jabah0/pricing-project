@@ -29,6 +29,23 @@ export class DatabaseUserRepository implements UserRepository {
     return this.toUser(user);
   }
 
+  async patchUser(
+    id: number,
+    updateBody: Omit<Partial<UserM>, 'id'>,
+  ): Promise<UserM> {
+    const user = await this.prisma.user.update({
+      data: {
+        ...updateBody,
+        medServices: {},
+      },
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  }
+
   async deleteUser(id: number): Promise<UserM> {
     const deletedUser = await this.prisma.user.delete({
       where: {
@@ -95,9 +112,10 @@ export class DatabaseUserRepository implements UserRepository {
     const adminUser: UserM = new UserM();
 
     adminUser.id = adminUserEntity.id;
+    adminUser.fullName = adminUserEntity.fullName;
     adminUser.username = adminUserEntity.username;
-    (adminUser.password = adminUserEntity.password),
-      (adminUser.createDate = adminUserEntity.createDate);
+    adminUser.password = adminUserEntity.password;
+    adminUser.createDate = adminUserEntity.createDate;
     adminUser.updatedDate = adminUserEntity.updatedDate;
     adminUser.lastLogin = adminUserEntity.lastLogin;
     adminUser.hashRefreshToken = adminUserEntity.hashRefreshToken;

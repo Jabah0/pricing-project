@@ -3,6 +3,7 @@ import { MedService } from 'api-contract';
 export class UserWithoutPassword {
   id: number;
   username: string;
+  fullName: string;
   createDate: Date;
   updatedDate: Date;
   lastLogin: Date;

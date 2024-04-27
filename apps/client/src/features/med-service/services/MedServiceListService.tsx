@@ -1,36 +1,169 @@
 import { apiClient } from "@/api/api-client";
-import { createSignal } from "solid-js";
+import { useLocale } from "@/features/locale/locale.context";
+import { useQueryClient } from "@tanstack/solid-query";
+import { ClientInferResponses } from "@ts-rest/core";
+import { MedService, contract } from "api-contract";
+import { createEffect, createSignal } from "solid-js";
+import toast from "solid-toast";
+
+type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
 export const MedServiceListService = () => {
-  const [name, setName] = createSignal("");
-  const [code, setCode] = createSignal("");
-  const [dalilCode, setDalilCode] = createSignal("");
+  const locale = useLocale();
 
-  const nameFilter = (term: string) => {
-    console.log("name", name());
-    setName(term);
-  };
+  const [isMy, setIsMy] = createSignal(false);
 
-  const codeFilter = (term: string) => {
-    setCode(term);
-  };
+  createEffect(() => {
+    console.log(isMy());
+  });
 
-  const dalilCodeFilter = (term: string) => {
-    setDalilCode(term);
+  const [serviceName, setServiceName] = createSignal<string>();
+  const [serviceCode, setServiceCode] = createSignal<string>();
+
+  const queryClient = useQueryClient();
+
+  const myServicesQuery = apiClient.medServices.getAllByUser.createQuery(
+    () => ["myServices", serviceName(), serviceCode()],
+    {
+      query: {
+        get name() {
+          return serviceName();
+        },
+        get code() {
+          return serviceCode();
+        },
+      },
+    }
+  );
+
+  const updateMedServiceMutation =
+    apiClient.medServices.patchOne.createMutation({
+      onMutate: async (
+        newService
+      ): Promise<{ previousData: MedServices | undefined }> => {
+        await queryClient.cancelQueries({
+          queryKey: ["services", serviceName(), serviceCode()],
+        });
+
+        const previousData = queryClient.getQueryData<MedServices>([
+          "services",
+          serviceName(),
+          serviceCode(),
+        ]);
+
+        let updatedService: MedService;
+        queryClient.setQueryData<MedServices>(
+          ["services", serviceName(), serviceCode()],
+          (old) => {
+            if (!old) return undefined;
+
+            const targetService = old.body.find(
+              (item) => item.id === newService.params.id
+            );
+
+            if (targetService) {
+              targetService.price =
+                newService.body?.price || targetService.price;
+
+              updatedService = targetService;
+            }
+
+            return {
+              ...old,
+              body: [...old.body],
+            };
+          }
+        );
+
+        queryClient.setQueryData<MedServices>(
+          ["myServices", serviceName(), serviceCode()],
+          (old) => {
+            if (!old) return undefined;
+
+            const targetService = old.body.find(
+              (item) => item.id === newService.params.id
+            );
+
+            if (targetService) {
+              targetService.price =
+                newService.body?.price || targetService.price;
+            } else {
+              return {
+                ...old,
+                body: [...old.body, updatedService],
+              };
+            }
+
+            return {
+              ...old,
+              body: [...old.body],
+            };
+          }
+        );
+
+        return { previousData };
+      },
+      onError: (_, __, context) => {
+        const typedContext = context as {
+          previousData: MedServices | undefined;
+        };
+
+        queryClient.setQueryData(
+          ["services", serviceName(), serviceCode()],
+          typedContext.previousData
+        );
+        toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
+      },
+      onSuccess: () => {
+        toast.success(locale.t("servicePriceUpdatedSuccessfully"));
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries([
+          "services",
+          serviceName(),
+          serviceCode(),
+        ]);
+        queryClient.invalidateQueries([
+          "myServices",
+          serviceName(),
+          serviceCode(),
+        ]);
+      },
+    });
+
+  const onUpdateServicePrice = (id: string, price: number) => {
+    updateMedServiceMutation.mutate({
+      params: { id },
+      body: { price },
+    });
   };
 
   const servicesQuery = apiClient.medServices.getAll.createQuery(
-    () => ["medServices", code(), name(), dalilCode()],
-    { query: { code: code(), name: name(), dalilCode: dalilCode() } }
+    () => ["services", serviceName(), serviceCode()],
+    {
+      query: {
+        get name() {
+          return serviceName();
+        },
+        get code() {
+          return serviceCode();
+        },
+      },
+    }
   );
 
+  const services = () => {
+    return isMy() ? myServicesQuery : servicesQuery;
+  };
+
   return {
-    nameFilter,
-    codeFilter,
-    dalilCodeFilter,
-    name,
-    code,
-    dalilCode,
-    servicesQuery,
+    onUpdateServicePrice,
+    setServiceName,
+    setServiceCode,
+    serviceName,
+    serviceCode,
+    setIsMy,
+    isMy,
+    servicesQuery: services,
   };
 };

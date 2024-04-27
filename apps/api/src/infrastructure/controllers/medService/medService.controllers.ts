@@ -9,6 +9,7 @@ import { AddMedServiceUseCase } from 'src/usecases/medService/addMedService.usec
 import { DeleteMedServiceUseCase } from 'src/usecases/medService/deleteMedService.usecase';
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
+import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedServices.usecase';
 @Controller()
 export class MedServiceController {
   constructor(
@@ -20,8 +21,10 @@ export class MedServiceController {
     private readonly addMedServiceUseCaseProxy: UseCaseProxy<AddMedServiceUseCase>,
     @Inject(UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY)
     private readonly deleteMedServiceUseCaseProxy: UseCaseProxy<DeleteMedServiceUseCase>,
-    @Inject(UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY)
+    @Inject(UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY)
     private readonly updateMedServiceUseCaseProxy: UseCaseProxy<UpdateMedServiceUseCase>,
+    @Inject(UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY)
+    private readonly getUserMedServicesUseCaseProxy: UseCaseProxy<GetUserMedServicesUseCase>,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -33,6 +36,23 @@ export class MedServiceController {
         const users = await this.getMedServicesUseCaseProxy
           .getInstance()
           .execute(name, code, dalilCode);
+        return {
+          status: 200,
+          body: users,
+        };
+      },
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.medServices.getAllByUser)
+  async getAllByUser(@Req() req) {
+    return tsRestHandler(
+      contract.medServices.getAllByUser,
+      async ({ query: { name, code, dalilCode } }) => {
+        const users = await this.getUserMedServicesUseCaseProxy
+          .getInstance()
+          .execute(req.user.id, name, code, dalilCode);
         return {
           status: 200,
           body: users,

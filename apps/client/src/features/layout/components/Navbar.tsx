@@ -2,6 +2,7 @@ import { Show, createEffect, createSignal } from "solid-js";
 import { DarkModeSwitcher } from "./DarkModeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { FloatMenu } from "./FloatMenu";
+import { ProfileButton } from "./ProfileButton";
 
 export const Navbar = () => {
   const [isVisible, setIsVisible] = createSignal(false);
@@ -30,6 +31,7 @@ export const Navbar = () => {
       <div class="flex gap-4">
         <LanguageSwitcher />
         <DarkModeSwitcher />
+        <ProfileButton />
         <Show when={isVisible()}>
           <FloatMenu />
         </Show>

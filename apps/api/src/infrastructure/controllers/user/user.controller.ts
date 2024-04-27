@@ -8,8 +8,9 @@ import { AddUserDto } from './user-dto.class';
 import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
 import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
+import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 
-@Controller('')
+@Controller()
 export class UserController {
   constructor(
     @Inject(UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY)
@@ -18,15 +19,17 @@ export class UserController {
     private readonly getUsersUsecaseProxy: UseCaseProxy<GetUsersUseCase>,
     @Inject(UsecasesProxyModule.GET_USER_USECASES_PROXY)
     private readonly getUserUsecaseProxy: UseCaseProxy<GetUserUseCase>,
+    @Inject(UsecasesProxyModule.UPDATE_USER_USECASES_PROXY)
+    private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCases>,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.users.create)
   async addNewUser(@Body() user: AddUserDto) {
     return tsRestHandler(contract.users.create, async () => {
       const newUser = await this.addUserUsecaseProxy
         .getInstance()
-        .execute(user.username, user.password);
+        .execute(user.fullName, user.username, user.password);
       return { status: 201, body: newUser };
     });
   }
@@ -48,5 +51,19 @@ export class UserController {
 
       return { status: 200, body: user };
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.patch)
+  async patchUser() {
+    return tsRestHandler(
+      contract.users.patch,
+      async ({ body, params: { id } }) => {
+        const user = await this.updateUserUsecaseProxy
+          .getInstance()
+          .execute(id, body);
+        return { status: 200, body: user };
+      },
+    );
   }
 }

@@ -10,5 +10,10 @@ export class AddUserDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
+  readonly fullName: string;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @IsString()
   readonly password: string;
 }

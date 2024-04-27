@@ -42,6 +42,7 @@ export type Credential = z.infer<typeof CredentialSchema>;
 export declare const UserSchema: z.ZodObject<{
     id: z.ZodNumber;
     username: z.ZodString;
+    fullName: z.ZodString;
     password: z.ZodString;
     createDate: z.ZodDate;
     updatedDate: z.ZodDate;
@@ -51,6 +52,7 @@ export declare const UserSchema: z.ZodObject<{
     id: number;
     username: string;
     password: string;
+    fullName: string;
     createDate: Date;
     updatedDate: Date;
     lastLogin: Date;
@@ -59,13 +61,85 @@ export declare const UserSchema: z.ZodObject<{
     id: number;
     username: string;
     password: string;
+    fullName: string;
     createDate: Date;
     updatedDate: Date;
     lastLogin: Date;
     hashRefreshToken: string;
 }>;
-export type User = z.infer<typeof UserSchema>;
+declare const UserWithoutPasswordSchema: z.ZodObject<Omit<{
+    id: z.ZodNumber;
+    username: z.ZodString;
+    fullName: z.ZodString;
+    password: z.ZodString;
+    createDate: z.ZodDate;
+    updatedDate: z.ZodDate;
+    lastLogin: z.ZodDate;
+    hashRefreshToken: z.ZodString;
+}, "password">, "strip", z.ZodTypeAny, {
+    id: number;
+    username: string;
+    fullName: string;
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}, {
+    id: number;
+    username: string;
+    fullName: string;
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}>;
+export type User = z.infer<typeof UserWithoutPasswordSchema>;
 export declare const contract: {
+    auth: {
+        login: {
+            method: "POST";
+            body: z.ZodObject<{
+                username: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                username: string;
+                password: string;
+            }, {
+                username: string;
+                password: string;
+            }>;
+            path: "/api/auth/login";
+            responses: {
+                200: z.ZodString;
+            };
+            strictStatusCodes: true;
+        };
+        logout: {
+            method: "POST";
+            body: z.ZodAny;
+            path: "/api/auth/logout";
+            responses: {
+                200: z.ZodString;
+            };
+            strictStatusCodes: true;
+        };
+        isAuthenticated: {
+            method: "GET";
+            path: "/api/auth/is_authenticated";
+            responses: {
+                200: z.ZodString;
+            };
+            strictStatusCodes: true;
+        };
+        refresh: {
+            method: "GET";
+            path: "/api/auth/refresh";
+            responses: {
+                200: z.ZodString;
+            };
+            strictStatusCodes: true;
+        };
+    };
     medServices: {
         create: {
             method: "POST";
@@ -146,6 +220,54 @@ export declare const contract: {
             }>;
             method: "GET";
             path: "/api/med-services";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilName: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                    unitSize: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    numberOfPricing: number;
+                    unitSize: number;
+                }, {
+                    id: string;
+                    name: string;
+                    code: string;
+                    dalilName: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
+                    numberOfPricing?: number | undefined;
+                }>, "many">;
+            };
+            strictStatusCodes: true;
+        };
+        getAllByUser: {
+            query: z.ZodObject<{
+                name: z.ZodOptional<z.ZodString>;
+                code: z.ZodOptional<z.ZodString>;
+                dalilCode: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                name?: string | undefined;
+                code?: string | undefined;
+                dalilCode?: string | undefined;
+            }, {
+                name?: string | undefined;
+                code?: string | undefined;
+                dalilCode?: string | undefined;
+            }>;
+            method: "GET";
+            path: "/api/med-services/user";
             responses: {
                 200: z.ZodArray<z.ZodObject<{
                     id: z.ZodString;
@@ -295,51 +417,6 @@ export declare const contract: {
             strictStatusCodes: true;
         };
     };
-    auth: {
-        login: {
-            method: "POST";
-            body: z.ZodObject<{
-                username: z.ZodString;
-                password: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                username: string;
-                password: string;
-            }, {
-                username: string;
-                password: string;
-            }>;
-            path: "/api/auth/login";
-            responses: {
-                200: z.ZodString;
-            };
-            strictStatusCodes: true;
-        };
-        logout: {
-            method: "POST";
-            body: z.ZodAny;
-            path: "/api/auth/logout";
-            responses: {
-                200: z.ZodString;
-            };
-            strictStatusCodes: true;
-        };
-        isAuthenticated: {
-            method: "GET";
-            path: "/api/auth/is_authenticated";
-            responses: {
-                200: z.ZodString;
-            };
-            strictStatusCodes: true;
-        };
-        refresh: {
-            method: "GET";
-            path: "/api/auth/refresh";
-            responses: {
-                200: z.ZodString;
-            };
-            strictStatusCodes: true;
-        };
-    };
     users: {
         getAll: {
             method: "GET";
@@ -348,6 +425,7 @@ export declare const contract: {
                 200: z.ZodArray<z.ZodObject<Omit<{
                     id: z.ZodNumber;
                     username: z.ZodString;
+                    fullName: z.ZodString;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
@@ -356,6 +434,7 @@ export declare const contract: {
                 }, "password">, "strip", z.ZodTypeAny, {
                     id: number;
                     username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -363,6 +442,7 @@ export declare const contract: {
                 }, {
                     id: number;
                     username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -385,6 +465,7 @@ export declare const contract: {
                 200: z.ZodObject<Omit<{
                     id: z.ZodNumber;
                     username: z.ZodString;
+                    fullName: z.ZodString;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
@@ -393,6 +474,7 @@ export declare const contract: {
                 }, "password">, "strip", z.ZodTypeAny, {
                     id: number;
                     username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -400,6 +482,7 @@ export declare const contract: {
                 }, {
                     id: number;
                     username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -418,20 +501,24 @@ export declare const contract: {
         create: {
             method: "POST";
             body: z.ZodObject<{
+                fullName: z.ZodString;
                 username: z.ZodString;
                 password: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 username: string;
                 password: string;
+                fullName: string;
             }, {
                 username: string;
                 password: string;
+                fullName: string;
             }>;
             path: "/api/users";
             responses: {
                 201: z.ZodObject<Omit<{
                     id: z.ZodNumber;
                     username: z.ZodString;
+                    fullName: z.ZodString;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
@@ -440,6 +527,7 @@ export declare const contract: {
                 }, "password">, "strip", z.ZodTypeAny, {
                     id: number;
                     username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -447,6 +535,73 @@ export declare const contract: {
                 }, {
                     id: number;
                     username: string;
+                    fullName: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        patch: {
+            pathParams: z.ZodObject<{
+                id: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: number;
+            }>;
+            method: "PATCH";
+            body: z.ZodObject<Omit<{
+                id: z.ZodOptional<z.ZodNumber>;
+                username: z.ZodOptional<z.ZodString>;
+                fullName: z.ZodOptional<z.ZodString>;
+                password: z.ZodOptional<z.ZodString>;
+                createDate: z.ZodOptional<z.ZodDate>;
+                updatedDate: z.ZodOptional<z.ZodDate>;
+                lastLogin: z.ZodOptional<z.ZodDate>;
+                hashRefreshToken: z.ZodOptional<z.ZodString>;
+            }, "id">, "strip", z.ZodTypeAny, {
+                username?: string | undefined;
+                password?: string | undefined;
+                fullName?: string | undefined;
+                createDate?: Date | undefined;
+                updatedDate?: Date | undefined;
+                lastLogin?: Date | undefined;
+                hashRefreshToken?: string | undefined;
+            }, {
+                username?: string | undefined;
+                password?: string | undefined;
+                fullName?: string | undefined;
+                createDate?: Date | undefined;
+                updatedDate?: Date | undefined;
+                lastLogin?: Date | undefined;
+                hashRefreshToken?: string | undefined;
+            }>;
+            path: "/api/users/:id";
+            responses: {
+                200: z.ZodObject<Omit<{
+                    id: z.ZodNumber;
+                    username: z.ZodString;
+                    fullName: z.ZodString;
+                    password: z.ZodString;
+                    createDate: z.ZodDate;
+                    updatedDate: z.ZodDate;
+                    lastLogin: z.ZodDate;
+                    hashRefreshToken: z.ZodString;
+                }, "password">, "strip", z.ZodTypeAny, {
+                    id: number;
+                    username: string;
+                    fullName: string;
+                    createDate: Date;
+                    updatedDate: Date;
+                    lastLogin: Date;
+                    hashRefreshToken: string;
+                }, {
+                    id: number;
+                    username: string;
+                    fullName: string;
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -457,3 +612,4 @@ export declare const contract: {
         };
     };
 };
+export {};

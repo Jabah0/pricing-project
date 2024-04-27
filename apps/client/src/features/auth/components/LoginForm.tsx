@@ -4,29 +4,34 @@ import { UsernameInput } from "./UsernameInput";
 import { apiClient } from "@/api/api-client";
 import toast from "solid-toast";
 import { useNavigate } from "@solidjs/router";
+import { createSignal } from "solid-js";
 
 export const LoginForm = () => {
   const navigator = useNavigate();
 
   const locale = useLocale();
 
+  const [password, setPassword] = createSignal("");
+  const [username, setUsername] = createSignal("");
+
+  const isEnabled = () => password().length > 0 && username().length > 0;
+
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
-      console.log("onError");
-      toast.error("loginFailed");
+      toast.error(locale.t("loginFailed"));
     },
     onSuccess: () => {
-      toast.success("loginSuccess");
+      toast.success(locale.t("loginSuccess"));
       navigator("/");
     },
   });
 
   const onSubmit = () => {
-    console.log("onSubmit executed");
+    if (!isEnabled()) return null;
     loginMutation.mutate({
       body: {
-        username: "user",
-        password: "password",
+        username: username(),
+        password: password(),
       },
     });
   };
@@ -43,18 +48,28 @@ export const LoginForm = () => {
             <label for="usernameInput" class="text-gray-400">
               {locale.t("username")}
             </label>
-            <UsernameInput id="usernameInput" />
+            <UsernameInput
+              id="usernameInput"
+              value={username()}
+              onInput={(e) => setUsername(e.target.value)}
+            />
           </div>
           <div class="flex flex-col gap-1">
             <label for="passwordInput" class="text-gray-400">
               {locale.t("password")}
             </label>
-            <PasswordInput id="passwordInput" />
+            <PasswordInput
+              id="passwordInput"
+              value={password()}
+              onInput={(e) => setPassword(e.target.value)}
+            />
           </div>
           <div class="flex gap-6">
             <button
               onClick={onSubmit}
-              class="rounded-lg w-full h-[2.5rem] bg-primary text-white text-center text-lg font-bold shadow-lg"
+              class={`rounded-lg w-full h-[2.5rem] bg-primary text-white text-center 
+              text-lg font-bold shadow-lg ${isEnabled() ? "hover:opacity-70" : "hover:cursor-not-allowed"}`}
+              disabled={!isEnabled()}
             >
               {locale.t("login")}
             </button>

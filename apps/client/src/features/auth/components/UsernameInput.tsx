@@ -12,6 +12,7 @@ export const UsernameInput = (
       <AccountIcon class="text-white" />
       <input
         {...props}
+        autocomplete="off"
         id="usernameInput"
         class="bg-transparent w-full text-white"
         placeholder={locale.t("enterUsername")}

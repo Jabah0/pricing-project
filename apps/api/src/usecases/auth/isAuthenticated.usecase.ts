@@ -9,6 +9,7 @@ export class IsAuthenticatedUseCases {
 
     return {
       id: user.id,
+      fullName: user.fullName,
       username: user.username,
       lastLogin: user.lastLogin,
       hashRefreshToken: user.hashRefreshToken,

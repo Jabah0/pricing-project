@@ -8,6 +8,7 @@ export class GetUserUseCase {
     const user = await this.userRepository.getUser(id);
     return {
       id: user.id,
+      fullName: user.fullName,
       username: user.username,
       lastLogin: user.lastLogin,
       hashRefreshToken: user.hashRefreshToken,

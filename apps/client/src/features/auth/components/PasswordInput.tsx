@@ -7,7 +7,7 @@ export const PasswordInput = (
   props: JSX.InputHTMLAttributes<HTMLInputElement>
 ) => {
   const locale = useLocale();
-  const [isWatch, setIsWatch] = createSignal(true);
+  const [isWatch, setIsWatch] = createSignal(false);
 
   const onSwitchVisible = () => {
     setIsWatch((pre) => !pre);
@@ -17,18 +17,20 @@ export const PasswordInput = (
     <div class="border border-gray-600 w-[20rem] rounded-lg px-2 py-1 shadow-lg flex justify-center items-center gap-3 bg-backPrimary">
       <button onClick={onSwitchVisible}>
         <Switch>
-          <Match when={isWatch()}>
+          <Match when={!isWatch()}>
             <WatchIcon class="text-white" />
           </Match>
-          <Match when={!isWatch()}>
+          <Match when={isWatch()}>
             <WatchOffIcon class="text-white" />
           </Match>
         </Switch>
       </button>
       <input
         {...props}
+        autocomplete="off"
         class="bg-transparent w-full text-white"
         placeholder={locale.t("enterPassword")}
+        type={isWatch() ? "text" : "password"}
       />
     </div>
   );

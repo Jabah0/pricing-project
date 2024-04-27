@@ -9,6 +9,7 @@ import { LocaleProvider } from "./features/locale/LocaleProvider";
 import i18next from "i18next";
 import { AuthLayout } from "./features/layout/components/AuthLayout";
 import { Login } from "./features/auth/pages/Login";
+import UsersList from "./features/user/components/UsersList";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);
@@ -25,6 +26,7 @@ function App() {
           <Router>
             <Route path="/" component={MainLayout}>
               <Route path="/" component={MedServiceList} />
+              <Route path="/users" component={UsersList} />
             </Route>
             <Route path="/auth" component={AuthLayout}>
               <Route path="/login" component={Login} />

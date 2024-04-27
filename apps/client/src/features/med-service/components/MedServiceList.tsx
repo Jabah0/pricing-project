@@ -1,160 +1,101 @@
-import { contract } from "api-contract";
-import toast from "solid-toast";
-import { For, Match, Switch, createSignal } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { BiRegularSearchAlt } from "solid-icons/bi";
-import { useQueryClient } from "@tanstack/solid-query";
 import { useLocale } from "@/features/locale/locale.context";
-import { apiClient } from "@/api/api-client";
-import { ClientInferResponses } from "@ts-rest/core";
 import { MedServiceItem } from "./MedServiceItem";
-
-type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
+import { MedServiceListService } from "../services/MedServiceListService";
+import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 
 export const MedServiceList = () => {
   const locale = useLocale();
 
-  const [serviceName, setServiceName] = createSignal<string>();
-  const [serviceCode, setServiceCode] = createSignal<string>();
-
-  const queryClient = useQueryClient();
-
-  const updateMedServiceMutation =
-    apiClient.medServices.patchOne.createMutation({
-      onMutate: async (
-        newService
-      ): Promise<{ previousData: MedServices | undefined }> => {
-        await queryClient.cancelQueries({
-          queryKey: ["services", serviceName(), serviceCode()],
-        });
-
-        const previousData = queryClient.getQueryData<MedServices>([
-          "services",
-          serviceName(),
-          serviceCode(),
-        ]);
-
-        queryClient.setQueryData<MedServices>(
-          ["services", serviceName(), serviceCode()],
-          (old) => {
-            if (!old) return undefined;
-
-            const targetService = old.body.find(
-              (item) => item.id === newService.params.id
-            );
-
-            if (targetService) {
-              targetService.price =
-                newService.body?.price || targetService.price;
-            }
-
-            return {
-              ...old,
-              body: [...old.body],
-            };
-          }
-        );
-
-        return { previousData };
-      },
-      onError: (_, __, context) => {
-        const typedContext = context as {
-          previousData: MedServices | undefined;
-        };
-
-        queryClient.setQueryData(
-          ["services", serviceName(), serviceCode()],
-          typedContext.previousData
-        );
-        toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
-      },
-      onSuccess: () => {
-        toast.success(locale.t("servicePriceUpdatedSuccessfully"));
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries([
-          "services",
-          serviceName(),
-          serviceCode(),
-        ]);
-      },
-    });
-
-  const onUpdateServicePrice = (id: string, price: number) => {
-    updateMedServiceMutation.mutate({
-      params: { id },
-      body: { price },
-    });
-  };
-
-  const servicesQuery = apiClient.medServices.getAll.createQuery(
-    () => ["services", serviceName(), serviceCode()],
-    {
-      query: {
-        get name() {
-          return serviceName();
-        },
-        get code() {
-          return serviceCode();
-        },
-      },
-    }
-  );
+  const medServicesService = MedServiceListService();
 
   return (
     <div class="flex flex-col gap-6">
-      <div class="flex gap-2">
-        <div
-          class="flex items-center border-[0.5px] border-gray-600 rounded-sm 
+      <div class="flex justify-between">
+        <div class="flex gap-2">
+          <div
+            class="flex items-center border-[0.5px] border-gray-600 rounded-sm 
           shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
-        >
-          <BiRegularSearchAlt class="text-white scale-150" />
-          <input
-            type="text"
-            class="bg-transparent flex-1 text-white w-full"
-            placeholder={locale.t("filterServiceName")}
-            onInput={(e) => {
-              setServiceName(e.target.value);
-            }}
-          />
+          >
+            <BiRegularSearchAlt class="text-white scale-150" />
+            <input
+              type="text"
+              class="bg-transparent flex-1 text-white w-full"
+              placeholder={locale.t("filterServiceName")}
+              onInput={(e) => {
+                medServicesService.setServiceName(e.target.value);
+              }}
+            />
+          </div>
+          <div
+            class="flex items-center  border-[0.5px] border-gray-600 rounded-sm 
+          shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
+          >
+            <BiRegularSearchAlt class="text-white scale-150" />
+            <input
+              type="text"
+              class="bg-transparent flex-1 text-white w-full"
+              placeholder={locale.t("filterServiceCode")}
+              onInput={(e) => {
+                medServicesService.setServiceCode(e.target.value);
+              }}
+            />
+          </div>
         </div>
-        <div
-          class="flex items-center  border-[0.5px] border-gray-600 rounded-sm 
-          shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
-        >
-          <BiRegularSearchAlt class="text-white scale-150" />
-          <input
-            type="text"
-            class="bg-transparent flex-1 text-white w-full"
-            placeholder={locale.t("filterServiceCode")}
-            onInput={(e) => {
-              setServiceCode(e.target.value);
-            }}
-          />
+        <div class="flex gap-2">
+          <button
+            onClick={() => medServicesService.setIsMy((pre) => !pre)}
+            class="h-[2.5rem] rounded-sm shadow-lg bg-backgroundSec text-white text-center
+            p-2"
+          >
+            {locale.t(medServicesService.isMy() ? "allServices" : "myServices")}
+          </button>
         </div>
       </div>
+
       <Switch>
-        <Match when={servicesQuery.isLoading}>
+        <Match when={medServicesService.servicesQuery().isLoading}>
           <div class="flex justify-center items-center h-full">
-            <p class="text-white">isLoading</p>
+            <SpinnersBlocksShuffleIcon class="text-primary h-[12rem] w-[12rem]" />
           </div>
         </Match>
-        <Match when={servicesQuery.isError && servicesQuery.error}>
-          <p class="text-white">Error: {servicesQuery.error?.body as string}</p>
+        <Match
+          when={
+            medServicesService.servicesQuery().isError &&
+            medServicesService.servicesQuery().error
+          }
+        >
+          <p class="text-white">
+            Error: {medServicesService.servicesQuery().error?.body as string}
+          </p>
         </Match>
-        <Match when={servicesQuery.isSuccess}>
+        <Match when={medServicesService.servicesQuery().isSuccess}>
           <div class="flex flex-col gap-4">
             <Switch>
-              <Match when={servicesQuery.data?.body.length === 0}>
+              <Match
+                when={
+                  medServicesService.servicesQuery().data?.body.length === 0
+                }
+              >
                 <p class="text-white text-center font-bold">
                   {locale.t("noData")}
                 </p>
               </Match>
-              <Match when={servicesQuery.data?.body.length !== 0}>
-                <For each={servicesQuery.data?.body}>
+              <Match
+                when={
+                  medServicesService.servicesQuery().data?.body.length !== 0
+                }
+              >
+                <For each={medServicesService.servicesQuery().data?.body}>
                   {(ser) => (
                     <MedServiceItem
-                      updateServicePrice={onUpdateServicePrice}
-                      updateServiceUnitSize={onUpdateServicePrice}
+                      updateServicePrice={
+                        medServicesService.onUpdateServicePrice
+                      }
+                      updateServiceUnitSize={
+                        medServicesService.onUpdateServicePrice
+                      }
                       medService={ser}
                     />
                   )}

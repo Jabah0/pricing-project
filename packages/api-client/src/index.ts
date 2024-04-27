@@ -26,6 +26,7 @@ export type Credential = z.infer<typeof CredentialSchema>;
 export const UserSchema = z.object({
   id: z.number(),
   username: z.string(),
+  fullName: z.string(),
   password: z.string(),
   createDate: z.date(),
   updatedDate: z.date(),
@@ -33,10 +34,45 @@ export const UserSchema = z.object({
   hashRefreshToken: z.string(),
 });
 
-export type User = z.infer<typeof UserSchema>;
+const UserWithoutPasswordSchema = UserSchema.omit({ password: true });
+
+export type User = z.infer<typeof UserWithoutPasswordSchema>;
 
 export const contract = c.router(
   {
+    auth: {
+      login: {
+        method: "POST",
+        path: "/auth/login",
+        body: CredentialSchema,
+        responses: {
+          200: z.string(),
+        },
+      },
+      logout: {
+        method: "POST",
+        path: "/auth/logout",
+        body: z.any(),
+        responses: {
+          200: z.string(),
+        },
+      },
+      isAuthenticated: {
+        method: "GET",
+        path: "/auth/is_authenticated",
+        responses: {
+          200: z.string(),
+        },
+      },
+      refresh: {
+        method: "GET",
+        path: "/auth/refresh",
+        responses: {
+          200: z.string(),
+        },
+      },
+    },
+
     medServices: {
       create: {
         method: "POST",
@@ -50,6 +86,19 @@ export const contract = c.router(
       getAll: {
         method: "GET",
         path: "/med-services",
+        query: z.object({
+          name: z.string().optional(),
+          code: z.string().optional(),
+          dalilCode: z.string().optional(),
+        }),
+        responses: {
+          200: MedServiceSchema.array(),
+        },
+      },
+
+      getAllByUser: {
+        method: "GET",
+        path: "/med-services/user",
         query: z.object({
           name: z.string().optional(),
           code: z.string().optional(),
@@ -112,39 +161,6 @@ export const contract = c.router(
       },
     },
 
-    auth: {
-      login: {
-        method: "POST",
-        path: "/auth/login",
-        body: CredentialSchema,
-        responses: {
-          200: z.string(),
-        },
-      },
-      logout: {
-        method: "POST",
-        path: "/auth/logout",
-        body: z.any(),
-        responses: {
-          200: z.string(),
-        },
-      },
-      isAuthenticated: {
-        method: "GET",
-        path: "/auth/is_authenticated",
-        responses: {
-          200: z.string(),
-        },
-      },
-      refresh: {
-        method: "GET",
-        path: "/auth/refresh",
-        responses: {
-          200: z.string(),
-        },
-      },
-    },
-
     users: {
       getAll: {
         method: "GET",
@@ -169,9 +185,24 @@ export const contract = c.router(
       create: {
         method: "POST",
         path: "/users",
-        body: z.object({ username: z.string(), password: z.string() }),
+        body: z.object({
+          fullName: z.string(),
+          username: z.string(),
+          password: z.string(),
+        }),
         responses: {
           201: UserSchema.omit({ password: true }),
+        },
+      },
+      patch: {
+        method: "PATCH",
+        path: "/users/:id",
+        pathParams: z.object({
+          id: z.coerce.number(),
+        }),
+        body: UserSchema.partial().omit({ id: true }),
+        responses: {
+          200: UserSchema.omit({ password: true }),
         },
       },
     },

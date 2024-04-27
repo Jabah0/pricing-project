@@ -21,13 +21,47 @@ exports.CredentialSchema = zod_1.z.object({
 exports.UserSchema = zod_1.z.object({
     id: zod_1.z.number(),
     username: zod_1.z.string(),
+    fullName: zod_1.z.string(),
     password: zod_1.z.string(),
     createDate: zod_1.z.date(),
     updatedDate: zod_1.z.date(),
     lastLogin: zod_1.z.date(),
     hashRefreshToken: zod_1.z.string(),
 });
+var UserWithoutPasswordSchema = exports.UserSchema.omit({ password: true });
 exports.contract = c.router({
+    auth: {
+        login: {
+            method: "POST",
+            path: "/auth/login",
+            body: exports.CredentialSchema,
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        logout: {
+            method: "POST",
+            path: "/auth/logout",
+            body: zod_1.z.any(),
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        isAuthenticated: {
+            method: "GET",
+            path: "/auth/is_authenticated",
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        refresh: {
+            method: "GET",
+            path: "/auth/refresh",
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+    },
     medServices: {
         create: {
             method: "POST",
@@ -40,6 +74,18 @@ exports.contract = c.router({
         getAll: {
             method: "GET",
             path: "/med-services",
+            query: zod_1.z.object({
+                name: zod_1.z.string().optional(),
+                code: zod_1.z.string().optional(),
+                dalilCode: zod_1.z.string().optional(),
+            }),
+            responses: {
+                200: exports.MedServiceSchema.array(),
+            },
+        },
+        getAllByUser: {
+            method: "GET",
+            path: "/med-services/user",
             query: zod_1.z.object({
                 name: zod_1.z.string().optional(),
                 code: zod_1.z.string().optional(),
@@ -98,38 +144,6 @@ exports.contract = c.router({
             },
         },
     },
-    auth: {
-        login: {
-            method: "POST",
-            path: "/auth/login",
-            body: exports.CredentialSchema,
-            responses: {
-                200: zod_1.z.string(),
-            },
-        },
-        logout: {
-            method: "POST",
-            path: "/auth/logout",
-            body: zod_1.z.any(),
-            responses: {
-                200: zod_1.z.string(),
-            },
-        },
-        isAuthenticated: {
-            method: "GET",
-            path: "/auth/is_authenticated",
-            responses: {
-                200: zod_1.z.string(),
-            },
-        },
-        refresh: {
-            method: "GET",
-            path: "/auth/refresh",
-            responses: {
-                200: zod_1.z.string(),
-            },
-        },
-    },
     users: {
         getAll: {
             method: "GET",
@@ -154,9 +168,24 @@ exports.contract = c.router({
         create: {
             method: "POST",
             path: "/users",
-            body: zod_1.z.object({ username: zod_1.z.string(), password: zod_1.z.string() }),
+            body: zod_1.z.object({
+                fullName: zod_1.z.string(),
+                username: zod_1.z.string(),
+                password: zod_1.z.string(),
+            }),
             responses: {
                 201: exports.UserSchema.omit({ password: true }),
+            },
+        },
+        patch: {
+            method: "PATCH",
+            path: "/users/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.number(),
+            }),
+            body: exports.UserSchema.partial().omit({ id: true }),
+            responses: {
+                200: exports.UserSchema.omit({ password: true }),
             },
         },
     },

@@ -5,10 +5,27 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Solid + TS</title>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0.3;
+        }
+      }
+
+      #bundle-loader {
+        position: absolute;
+        opacity: 0.7;
+        top: 50%;
+        left: 50%;
+        margin: -64px 0 0 -64px;
+        fill: #c7c7c7;
+        animation: fadeIn 1s infinite alternate;
+      }
+    </style>
   </head>
+
   <body>
-    <div id="root"></div>
-    <div id="portal"></div>
+    <div class="bg-slate-500" id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

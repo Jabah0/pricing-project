@@ -27,6 +27,8 @@ import { UseCaseProxy } from './usecases-proxy';
 import { GetUsersUseCase } from '../../usecases/user/getUsers.usecase';
 import { GetUserUseCase } from '../../usecases/user/getUser.usecase';
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
+import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedServices.usecase';
+import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 
 @Module({
   imports: [
@@ -48,13 +50,16 @@ export class UsecasesProxyModule {
   static ADD_NEW_USER_USECASES_PROXY = 'addNewUserUsecasesProxy';
   static GET_USERS_USECASES_PROXY = 'getUsersUsecasesProxy';
   static GET_USER_USECASES_PROXY = 'getUserUsecasesProxy';
+  static UPDATE_USER_USECASES_PROXY = 'updateUserUsecasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
   static GET_MED_SERVICES_USECASES_PROXY = 'getMedServicesUsecasesProxy';
   static POST_MED_SERVICE_USECASES_PROXY = 'postMedServiceUsecasesProxy';
   static DELETE_MED_SERVICE_USECASES_PROXY = 'deleteMedServiceUsecasesProxy';
-  static UPDATE_MED_SERVICE_USEcASES_PROXY = 'updateMedServiceUsecasesProxy';
+  static UPDATE_MED_SERVICE_USECASES_PROXY = 'updateMedServiceUsecasesProxy';
+  static GET_MED_SERVICES_BY_USER_USECASES_PROXY =
+    'getMedServicesByUserUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -70,6 +75,18 @@ export class UsecasesProxyModule {
           ) =>
             new UseCaseProxy(
               new AddNewUserUseCases(logger, userRepository, bcryptService),
+            ),
+        },
+        {
+          inject: [LoggerService, DatabaseUserRepository, BcryptService],
+          provide: UsecasesProxyModule.UPDATE_USER_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            userRepository: DatabaseUserRepository,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new UpdateUserUseCases(logger, userRepository, bcryptService),
             ),
         },
         {
@@ -134,6 +151,14 @@ export class UsecasesProxyModule {
             new UseCaseProxy(new GetMedServicesUseCase(medServiceRepository)),
         },
         {
+          inject: [DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY,
+          useFactory: (medServiceRepository: DatabaseMedServiceRepository) =>
+            new UseCaseProxy(
+              new GetUserMedServicesUseCase(medServiceRepository),
+            ),
+        },
+        {
           inject: [LoggerService, DatabaseMedServiceRepository],
           provide: UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
           useFactory: (
@@ -157,7 +182,7 @@ export class UsecasesProxyModule {
         },
         {
           inject: [LoggerService, DatabaseMedServiceRepository],
-          provide: UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY,
+          provide: UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY,
           useFactory: (
             logger: LoggerService,
             medServiceRepository: DatabaseMedServiceRepository,
@@ -170,15 +195,17 @@ export class UsecasesProxyModule {
       exports: [
         UsecasesProxyModule.GET_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.GET_MED_SERVICES_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY,
         UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.LOGIN_USECASES_PROXY,
         UsecasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
         UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
-        UsecasesProxyModule.UPDATE_MED_SERVICE_USEcASES_PROXY,
+        UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY,
       ],
     };
   }

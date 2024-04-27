@@ -9,6 +9,7 @@ export class GetUsersUseCase {
     return users.map((user) => ({
       id: user.id,
       username: user.username,
+      fullName: user.fullName,
       lastLogin: user.lastLogin,
       hashRefreshToken: user.hashRefreshToken,
       createDate: user.createDate,

@@ -44,6 +44,16 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.auth.logout)
+  async logout(@Req() request: any) {
+    return tsRestHandler(contract.auth.logout, async () => {
+      const cookie = await this.logoutUsecaseProxy.getInstance().execute();
+      request.res.setHeader('Set-Cookie', cookie);
+      return { status: 200, body: 'Logout successful' };
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.auth.isAuthenticated)
   async isAuthenticated(@Req() request: any) {
     return tsRestHandler(contract.auth.isAuthenticated, async () => {
@@ -54,18 +64,8 @@ export class AuthController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
-  @TsRestHandler(contract.auth.logout)
-  async logout(@Req() request: any) {
-    return tsRestHandler(contract.auth.logout, async () => {
-      const cookie = await this.logoutUsecaseProxy.getInstance().execute();
-      request.res.setHeader('Set-Cookie', cookie);
-      return { status: 200, body: 'Logout successful' };
-    });
-  }
-
   @UseGuards(JwtRefreshGuard)
-  @TsRestHandler(contract.auth)
+  @TsRestHandler(contract.auth.refresh)
   async refresh(@Req() request: any) {
     return tsRestHandler(contract.auth.refresh, async () => {
       const accessTokenCookie = await this.loginUsecaseProxy

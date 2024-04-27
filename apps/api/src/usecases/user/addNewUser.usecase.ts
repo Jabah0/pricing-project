@@ -11,11 +11,13 @@ export class AddNewUserUseCases {
   ) {}
 
   async execute(
+    fullName: string,
     username: string,
     password: string,
   ): Promise<UserWithoutPassword> {
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userRepository.addNewUser(
+      fullName,
       username,
       hashedPassword,
     );
@@ -27,6 +29,7 @@ export class AddNewUserUseCases {
 
     return {
       id: newUser.id,
+      fullName: newUser.fullName,
       username: newUser.username,
       lastLogin: newUser.lastLogin,
       hashRefreshToken: newUser.hashRefreshToken,
