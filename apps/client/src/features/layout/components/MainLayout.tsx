@@ -8,9 +8,14 @@ import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
 import { useLocale } from "@/features/locale/locale.context";
 import { Toaster } from "solid-toast";
+import { UsersIcon } from "@/assets/icons/UsersIcon";
+import { useLocation } from "@solidjs/router";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
+  const location = useLocation();
+
+  console.log(location.pathname);
 
   return (
     <div class="flex gap-6 w-screen h-screen">
@@ -21,16 +26,35 @@ export const MainLayout: ParentComponent = (props) => {
           </div>
           <div class="flex flex-col justify-center items-center gap-4 w-full">
             <SidebarElement
-              active={true}
+              path="/"
+              active={location.pathname === "/"}
               title={locale.t("home")}
               icon={FiHome}
             />
             <SidebarElement
+              active={location.pathname.includes("/services")}
+              path="/services"
               title={locale.t("services")}
               icon={RiHealthMedicalCapsuleFill}
             />
-            <SidebarElement title={locale.t("profile")} icon={BsPersonFill} />
-            <SidebarElement title={locale.t("settings")} icon={FiSettings} />
+            <SidebarElement
+              active={location.pathname.includes("/users")}
+              path="/users"
+              title={locale.t("users")}
+              icon={UsersIcon}
+            />
+            <SidebarElement
+              active={location.pathname.includes("/profile")}
+              path="/profile"
+              title={locale.t("profile")}
+              icon={BsPersonFill}
+            />
+            <SidebarElement
+              active={location.pathname.includes("/settings")}
+              path="/settings"
+              title={locale.t("settings")}
+              icon={FiSettings}
+            />
           </div>
         </div>
       </Sidebar>

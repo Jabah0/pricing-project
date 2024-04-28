@@ -16,7 +16,7 @@ export function PortalModal(props: PortalProps) {
         <Portal>
           <div class="fixed top-0 right-0">
             <div
-              class="flex justify-center items-center h-screen w-screen backdrop-blur-sm"
+              class="flex justify-center items-center h-screen w-screen backdrop-brightness-75"
               onClick={() => setIsOpen(false)}
             >
               {props.modal}

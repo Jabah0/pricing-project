@@ -4,11 +4,32 @@ import { For, Match, Switch } from "solid-js";
 import { UserItem } from "./UserItem";
 import { useLocale } from "@/features/locale/locale.context";
 import { apiClient } from "@/api/api-client";
+import { AddUser } from "./AddUser";
+import toast from "solid-toast";
+
+export type AddUser = {
+  username: string;
+  fullName: string;
+  password: string;
+};
 
 const UsersList = () => {
   const locale = useLocale();
 
   const usersQuery = apiClient.users.getAll.createQuery(() => ["users"], {});
+
+  const userMutation = apiClient.users.create.createMutation({
+    onError: () => {
+      toast.error(locale.t("addUserFailed"));
+    },
+    onSuccess: () => {
+      toast.success(locale.t("addUserSuccessfully"));
+    },
+  });
+
+  const onAddUser = (user: AddUser) => {
+    userMutation.mutate({ body: { ...user } });
+  };
 
   return (
     <div class="flex flex-col gap-6">
@@ -16,13 +37,13 @@ const UsersList = () => {
         <div class="flex gap-2">
           <div
             class="flex items-center border-[0.5px] border-gray-600 rounded-sm 
-          shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
+            shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
           >
             <BiRegularSearchAlt class="text-white scale-150" />
             <input
               type="text"
               class="bg-transparent flex-1 text-white w-full"
-              placeholder={locale.t("filterServiceName")}
+              placeholder={locale.t("searchFullName")}
             />
           </div>
           <div
@@ -33,10 +54,11 @@ const UsersList = () => {
             <input
               type="text"
               class="bg-transparent flex-1 text-white w-full"
-              placeholder={locale.t("filterServiceCode")}
+              placeholder={locale.t("searchUsername")}
             />
           </div>
         </div>
+        <AddUser onAdd={onAddUser} />
       </div>
 
       <Switch>

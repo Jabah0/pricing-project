@@ -3,7 +3,7 @@ import { useLocale } from "@/features/locale/locale.context";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { MedService, contract } from "api-contract";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import toast from "solid-toast";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
@@ -12,10 +12,6 @@ export const MedServiceListService = () => {
   const locale = useLocale();
 
   const [isMy, setIsMy] = createSignal(false);
-
-  createEffect(() => {
-    console.log(isMy());
-  });
 
   const [serviceName, setServiceName] = createSignal<string>();
   const [serviceCode, setServiceCode] = createSignal<string>();

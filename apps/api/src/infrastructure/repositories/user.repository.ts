@@ -70,9 +70,14 @@ export class DatabaseUserRepository implements UserRepository {
     return this.toUser(adminUserEntity);
   }
 
-  async addNewUser(username: string, password: string): Promise<UserM> {
+  async addNewUser(
+    fullName,
+    username: string,
+    password: string,
+  ): Promise<UserM> {
     const newUser = await this.prisma.user.create({
       data: {
+        fullName,
         password,
         username,
         lastLogin: formatISO(new Date().toDateString()),

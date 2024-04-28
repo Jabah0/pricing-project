@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@corvu/tailwind": "^0.1.4",
     "@kobalte/core": "^0.12.6",
     "@solidjs/router": "^0.13.1",
     "@tanstack/solid-query": "^4.35.7",
@@ -17,6 +18,7 @@
     "api-contract": "*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "corvu": "^0.5.0",
     "i18next": "^23.11.1",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-http-backend": "^2.5.0",

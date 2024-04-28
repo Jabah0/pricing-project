@@ -1,17 +1,20 @@
 import { Tooltip } from "@kobalte/core";
+import { A } from "@solidjs/router";
 import { IconTypes } from "solid-icons";
 
 type Props = {
   title: string;
   icon: IconTypes;
   active?: boolean;
+  path: string;
 };
 
 export const SidebarElement = (props: Props) => {
   return (
     <Tooltip.Root placement="right-start" openDelay={0.1}>
       <Tooltip.Trigger>
-        <button
+        <A
+          href={props.path}
           class={`flex items-center justify-center gap-1 p-2 w-12 h-12
           hover:bg-backgroundSec rounded-2xl font-bold group
           ${props.active ? "bg-backgroundSec" : "bg-transparent"}`}
@@ -21,7 +24,7 @@ export const SidebarElement = (props: Props) => {
             ${props.active ? "text-iconStroke" : "text-white"}
           `}
           />
-        </button>
+        </A>
       </Tooltip.Trigger>
       <Tooltip.Content class="bg-secondary m-0.5 p-2 rounded-md transition-all">
         <Tooltip.Arrow class="w-1 h-1" />

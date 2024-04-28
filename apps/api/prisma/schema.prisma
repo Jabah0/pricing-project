@@ -16,10 +16,10 @@ datasource db {
 model User {
   id                Int       @default(autoincrement()) @id
   password          String
-  fullName          String    @default("user")
+  fullName          String
   username          String    @unique
   createDate        DateTime  @default(now())
-  updatedDate        DateTime @updatedAt
+  updatedDate       DateTime  @updatedAt
   lastLogin         DateTime?
   hashRefreshToken  String
   medServices       MedService[]
