@@ -9,6 +9,7 @@ import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
 import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
+import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
 
 @Controller()
 export class UserController {
@@ -21,6 +22,8 @@ export class UserController {
     private readonly getUserUsecaseProxy: UseCaseProxy<GetUserUseCase>,
     @Inject(UsecasesProxyModule.UPDATE_USER_USECASES_PROXY)
     private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCases>,
+    @Inject(UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY)
+    private readonly getUserInfoUsecaseProxy: UseCaseProxy<GetUserInformationUseCase>,
   ) {}
 
   //@UseGuards(JwtAuthGuard)
@@ -56,6 +59,20 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.users.patch)
   async patchUser() {
+    return tsRestHandler(
+      contract.users.patch,
+      async ({ body, params: { id } }) => {
+        const user = await this.updateUserUsecaseProxy
+          .getInstance()
+          .execute(id, body);
+        return { status: 200, body: user };
+      },
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.patch)
+  async getUserInfo() {
     return tsRestHandler(
       contract.users.patch,
       async ({ body, params: { id } }) => {

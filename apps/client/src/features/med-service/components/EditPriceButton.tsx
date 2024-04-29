@@ -1,7 +1,7 @@
 import { Match, Switch } from "solid-js";
-import { useLocale } from "@/features/locale/locale.context";
-import { FiSave } from "solid-icons/fi";
-import { ImCross } from "solid-icons/im";
+import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
+import { CancelIcon } from "@/assets/icons/CancelIcon";
+import { EditIcon } from "@/assets/icons/EditIcon";
 
 export const EditPriceButton = (props: {
   isEdit?: boolean;
@@ -9,35 +9,30 @@ export const EditPriceButton = (props: {
   onCancel?: () => void;
   onSave?: () => void;
 }) => {
-  const locale = useLocale();
-
   return (
     <Switch>
       <Match when={!props.isEdit}>
         <button
-          class="bg-buttonBack rounded-md min-w-16 p-2 border border-gray-400 text-white
+          class="flex items-center justify-center bg-backgroundSec rounded-md w-[4.5rem] h-8 p-2 border border-gray-700 text-white
           shadow-lg"
           onClick={props.onEdit}
         >
-          <p>{locale.t("edit")}</p>
+          <EditIcon class="text-yellow-300" />
         </button>
       </Match>
       <Match when={props.isEdit}>
-        <div class="flex">
+        <div class="flex gap-2">
           <button
-            class="min-w-8 bg-green-600 rounded-s-md text-white p-2 
-            border-l border-t border-b border-gray-400"
+            class="flex items-center justify-center w-8 h-8 bg-backgroundSec rounded-md text-white p-2 shadow-lg border border-gray-700"
             onClick={props.onSave}
           >
-            <FiSave class="text-white scale-150" />
+            <ConfirmIcon class="scale-150 text-green-500" />
           </button>
-          <div class="h-11 w-0.5 bg-gray-400" />
           <button
-            class="min-w-8 bg-red-600 rounded-e-md text-white p-2
-            border-r border-t border-b border-gray-400"
+            class="flex items-center justify-center w-8 h-8 bg-backgroundSec rounded-md text-white p-2 shadow-lg border border-gray-700"
             onClick={props.onCancel}
           >
-            <ImCross />
+            <CancelIcon class="scale-150 text-red-500" />
           </button>
         </div>
       </Match>

@@ -113,6 +113,18 @@ export class DatabaseUserRepository implements UserRepository {
     });
   }
 
+  async getMe(id: number): Promise<{ fullName: string; username: string }> {
+    return await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        fullName: true,
+        username: true,
+      },
+    });
+  }
+
   private toUser(adminUserEntity: User): UserM {
     const adminUser: UserM = new UserM();
 

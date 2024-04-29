@@ -61,6 +61,16 @@ exports.contract = c.router({
                 200: zod_1.z.string(),
             },
         },
+        whoAmI: {
+            method: "GET",
+            path: "/auth/whoAmI",
+            responses: {
+                200: zod_1.z.object({
+                    username: zod_1.z.string(),
+                    fullName: zod_1.z.string(),
+                }),
+            },
+        },
     },
     medServices: {
         create: {

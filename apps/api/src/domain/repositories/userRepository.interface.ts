@@ -13,4 +13,5 @@ export interface UserRepository {
   patchUser(id: number, updateBody: Partial<UserM>);
   updateLastLogin(username: string): Promise<void>;
   updateRefreshToken(username: string, refreshToken: string): Promise<void>;
+  getMe(id: number): Promise<{ fullName: string; username: string }>;
 }

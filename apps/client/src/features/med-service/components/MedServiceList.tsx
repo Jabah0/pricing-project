@@ -1,9 +1,9 @@
 import { For, Match, Switch } from "solid-js";
-import { BiRegularSearchAlt } from "solid-icons/bi";
 import { useLocale } from "@/features/locale/locale.context";
 import { MedServiceItem } from "./MedServiceItem";
 import { MedServiceListService } from "../services/MedServiceListService";
 import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
+import { SearchIcon } from "@/assets/icons/SearchIcon";
 
 export const MedServiceList = () => {
   const locale = useLocale();
@@ -18,11 +18,11 @@ export const MedServiceList = () => {
             class="flex items-center border-[0.5px] border-gray-600 rounded-sm 
           shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
           >
-            <BiRegularSearchAlt class="text-white scale-150" />
+            <SearchIcon class="text-white scale-150" />
             <input
               type="text"
               class="bg-transparent flex-1 text-white w-full"
-              placeholder={locale.t("filterServiceName")}
+              placeholder={locale.t("searchServiceName")}
               onInput={(e) => {
                 medServicesService.setServiceName(e.target.value);
               }}
@@ -30,13 +30,13 @@ export const MedServiceList = () => {
           </div>
           <div
             class="flex items-center  border-[0.5px] border-gray-600 rounded-sm 
-          shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
+            shadow-lg h-[2.5rem] w-[16rem] p-2 gap-2"
           >
-            <BiRegularSearchAlt class="text-white scale-150" />
+            <SearchIcon class="text-white scale-150" />
             <input
               type="text"
               class="bg-transparent flex-1 text-white w-full"
-              placeholder={locale.t("filterServiceCode")}
+              placeholder={locale.t("searchServiceCode")}
               onInput={(e) => {
                 medServicesService.setServiceCode(e.target.value);
               }}

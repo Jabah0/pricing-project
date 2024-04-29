@@ -2,6 +2,9 @@ import { AccountIcon } from "@/assets/icons/AccountIcon";
 import { useLocale } from "@/features/locale/locale.context";
 import { User } from "api-contract";
 import { createSignal } from "solid-js";
+import toast from "solid-toast";
+import { TextInput } from "./TextInput";
+import { PasswordInput } from "./PasswordInput";
 
 type Props = {
   user?: User;
@@ -15,17 +18,27 @@ const UserDrawer = (props: Props) => {
   const [username, setUsername] = createSignal("");
   const [fullName, setFullName] = createSignal("");
   const [password, setPassword] = createSignal("");
+  const [confirmPassword, setConfirmPassword] = createSignal("");
 
-  const onSave = () => {
-    props.onSave({
-      username: username(),
-      fullName: fullName(),
-      password: password(),
-    });
+  const onSave = async () => {
+    if (password() !== confirmPassword()) {
+      toast.error("passwordDoNotMatch");
+      return;
+    }
+    try {
+      await props.onSave({
+        username: username(),
+        fullName: fullName(),
+        password: password(),
+      });
+      props.onClose();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <div class="flex flex-col justify-between items-center h-full w-full py-10 bg-backgroundSec">
+    <div class="flex flex-col justify-between items-center h-full w-full py-10 px-[3rem] bg-backgroundSec">
       <div class="flex flex-col gap-6 justify-center items-center">
         <div
           class="flex justify-center items-center text-white h-16 w-16 
@@ -37,41 +50,37 @@ const UserDrawer = (props: Props) => {
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-gray-300">{locale.t("fullName")}</p>
-            <div class="bg-backPrimary rounded-md border border-gray-400 p-1">
-              <input
-                class="bg-transparent text-white"
-                value={props.user?.fullName || ""}
-                onInput={(e) => setFullName(e.target.value)}
-              />
-            </div>
+            <TextInput
+              class="bg-transparent text-white"
+              value={props.user?.fullName || ""}
+              onInput={(e) => setFullName(e.target.value)}
+            />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-gray-300">{locale.t("username")}</p>
-            <div class="bg-backPrimary rounded-md border border-gray-400 p-1">
-              <input
-                class="bg-transparent text-white"
-                value={props.user?.username || ""}
-                onInput={(e) => setUsername(e.target.value)}
-              />
-            </div>
+            <TextInput
+              onInput={(e) => {
+                setUsername(e.target.value);
+              }}
+              value={props.user?.fullName || ""}
+            />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-gray-300">{locale.t("password")}</p>
-            <div class="bg-backPrimary rounded-md border border-gray-400 p-1">
-              <input
-                class="bg-transparent text-white"
-                onInput={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            <PasswordInput
+              onInput={(e) => setPassword(e.target.value)}
+              value={password()}
+            />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-gray-300">{locale.t("confirmPassword")}</p>
-            <div class="bg-backPrimary rounded-md border border-gray-400 p-1">
-              <input class="bg-transparent text-white" />
-            </div>
+            <PasswordInput
+              class="bg-transparent text-white"
+              onInput={(e) => setConfirmPassword(e.target.value)}
+            />
           </div>
         </div>
       </div>

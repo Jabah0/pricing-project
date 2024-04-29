@@ -22,6 +22,7 @@ export const LoginForm = () => {
     },
     onSuccess: () => {
       toast.success(locale.t("loginSuccess"));
+
       navigator("/");
     },
   });

@@ -139,6 +139,23 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        whoAmI: {
+            method: "GET";
+            path: "/api/auth/whoAmI";
+            responses: {
+                200: z.ZodObject<{
+                    username: z.ZodString;
+                    fullName: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    username: string;
+                    fullName: string;
+                }, {
+                    username: string;
+                    fullName: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
     };
     medServices: {
         create: {

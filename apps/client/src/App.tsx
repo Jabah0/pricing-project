@@ -9,7 +9,7 @@ import { LocaleProvider } from "./features/locale/LocaleProvider";
 import i18next from "i18next";
 import { AuthLayout } from "./features/layout/components/AuthLayout";
 import { Login } from "./features/auth/pages/Login";
-import UsersList from "./features/user/components/UsersList";
+import { UsersList } from "./features/_users/components/UsersList";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);

@@ -71,6 +71,16 @@ export const contract = c.router(
           200: z.string(),
         },
       },
+      whoAmI: {
+        method: "GET",
+        path: "/auth/whoAmI",
+        responses: {
+          200: z.object({
+            username: z.string(),
+            fullName: z.string(),
+          }),
+        },
+      },
     },
 
     medServices: {

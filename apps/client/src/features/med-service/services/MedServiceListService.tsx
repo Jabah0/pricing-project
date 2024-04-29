@@ -1,5 +1,7 @@
 import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
+import ErrorToast from "@/toasts/ErrorToast";
+import SuccessToast from "@/toasts/SuccessToast";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { MedService, contract } from "api-contract";
@@ -108,10 +110,20 @@ export const MedServiceListService = () => {
           ["services", serviceName(), serviceCode()],
           typedContext.previousData
         );
-        toast.error(locale.t("servicePriceUpdatedUnSuccessfully"));
+        toast.custom((t) => (
+          <ErrorToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("servicePriceUpdatedUnSuccessfully")}
+          />
+        ));
       },
       onSuccess: () => {
-        toast.success(locale.t("servicePriceUpdatedSuccessfully"));
+        toast.custom((t) => (
+          <SuccessToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("servicePriceUpdatedSuccessfully")}
+          />
+        ));
       },
       onSettled: () => {
         queryClient.invalidateQueries([

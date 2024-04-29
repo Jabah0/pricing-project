@@ -29,6 +29,7 @@ import { GetUserUseCase } from '../../usecases/user/getUser.usecase';
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedServices.usecase';
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
+import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
 
 @Module({
   imports: [
@@ -60,6 +61,8 @@ export class UsecasesProxyModule {
   static UPDATE_MED_SERVICE_USECASES_PROXY = 'updateMedServiceUsecasesProxy';
   static GET_MED_SERVICES_BY_USER_USECASES_PROXY =
     'getMedServicesByUserUsecasesProxy';
+  static GET_USER_INFORMATION_USECASES_PROXY =
+    'getUserInformationUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -100,6 +103,12 @@ export class UsecasesProxyModule {
           provide: UsecasesProxyModule.GET_USER_USECASES_PROXY,
           useFactory: (userRepository: DatabaseUserRepository) =>
             new UseCaseProxy(new GetUserUseCase(userRepository)),
+        },
+        {
+          inject: [DatabaseUserRepository],
+          provide: UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
+          useFactory: (userRepository: DatabaseUserRepository) =>
+            new UseCaseProxy(new GetUserInformationUseCase(userRepository)),
         },
         {
           inject: [

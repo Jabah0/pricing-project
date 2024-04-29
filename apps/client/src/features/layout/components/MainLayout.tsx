@@ -1,8 +1,5 @@
 import { ParentComponent } from "solid-js";
-import { FiHome, FiSettings } from "solid-icons/fi";
-import { RiHealthMedicalCapsuleFill } from "solid-icons/ri";
 import { FaSolidBuildingColumns } from "solid-icons/fa";
-import { BsPersonFill } from "solid-icons/bs";
 import { Sidebar } from "./Sidebar";
 import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
@@ -10,12 +7,14 @@ import { useLocale } from "@/features/locale/locale.context";
 import { Toaster } from "solid-toast";
 import { UsersIcon } from "@/assets/icons/UsersIcon";
 import { useLocation } from "@solidjs/router";
+import { SettingsIcon } from "@/assets/icons/SettingsIcon";
+import { MedicalServicesIcon } from "@/assets/icons/MedicalServicesIcon";
+import { PersonFilledIcon } from "@/assets/icons/PersonFilledIcon";
+import { HomeIcon } from "@/assets/icons/HomeIcon";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
   const location = useLocation();
-
-  console.log(location.pathname);
 
   return (
     <div class="flex gap-6 w-screen h-screen">
@@ -29,13 +28,13 @@ export const MainLayout: ParentComponent = (props) => {
               path="/"
               active={location.pathname === "/"}
               title={locale.t("home")}
-              icon={FiHome}
+              icon={HomeIcon}
             />
             <SidebarElement
               active={location.pathname.includes("/services")}
               path="/services"
               title={locale.t("services")}
-              icon={RiHealthMedicalCapsuleFill}
+              icon={MedicalServicesIcon}
             />
             <SidebarElement
               active={location.pathname.includes("/users")}
@@ -47,13 +46,13 @@ export const MainLayout: ParentComponent = (props) => {
               active={location.pathname.includes("/profile")}
               path="/profile"
               title={locale.t("profile")}
-              icon={BsPersonFill}
+              icon={PersonFilledIcon}
             />
             <SidebarElement
               active={location.pathname.includes("/settings")}
               path="/settings"
               title={locale.t("settings")}
-              icon={FiSettings}
+              icon={SettingsIcon}
             />
           </div>
         </div>
