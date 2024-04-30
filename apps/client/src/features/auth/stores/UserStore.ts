@@ -1,3 +1,4 @@
+import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 type User = {
@@ -5,6 +6,6 @@ type User = {
   username: string;
 };
 
-const [user, setUser] = createStore<User | {}>({});
+const [user, setUser] = createSignal<User>();
 
 export const useUser = () => [user, setUser];

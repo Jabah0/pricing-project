@@ -11,6 +11,7 @@ import { IsAuthenticatedUseCases } from '../../../usecases/auth/isAuthenticated.
 import { LogoutUseCases } from '../../../usecases/auth/logout.usecase';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { contract } from 'api-contract';
+import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
 
 @Controller()
 export class AuthController {
@@ -21,6 +22,8 @@ export class AuthController {
     private readonly logoutUsecaseProxy: UseCaseProxy<LogoutUseCases>,
     @Inject(UsecasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY)
     private readonly isAuthUsecaseProxy: UseCaseProxy<IsAuthenticatedUseCases>,
+    @Inject(UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY)
+    private readonly getUserInfoUsecaseProxy: UseCaseProxy<GetUserInformationUseCase>,
   ) {}
 
   @UseGuards(LoginGuard)
@@ -73,6 +76,17 @@ export class AuthController {
         .getCookieWithJwtToken(request.user.username);
       request.res.setHeader('Set-Cookie', accessTokenCookie);
       return { status: 200, body: 'Refresh successful' };
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.auth.whoAmI)
+  async getUserInfo(@Req() request: any) {
+    return tsRestHandler(contract.auth.whoAmI, async () => {
+      const user = await this.getUserInfoUsecaseProxy
+        .getInstance()
+        .execute(request.user.id);
+      return { status: 200, body: user };
     });
   }
 }

@@ -4,6 +4,7 @@ import { DropdownMenu } from "@kobalte/core";
 import { ProfileLogoutButton } from "./LogoutButton";
 import { useNavigate } from "@solidjs/router";
 import { apiClient } from "@/api/api-client";
+import { useUser } from "@/features/auth/stores/UserStore";
 
 export const ProfileButton = () => {
   const locale = useLocale();
@@ -16,6 +17,8 @@ export const ProfileButton = () => {
     logoutMutation.mutate({ body: {} });
     navigator("/auth/login");
   };
+
+  const [user, setUser] = useUser();
 
   return (
     <DropdownMenu.Root>
@@ -41,8 +44,8 @@ export const ProfileButton = () => {
                 <AccountIcon class="text-white h-16 w-16" />
               </div>
               <div class="flex flex-col justify-center items-center">
-                <p class="text-white text-lg">Mohammad Jabah</p>
-                <p class="text-gray-400">@jabah</p>
+                <p class="text-white text-lg">{user()?.fullName}</p>
+                <p class="text-gray-400">{user()?.username}</p>
               </div>
             </div>
             <button

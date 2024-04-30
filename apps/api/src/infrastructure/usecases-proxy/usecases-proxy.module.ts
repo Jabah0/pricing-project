@@ -207,6 +207,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY,
         UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.LOGIN_USECASES_PROXY,
         UsecasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
@@ -214,7 +215,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.UPDATE_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
-        UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY,
+        UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
       ],
     };
   }

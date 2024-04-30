@@ -5,6 +5,8 @@ import { apiClient } from "@/api/api-client";
 import toast from "solid-toast";
 import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
+import { useUser } from "../stores/UserStore";
+import SuccessToast from "@/toasts/SuccessToast";
 
 export const LoginForm = () => {
   const navigator = useNavigate();
@@ -16,13 +18,27 @@ export const LoginForm = () => {
 
   const isEnabled = () => password().length > 0 && username().length > 0;
 
+  const [_user, setUser] = useUser();
+
+  const getUserInfoQuery = apiClient.auth.whoAmI.createQuery(
+    () => ["myInfo"],
+    {},
+    { enabled: false }
+  );
+
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
       toast.error(locale.t("loginFailed"));
     },
-    onSuccess: () => {
-      toast.success(locale.t("loginSuccess"));
-
+    onSuccess: async () => {
+      toast.custom((t) => (
+        <SuccessToast
+          message={locale.t("loginSuccess")}
+          onDismiss={() => toast.dismiss(t.id)}
+        />
+      ));
+      const { data } = await getUserInfoQuery.refetch();
+      setUser(data?.body);
       navigator("/");
     },
   });
