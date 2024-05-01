@@ -42,13 +42,20 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         },
       },
       include: {
-        users: true,
+        users: {
+          select: {
+            id: true,
+            username: true,
+            fullName: true,
+            lastLogin: true,
+          },
+        },
       },
       orderBy: { id: 'asc' },
     });
 
     const filteredMedServices = medServices.filter(
-      (medService) => medService.users.length < 3,
+      (medService) => medService.users.length < medService.numberOfPricing,
     );
 
     return filteredMedServices;

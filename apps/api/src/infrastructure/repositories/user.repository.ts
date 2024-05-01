@@ -10,9 +10,7 @@ export class DatabaseUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getUsers(): Promise<UserM[]> {
-    const users = await this.prisma.user.findMany();
-
-    if (!users) return null;
+    const users = await this.prisma.user.findMany({ orderBy: { id: 'asc' } });
 
     return users.map((user) => this.toUser(user));
   }

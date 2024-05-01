@@ -11,6 +11,8 @@ import { contract } from "api-contract";
 import { SearchIcon } from "@/assets/icons/SearchIcon";
 import SuccessToast from "@/toasts/SuccessToast";
 import ErrorToast from "@/toasts/ErrorToast";
+import { useNavigate } from "@solidjs/router";
+import { useUser } from "@/features/auth/stores/UserStore";
 
 export type AddUserType = {
   fullName: string;
@@ -21,11 +23,25 @@ export type AddUserType = {
 type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
+  const navigator = useNavigate();
+  const [_authUser, setAuth] = useUser();
+
   const locale = useLocale();
 
   const queryClient = useQueryClient();
 
-  const usersQuery = apiClient.users.getAll.createQuery(() => ["users"], {});
+  const usersQuery = apiClient.users.getAll.createQuery(
+    () => ["users"],
+    {},
+    {
+      onError(err) {
+        if (err.status === 401) {
+          setAuth(undefined);
+          navigator("/auth/login");
+        }
+      },
+    }
+  );
 
   const addUserMutation = apiClient.users.create.createMutation({
     onMutate: async (newUser) => {
@@ -57,7 +73,7 @@ export const UsersList = () => {
 
       return { previousData };
     },
-    onError: (_, __, context) => {
+    onError: (_err, __, context) => {
       const typedContext = context as {
         previousData: Users | undefined;
       };

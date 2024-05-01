@@ -8,6 +8,7 @@ import { useUser } from "@/features/auth/stores/UserStore";
 
 export const ProfileButton = () => {
   const locale = useLocale();
+  const [user, setUser] = useUser();
 
   const navigator = useNavigate();
 
@@ -15,10 +16,9 @@ export const ProfileButton = () => {
 
   const onLogout = () => {
     logoutMutation.mutate({ body: {} });
+    setUser(() => undefined);
     navigator("/auth/login");
   };
-
-  const [user, setUser] = useUser();
 
   return (
     <DropdownMenu.Root>
@@ -33,7 +33,7 @@ export const ProfileButton = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           class="bg-backPrimary border border-gray-600 
-          rounded-lg my-6"
+          rounded-lg my-6 w-[12rem]"
         >
           <div class="flex flex-col gap-3 justify-center items-center my-6 mx-4">
             <div class="flex flex-col gap-3 justify-center items-center">
@@ -44,8 +44,10 @@ export const ProfileButton = () => {
                 <AccountIcon class="text-white h-16 w-16" />
               </div>
               <div class="flex flex-col justify-center items-center">
-                <p class="text-white text-lg">{user()?.fullName}</p>
-                <p class="text-gray-400">{user()?.username}</p>
+                <p class="text-white text-lg text-ellipsis">
+                  {user()?.fullName}
+                </p>
+                <p class="text-gray-400 text-ellipsis">{user()?.username}</p>
               </div>
             </div>
             <button

@@ -38,7 +38,7 @@ export const LoginForm = () => {
         />
       ));
       const { data } = await getUserInfoQuery.refetch();
-      setUser(data?.body);
+      setUser(() => data?.body);
       navigator("/");
     },
   });
