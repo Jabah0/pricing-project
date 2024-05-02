@@ -15,9 +15,9 @@ datasource db {
 
 model User {
   id                Int       @default(autoincrement()) @id
-  password          String
   fullName          String
   username          String    @unique
+  password          String
   createDate        DateTime  @default(now())
   updatedDate       DateTime  @updatedAt
   lastLogin         DateTime?
@@ -42,9 +42,10 @@ model UserMedServices {
   medService        MedService  @relation(fields: [medServiceId], references: [id])
   userId            Int
   user              User        @relation(fields: [userId], references: [id])
-  createDate        DateTime  @default(now())
-  updatedDate       DateTime  @updatedAt
+  createDate        DateTime    @default(now())
+  updatedDate       DateTime    @updatedAt
   price             Int
+  unitSize          Int         @default(0)
 
   @@id([medServiceId, userId])
 }

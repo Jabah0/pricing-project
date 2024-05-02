@@ -34,7 +34,6 @@ export class DatabaseUserRepository implements UserRepository {
     const user = await this.prisma.user.update({
       data: {
         ...updateBody,
-        medServices: {},
       },
       where: {
         id,

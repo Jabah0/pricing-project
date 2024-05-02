@@ -2,7 +2,12 @@ import { MedService } from '../model/medService';
 
 export interface MedServiceRepository {
   insert(medService: MedService): Promise<MedService>;
-  findAll(name: string, code: string, dalilCode: string): Promise<MedService[]>;
+  findAll(
+    userId: number,
+    name: string,
+    code: string,
+    dalilCode: string,
+  ): Promise<MedService[]>;
   findByUser(
     userId: number,
     name: string,

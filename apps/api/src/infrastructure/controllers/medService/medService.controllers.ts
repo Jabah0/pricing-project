@@ -29,13 +29,13 @@ export class MedServiceController {
 
   @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.medServices.getAll)
-  async getAll() {
+  async getAll(@Req() request) {
     return tsRestHandler(
       contract.medServices.getAll,
       async ({ query: { name, code, dalilCode } }) => {
         const users = await this.getMedServicesUseCaseProxy
           .getInstance()
-          .execute(name, code, dalilCode);
+          .execute(request.user.id, name, code, dalilCode);
         return {
           status: 200,
           body: users,

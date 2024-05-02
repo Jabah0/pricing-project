@@ -25,6 +25,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
   }
 
   async findAll(
+    userId: number,
     name: string,
     code: string,
     dalilCode: string,
@@ -40,14 +41,25 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         dalilName: {
           contains: dalilCode,
         },
+        users: {
+          every: {
+            userId: {
+              not: userId,
+            },
+          },
+        },
       },
       include: {
         users: {
           select: {
-            id: true,
-            username: true,
-            fullName: true,
-            lastLogin: true,
+            price: true,
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                username: true,
+              },
+            },
           },
         },
       },
@@ -67,28 +79,41 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     code: string,
     dalilCode: string,
   ): Promise<MedService[]> {
-    return await this.prisma.medService.findMany({
+    const userMedServices = await this.prisma.userMedServices.findMany({
       where: {
-        name: {
-          contains: name,
-        },
-        code: {
-          contains: code,
-        },
-        dalilName: {
-          contains: dalilCode,
-        },
-        users: {
-          some: {
-            id: userId,
+        userId,
+        medService: {
+          name: {
+            contains: name,
+          },
+          code: {
+            contains: code,
+          },
+          dalilName: {
+            contains: dalilCode,
           },
         },
       },
-      include: {
-        users: true,
+      select: {
+        medService: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            dalilName: true,
+            nationalCode: true,
+            numberOfPricing: true,
+            unitSize: true,
+          },
+        },
+        price: true,
       },
-      orderBy: { id: 'asc' },
     });
+
+    return userMedServices.map((service) => ({
+      ...service.medService,
+      price: service.price,
+    }));
   }
 
   async findById(id: string): Promise<MedService> {
@@ -97,7 +122,19 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         id,
       },
       include: {
-        users: true,
+        users: {
+          select: {
+            price: true,
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                username: true,
+                lastLogin: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -124,10 +161,23 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     const updatedService = await this.prisma.medService.update({
       where: { id: serviceId },
       data: {
-        ...updateBody,
         users: {
-          connect: {
-            id: userId,
+          upsert: {
+            create: {
+              price: updateBody.price,
+              user: {
+                connect: { id: userId },
+              },
+            },
+            update: {
+              price: updateBody.price,
+            },
+            where: {
+              medServiceId_userId: {
+                userId,
+                medServiceId: serviceId,
+              },
+            },
           },
         },
       },
