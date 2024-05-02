@@ -4,11 +4,7 @@ import { Observable } from 'rxjs';
 import { ROLE_KEY } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { AccessControlService } from '../strategies/access-control.strategy';
-
-export class TokenDto {
-  id: number;
-  role: Role;
-}
+import { User } from 'api-contract';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -26,12 +22,12 @@ export class RoleGuard implements CanActivate {
     ]);
 
     const request = context.switchToHttp().getRequest();
-    const token = request['token'] as TokenDto;
+    const user = request['user'] as User;
 
     for (const role of requiredRoles) {
       const result = this.accessControlService.isAuthorized({
         requiredRole: role,
-        currentRole: token.role,
+        currentRole: user.role as Role,
       });
 
       if (result) {

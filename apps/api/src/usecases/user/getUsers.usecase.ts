@@ -10,6 +10,7 @@ export class GetUsersUseCase {
       id: user.id,
       username: user.username,
       fullName: user.fullName,
+      role: user.role,
       lastLogin: user.lastLogin,
       hashRefreshToken: user.hashRefreshToken,
       createDate: user.createDate,

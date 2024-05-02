@@ -31,6 +31,7 @@ export class AddNewUserUseCases {
       id: newUser.id,
       fullName: newUser.fullName,
       username: newUser.username,
+      role: newUser.role,
       lastLogin: newUser.lastLogin,
       hashRefreshToken: newUser.hashRefreshToken,
       createDate: newUser.createDate,

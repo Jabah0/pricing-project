@@ -4,6 +4,7 @@ export class UserWithoutPassword {
   id: number;
   username: string;
   fullName: string;
+  role: 'ADMIN' | 'USER';
   createDate: Date;
   updatedDate: Date;
   lastLogin: Date;

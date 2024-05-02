@@ -3,6 +3,30 @@ import { z } from "zod";
 
 const c = initContract();
 
+const ROLES = ["ADMIN", "USER"] as const;
+
+export const RolesSchema = z.enum(ROLES);
+
+export type Roles = z.infer<typeof RolesSchema>;
+
+export type Credential = z.infer<typeof CredentialSchema>;
+
+export const UserSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  fullName: z.string(),
+  role: RolesSchema,
+  password: z.string(),
+  createDate: z.date(),
+  updatedDate: z.date(),
+  lastLogin: z.date(),
+  hashRefreshToken: z.string(),
+});
+
+const UserWithoutPasswordSchema = UserSchema.omit({ password: true });
+
+export type User = z.infer<typeof UserWithoutPasswordSchema>;
+
 export const MedServiceSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -20,23 +44,6 @@ export const CredentialSchema = z.object({
   username: z.string(),
   password: z.string(),
 });
-
-export type Credential = z.infer<typeof CredentialSchema>;
-
-export const UserSchema = z.object({
-  id: z.number(),
-  username: z.string(),
-  fullName: z.string(),
-  password: z.string(),
-  createDate: z.date(),
-  updatedDate: z.date(),
-  lastLogin: z.date(),
-  hashRefreshToken: z.string(),
-});
-
-const UserWithoutPasswordSchema = UserSchema.omit({ password: true });
-
-export type User = z.infer<typeof UserWithoutPasswordSchema>;
 
 export const contract = c.router(
   {

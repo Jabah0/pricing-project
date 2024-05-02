@@ -13,11 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
 model User {
   id                Int       @default(autoincrement()) @id
   fullName          String
   username          String    @unique
   password          String
+  role              Role     @default(USER)
   createDate        DateTime  @default(now())
   updatedDate       DateTime  @updatedAt
   lastLogin         DateTime?

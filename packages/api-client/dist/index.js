@@ -1,9 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contract = exports.UserSchema = exports.CredentialSchema = exports.MedServiceSchema = void 0;
+exports.contract = exports.CredentialSchema = exports.MedServiceSchema = exports.UserSchema = exports.RolesSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var c = (0, core_1.initContract)();
+var ROLES = ["ADMIN", "USER"];
+exports.RolesSchema = zod_1.z.enum(ROLES);
+exports.UserSchema = zod_1.z.object({
+    id: zod_1.z.number(),
+    username: zod_1.z.string(),
+    fullName: zod_1.z.string(),
+    role: exports.RolesSchema,
+    password: zod_1.z.string(),
+    createDate: zod_1.z.date(),
+    updatedDate: zod_1.z.date(),
+    lastLogin: zod_1.z.date(),
+    hashRefreshToken: zod_1.z.string(),
+});
+var UserWithoutPasswordSchema = exports.UserSchema.omit({ password: true });
 exports.MedServiceSchema = zod_1.z.object({
     id: zod_1.z.string(),
     name: zod_1.z.string(),
@@ -18,17 +32,6 @@ exports.CredentialSchema = zod_1.z.object({
     username: zod_1.z.string(),
     password: zod_1.z.string(),
 });
-exports.UserSchema = zod_1.z.object({
-    id: zod_1.z.number(),
-    username: zod_1.z.string(),
-    fullName: zod_1.z.string(),
-    password: zod_1.z.string(),
-    createDate: zod_1.z.date(),
-    updatedDate: zod_1.z.date(),
-    lastLogin: zod_1.z.date(),
-    hashRefreshToken: zod_1.z.string(),
-});
-var UserWithoutPasswordSchema = exports.UserSchema.omit({ password: true });
 exports.contract = c.router({
     auth: {
         login: {

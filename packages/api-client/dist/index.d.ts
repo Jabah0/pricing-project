@@ -1,4 +1,68 @@
 import { z } from "zod";
+export declare const RolesSchema: z.ZodEnum<["ADMIN", "USER"]>;
+export type Roles = z.infer<typeof RolesSchema>;
+export type Credential = z.infer<typeof CredentialSchema>;
+export declare const UserSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    username: z.ZodString;
+    fullName: z.ZodString;
+    role: z.ZodEnum<["ADMIN", "USER"]>;
+    password: z.ZodString;
+    createDate: z.ZodDate;
+    updatedDate: z.ZodDate;
+    lastLogin: z.ZodDate;
+    hashRefreshToken: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    username: string;
+    password: string;
+    id: number;
+    fullName: string;
+    role: "ADMIN" | "USER";
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}, {
+    username: string;
+    password: string;
+    id: number;
+    fullName: string;
+    role: "ADMIN" | "USER";
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}>;
+declare const UserWithoutPasswordSchema: z.ZodObject<Omit<{
+    id: z.ZodNumber;
+    username: z.ZodString;
+    fullName: z.ZodString;
+    role: z.ZodEnum<["ADMIN", "USER"]>;
+    password: z.ZodString;
+    createDate: z.ZodDate;
+    updatedDate: z.ZodDate;
+    lastLogin: z.ZodDate;
+    hashRefreshToken: z.ZodString;
+}, "password">, "strip", z.ZodTypeAny, {
+    username: string;
+    id: number;
+    fullName: string;
+    role: "ADMIN" | "USER";
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}, {
+    username: string;
+    id: number;
+    fullName: string;
+    role: "ADMIN" | "USER";
+    createDate: Date;
+    updatedDate: Date;
+    lastLogin: Date;
+    hashRefreshToken: string;
+}>;
+export type User = z.infer<typeof UserWithoutPasswordSchema>;
 export declare const MedServiceSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
@@ -9,18 +73,18 @@ export declare const MedServiceSchema: z.ZodObject<{
     numberOfPricing: z.ZodDefault<z.ZodNumber>;
     unitSize: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
+    code: string;
     id: string;
     name: string;
-    code: string;
     dalilName: string;
     nationalCode: string;
     price: number;
     numberOfPricing: number;
     unitSize: number;
 }, {
+    code: string;
     id: string;
     name: string;
-    code: string;
     dalilName: string;
     nationalCode: string;
     price: number;
@@ -38,62 +102,6 @@ export declare const CredentialSchema: z.ZodObject<{
     username: string;
     password: string;
 }>;
-export type Credential = z.infer<typeof CredentialSchema>;
-export declare const UserSchema: z.ZodObject<{
-    id: z.ZodNumber;
-    username: z.ZodString;
-    fullName: z.ZodString;
-    password: z.ZodString;
-    createDate: z.ZodDate;
-    updatedDate: z.ZodDate;
-    lastLogin: z.ZodDate;
-    hashRefreshToken: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    id: number;
-    username: string;
-    password: string;
-    fullName: string;
-    createDate: Date;
-    updatedDate: Date;
-    lastLogin: Date;
-    hashRefreshToken: string;
-}, {
-    id: number;
-    username: string;
-    password: string;
-    fullName: string;
-    createDate: Date;
-    updatedDate: Date;
-    lastLogin: Date;
-    hashRefreshToken: string;
-}>;
-declare const UserWithoutPasswordSchema: z.ZodObject<Omit<{
-    id: z.ZodNumber;
-    username: z.ZodString;
-    fullName: z.ZodString;
-    password: z.ZodString;
-    createDate: z.ZodDate;
-    updatedDate: z.ZodDate;
-    lastLogin: z.ZodDate;
-    hashRefreshToken: z.ZodString;
-}, "password">, "strip", z.ZodTypeAny, {
-    id: number;
-    username: string;
-    fullName: string;
-    createDate: Date;
-    updatedDate: Date;
-    lastLogin: Date;
-    hashRefreshToken: string;
-}, {
-    id: number;
-    username: string;
-    fullName: string;
-    createDate: Date;
-    updatedDate: Date;
-    lastLogin: Date;
-    hashRefreshToken: string;
-}>;
-export type User = z.infer<typeof UserWithoutPasswordSchema>;
 export declare const contract: {
     auth: {
         login: {
@@ -170,18 +178,18 @@ export declare const contract: {
                 numberOfPricing: z.ZodDefault<z.ZodNumber>;
                 unitSize: z.ZodNumber;
             }, "strip", z.ZodTypeAny, {
+                code: string;
                 id: string;
                 name: string;
-                code: string;
                 dalilName: string;
                 nationalCode: string;
                 price: number;
                 numberOfPricing: number;
                 unitSize: number;
             }, {
+                code: string;
                 id: string;
                 name: string;
-                code: string;
                 dalilName: string;
                 nationalCode: string;
                 price: number;
@@ -200,18 +208,18 @@ export declare const contract: {
                     numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
                     numberOfPricing: number;
                     unitSize: number;
                 }, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
@@ -248,18 +256,18 @@ export declare const contract: {
                     numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
                     numberOfPricing: number;
                     unitSize: number;
                 }, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
@@ -296,18 +304,18 @@ export declare const contract: {
                     numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
                     numberOfPricing: number;
                     unitSize: number;
                 }, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
@@ -338,18 +346,18 @@ export declare const contract: {
                     numberOfPricing: z.ZodDefault<z.ZodNumber>;
                     unitSize: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
                     numberOfPricing: number;
                     unitSize: number;
                 }, {
+                    code: string;
                     id: string;
                     name: string;
-                    code: string;
                     dalilName: string;
                     nationalCode: string;
                     price: number;
@@ -443,23 +451,26 @@ export declare const contract: {
                     id: z.ZodNumber;
                     username: z.ZodString;
                     fullName: z.ZodString;
+                    role: z.ZodEnum<["ADMIN", "USER"]>;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
                 }, "password">, "strip", z.ZodTypeAny, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -483,23 +494,26 @@ export declare const contract: {
                     id: z.ZodNumber;
                     username: z.ZodString;
                     fullName: z.ZodString;
+                    role: z.ZodEnum<["ADMIN", "USER"]>;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
                 }, "password">, "strip", z.ZodTypeAny, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -536,23 +550,26 @@ export declare const contract: {
                     id: z.ZodNumber;
                     username: z.ZodString;
                     fullName: z.ZodString;
+                    role: z.ZodEnum<["ADMIN", "USER"]>;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
                 }, "password">, "strip", z.ZodTypeAny, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
@@ -574,6 +591,7 @@ export declare const contract: {
                 id: z.ZodOptional<z.ZodNumber>;
                 username: z.ZodOptional<z.ZodString>;
                 fullName: z.ZodOptional<z.ZodString>;
+                role: z.ZodOptional<z.ZodEnum<["ADMIN", "USER"]>>;
                 password: z.ZodOptional<z.ZodString>;
                 createDate: z.ZodOptional<z.ZodDate>;
                 updatedDate: z.ZodOptional<z.ZodDate>;
@@ -583,6 +601,7 @@ export declare const contract: {
                 username?: string | undefined;
                 password?: string | undefined;
                 fullName?: string | undefined;
+                role?: "ADMIN" | "USER" | undefined;
                 createDate?: Date | undefined;
                 updatedDate?: Date | undefined;
                 lastLogin?: Date | undefined;
@@ -591,6 +610,7 @@ export declare const contract: {
                 username?: string | undefined;
                 password?: string | undefined;
                 fullName?: string | undefined;
+                role?: "ADMIN" | "USER" | undefined;
                 createDate?: Date | undefined;
                 updatedDate?: Date | undefined;
                 lastLogin?: Date | undefined;
@@ -602,23 +622,26 @@ export declare const contract: {
                     id: z.ZodNumber;
                     username: z.ZodString;
                     fullName: z.ZodString;
+                    role: z.ZodEnum<["ADMIN", "USER"]>;
                     password: z.ZodString;
                     createDate: z.ZodDate;
                     updatedDate: z.ZodDate;
                     lastLogin: z.ZodDate;
                     hashRefreshToken: z.ZodString;
                 }, "password">, "strip", z.ZodTypeAny, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
                 }, {
-                    id: number;
                     username: string;
+                    id: number;
                     fullName: string;
+                    role: "ADMIN" | "USER";
                     createDate: Date;
                     updatedDate: Date;
                     lastLogin: Date;
