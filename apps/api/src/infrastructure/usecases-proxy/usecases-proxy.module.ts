@@ -30,11 +30,13 @@ import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedServic
 import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedServices.usecase';
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
+import { AccessControlModule } from '../services/role/access-control.module';
 
 @Module({
   imports: [
     LoggerModule,
     JwtModule,
+    AccessControlModule,
     BcryptModule,
     EnvironmentConfigModule,
     RepositoriesModule,

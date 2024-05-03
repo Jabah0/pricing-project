@@ -535,14 +535,17 @@ export declare const contract: {
                 fullName: z.ZodString;
                 username: z.ZodString;
                 password: z.ZodString;
+                role: z.ZodEnum<["ADMIN", "USER"]>;
             }, "strip", z.ZodTypeAny, {
                 username: string;
                 password: string;
                 fullName: string;
+                role: "ADMIN" | "USER";
             }, {
                 username: string;
                 password: string;
                 fullName: string;
+                role: "ADMIN" | "USER";
             }>;
             path: "/api/users";
             responses: {

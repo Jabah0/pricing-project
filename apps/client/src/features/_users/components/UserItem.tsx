@@ -28,6 +28,9 @@ export const UserItem = (props: Props) => {
           <div>
             <p class="text-gray-400">{props.user.username}</p>
           </div>
+          <div>
+            <p class="text-gray-400">{props.user.role}</p>
+          </div>
         </div>
       </div>
       <div>

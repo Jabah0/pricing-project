@@ -9,6 +9,9 @@ import { GetUsersUseCase } from 'src/usecases/user/getUsers.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
 import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
+import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
+import { Role } from 'src/infrastructure/common/enums/role.enum';
+import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
 
 @Controller()
 export class UserController {
@@ -29,12 +32,13 @@ export class UserController {
     return tsRestHandler(contract.users.create, async () => {
       const newUser = await this.addUserUsecaseProxy
         .getInstance()
-        .execute(user.fullName, user.username, user.password);
+        .execute(user.fullName, user.username, user.password, user.role);
       return { status: 201, body: newUser };
     });
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @TsRestHandler(contract.users.getAll)
   async getUsers() {
     return tsRestHandler(contract.users.getAll, async () => {

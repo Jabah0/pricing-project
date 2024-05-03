@@ -5,6 +5,7 @@ import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { TextInput } from "./TextInput";
 import { PasswordInput } from "./PasswordInput";
+import RolesCombobox from "./RolesCombobox";
 
 type Props = {
   user?: User;
@@ -65,6 +66,11 @@ const UserDrawer = (props: Props) => {
               }}
               value={props.user?.fullName || ""}
             />
+          </div>
+
+          <div class="flex flex-col gap-3 justify-center ">
+            <p class="text-gray-300">{locale.t("role")}</p>
+            <RolesCombobox role={props.user?.role} />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">

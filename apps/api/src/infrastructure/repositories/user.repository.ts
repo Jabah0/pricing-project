@@ -4,6 +4,7 @@ import { PrismaService } from '../config/prisma-orm/prisma.service';
 import { UserM } from '../../domain/model/user';
 import { User } from '@prisma/client';
 import { formatISO } from 'date-fns';
+import { Role } from '../common/enums/role.enum';
 
 @Injectable()
 export class DatabaseUserRepository implements UserRepository {
@@ -71,6 +72,7 @@ export class DatabaseUserRepository implements UserRepository {
     fullName,
     username: string,
     password: string,
+    role: Role,
   ): Promise<UserM> {
     const newUser = await this.prisma.user.create({
       data: {
@@ -79,6 +81,7 @@ export class DatabaseUserRepository implements UserRepository {
         username,
         lastLogin: formatISO(new Date().toDateString()),
         hashRefreshToken: '',
+        role,
       },
     });
 
@@ -127,6 +130,7 @@ export class DatabaseUserRepository implements UserRepository {
 
     adminUser.id = adminUserEntity.id;
     adminUser.fullName = adminUserEntity.fullName;
+    adminUser.role = adminUserEntity.role;
     adminUser.username = adminUserEntity.username;
     adminUser.password = adminUserEntity.password;
     adminUser.createDate = adminUserEntity.createDate;

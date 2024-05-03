@@ -7,7 +7,7 @@ import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { UserItem } from "./UserItem";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
-import { contract } from "api-contract";
+import { Roles, contract } from "api-contract";
 import { SearchIcon } from "@/assets/icons/SearchIcon";
 import SuccessToast from "@/toasts/SuccessToast";
 import ErrorToast from "@/toasts/ErrorToast";
@@ -17,6 +17,7 @@ import { useUser } from "@/features/auth/stores/UserStore";
 export type AddUserType = {
   fullName: string;
   username: string;
+  role: Roles;
   password: string;
 };
 
@@ -61,6 +62,7 @@ export const UsersList = () => {
             {
               username: newUser.body.username,
               fullName: newUser.body.fullName,
+              role: newUser.body.role,
               hashRefreshToken: "",
               lastLogin: new Date(2024, 1, 1),
               createDate: new Date(2024, 1, 1),

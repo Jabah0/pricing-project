@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLE_KEY } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
-import { AccessControlService } from '../strategies/access-control.strategy';
+import { AccessControlService } from '../../services/role/access-control.service';
 import { User } from 'api-contract';
 
 @Injectable()
@@ -23,6 +23,8 @@ export class RoleGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = request['user'] as User;
+
+    console.log('roles executed');
 
     for (const role of requiredRoles) {
       const result = this.accessControlService.isAuthorized({

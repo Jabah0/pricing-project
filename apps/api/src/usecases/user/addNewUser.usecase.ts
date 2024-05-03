@@ -1,3 +1,4 @@
+import { Role } from 'src/infrastructure/common/enums/role.enum';
 import { IBcryptService } from '../../domain/adapters/bcrypt.interface';
 import { ILogger } from '../../domain/logger/logger.interface';
 import { UserWithoutPassword } from '../../domain/model/user';
@@ -14,12 +15,14 @@ export class AddNewUserUseCases {
     fullName: string,
     username: string,
     password: string,
+    role: Role,
   ): Promise<UserWithoutPassword> {
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userRepository.addNewUser(
       fullName,
       username,
       hashedPassword,
+      role,
     );
 
     this.logger.log(

@@ -1,25 +1,23 @@
-import { useLocale } from "@/features/locale/locale.context";
 import { User } from "api-contract";
 import { Drawer } from "corvu/drawer";
 import UserDrawer from "./UserDrawer";
+import { EditIcon } from "@/assets/icons/EditIcon";
 
 type Props = {
   user: User;
 };
 
 export const UpdateUser = (props: Props) => {
-  const locale = useLocale();
-
   return (
     <Drawer breakPoints={[0.5]} velocityFunction={() => 1} side="right">
       {(drawerProps) => (
         <>
           <Drawer.Trigger
             as="button"
-            class="h-[2rem] w-[6rem] border border-gray-700 rounded-sm bg-backgroundSec 
-            text-white shadow-lg"
+            class="flex items-center justify-center bg-backgroundSec rounded-md w-[4.5rem] h-8 p-2 border border-gray-700 text-white
+          shadow-lg"
           >
-            {locale.t("edit")}
+            <EditIcon class="text-yellow-300" />
           </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay

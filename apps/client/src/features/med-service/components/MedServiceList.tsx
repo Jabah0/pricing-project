@@ -44,13 +44,26 @@ export const MedServiceList = () => {
           </div>
         </div>
         <div class="flex gap-2">
-          <button
-            onClick={() => medServicesService.setIsMy((pre) => !pre)}
-            class="h-[2.5rem] rounded-sm shadow-lg bg-backgroundSec text-white text-center
-            p-2"
-          >
-            {locale.t(medServicesService.isMy() ? "allServices" : "myServices")}
-          </button>
+          <div class="flex justify-center items-center gap-2 bg-backPrimary shadow-lg px-2 rounded-sm">
+            <button
+              onClick={() => medServicesService.setIsMy(false)}
+              class={`flex justify-center items-center h-[2rem] rounded-sm
+              ${!medServicesService.isMy() ? "bg-backgroundSec text-white shadow-lg" : "bg-transparent text-gray-400"} 
+              p-2 text-center`}
+              disabled={!medServicesService.isMy()}
+            >
+              {locale.t("allServices")}
+            </button>
+            <button
+              onClick={() => medServicesService.setIsMy(true)}
+              class={`flex justify-center items-center h-[2rem] rounded-sm
+              ${medServicesService.isMy() ? "bg-backgroundSec text-white shadow-lg" : "bg-transparent text-gray-400"} 
+              p-2 text-center`}
+              disabled={medServicesService.isMy()}
+            >
+              {locale.t("myServices")}
+            </button>
+          </div>
         </div>
       </div>
 

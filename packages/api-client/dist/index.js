@@ -185,6 +185,7 @@ exports.contract = c.router({
                 fullName: zod_1.z.string(),
                 username: zod_1.z.string(),
                 password: zod_1.z.string(),
+                role: exports.RolesSchema,
             }),
             responses: {
                 201: exports.UserSchema.omit({ password: true }),

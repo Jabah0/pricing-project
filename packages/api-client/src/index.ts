@@ -206,6 +206,7 @@ export const contract = c.router(
           fullName: z.string(),
           username: z.string(),
           password: z.string(),
+          role: RolesSchema,
         }),
         responses: {
           201: UserSchema.omit({ password: true }),

@@ -1,3 +1,4 @@
+import { Role } from 'src/infrastructure/common/enums/role.enum';
 import { UserM } from '../model/user';
 
 export interface UserRepository {
@@ -9,6 +10,7 @@ export interface UserRepository {
     fullName: string,
     username: string,
     password: string,
+    role: Role,
   ): Promise<UserM>;
   patchUser(id: number, updateBody: Partial<UserM>);
   updateLastLogin(username: string): Promise<void>;

@@ -10,6 +10,8 @@ import i18next from "i18next";
 import { AuthLayout } from "./features/layout/components/AuthLayout";
 import { Login } from "./features/auth/pages/Login";
 import { UsersList } from "./features/_users/components/UsersList";
+import { RouteGuard } from "./features/auth/components/RouteGuard";
+import { DotsRotateIcon } from "./assets/icons/DotsRotateIcon";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);
@@ -25,7 +27,9 @@ function App() {
         <LocaleProvider i18n={i18next}>
           <Router>
             <Route path="/" component={MainLayout}>
-              <Route path="/" component={MedServiceList} />
+              <Route component={RouteGuard}>
+                <Route path="/" component={MedServiceList} />
+              </Route>
               <Route path="/users" component={UsersList} />
             </Route>
             <Route path="/auth" component={AuthLayout}>
@@ -35,7 +39,9 @@ function App() {
         </LocaleProvider>
       </Match>
       <Match when={!loaded()}>
-        <p>Loading</p>
+        <div class="flex justify-center items-center h-screen w-screen">
+          <DotsRotateIcon class="text-primary h-[10rem] w-[10rem]" />
+        </div>
       </Match>
     </Switch>
   );
