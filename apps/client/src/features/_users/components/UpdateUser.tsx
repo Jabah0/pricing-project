@@ -1,6 +1,6 @@
 import { User } from "api-contract";
 import { Drawer } from "corvu/drawer";
-import UserDrawer from "./UserDrawer";
+import { UserDrawer } from "./UserDrawer";
 import { EditIcon } from "@/assets/icons/EditIcon";
 
 type Props = {
@@ -9,7 +9,12 @@ type Props = {
 
 export const UpdateUser = (props: Props) => {
   return (
-    <Drawer breakPoints={[0.5]} velocityFunction={() => 1} side="right">
+    <Drawer
+      breakPoints={[0.5]}
+      velocityFunction={() => 1}
+      side="right"
+      closeOnOutsidePointer={false}
+    >
       {(drawerProps) => (
         <>
           <Drawer.Trigger

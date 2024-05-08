@@ -41,10 +41,15 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @TsRestHandler(contract.users.getAll)
   async getUsers() {
-    return tsRestHandler(contract.users.getAll, async () => {
-      const users = await this.getUsersUsecaseProxy.getInstance().execute();
-      return { status: 200, body: users };
-    });
+    return tsRestHandler(
+      contract.users.getAll,
+      async ({ query: { page, perPage } }) => {
+        const users = await this.getUsersUsecaseProxy
+          .getInstance()
+          .execute(page, perPage);
+        return { status: 200, body: users };
+      },
+    );
   }
 
   @UseGuards(JwtAuthGuard)

@@ -5,6 +5,7 @@ import { ProfileLogoutButton } from "./LogoutButton";
 import { useNavigate } from "@solidjs/router";
 import { apiClient } from "@/api/api-client";
 import { useUser } from "@/features/auth/stores/UserStore";
+import { useQueryClient } from "@tanstack/solid-query";
 
 export const ProfileButton = () => {
   const locale = useLocale();
@@ -12,11 +13,14 @@ export const ProfileButton = () => {
 
   const navigator = useNavigate();
 
+  const queryClient = useQueryClient();
+
   const logoutMutation = apiClient.auth.logout.createMutation();
 
   const onLogout = () => {
     logoutMutation.mutate({ body: {} });
     setUser(() => undefined);
+    queryClient.clear();
     navigator("/auth/login");
   };
 

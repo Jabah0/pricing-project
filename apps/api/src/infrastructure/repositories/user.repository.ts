@@ -2,18 +2,39 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../domain/repositories/userRepository.interface';
 import { PrismaService } from '../config/prisma-orm/prisma.service';
 import { UserM } from '../../domain/model/user';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { formatISO } from 'date-fns';
 import { Role } from '../common/enums/role.enum';
+import { paginator } from './paginator';
+import {
+  PaginateFunction,
+  PaginatedResult,
+} from 'src/domain/model/apiResponse';
+
+const paginate: PaginateFunction = paginator({ perPage: 30 });
 
 @Injectable()
 export class DatabaseUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUsers(): Promise<UserM[]> {
-    const users = await this.prisma.user.findMany({ orderBy: { id: 'asc' } });
-
-    return users.map((user) => this.toUser(user));
+  async getUsers(): Promise<PaginatedResult<UserM>> {
+    return paginate(
+      this.prisma.user,
+      {
+        where: {} as Prisma.UserWhereInput,
+        select: {
+          id: true,
+          username: true,
+          fullName: true,
+          role: true,
+          hashRefreshToken: true,
+          lastLogin: true,
+          createDate: true,
+          updatedDate: true,
+        } as Prisma.UserSelect,
+      },
+      { page: 2 },
+    );
   }
 
   async getUser(id: number): Promise<UserM> {
@@ -113,7 +134,9 @@ export class DatabaseUserRepository implements UserRepository {
     });
   }
 
-  async getMe(id: number): Promise<{ fullName: string; username: string }> {
+  async getMe(
+    id: number,
+  ): Promise<{ fullName: string; username: string; role: string }> {
     return await this.prisma.user.findUnique({
       where: {
         id,
@@ -121,6 +144,7 @@ export class DatabaseUserRepository implements UserRepository {
       select: {
         fullName: true,
         username: true,
+        role: true,
       },
     });
   }

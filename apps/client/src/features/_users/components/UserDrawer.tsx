@@ -1,6 +1,6 @@
 import { AccountIcon } from "@/assets/icons/AccountIcon";
 import { useLocale } from "@/features/locale/locale.context";
-import { User } from "api-contract";
+import { Roles, User } from "api-contract";
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { TextInput } from "./TextInput";
@@ -13,11 +13,12 @@ type Props = {
   onSave: (param?: any) => void;
 };
 
-const UserDrawer = (props: Props) => {
+export const UserDrawer = (props: Props) => {
   const locale = useLocale();
 
   const [username, setUsername] = createSignal("");
   const [fullName, setFullName] = createSignal("");
+  const [role, setRole] = createSignal<Roles>();
   const [password, setPassword] = createSignal("");
   const [confirmPassword, setConfirmPassword] = createSignal("");
 
@@ -31,6 +32,7 @@ const UserDrawer = (props: Props) => {
         username: username(),
         fullName: fullName(),
         password: password(),
+        role: role(),
       });
       props.onClose();
     } catch (err) {
@@ -64,13 +66,19 @@ const UserDrawer = (props: Props) => {
               onInput={(e) => {
                 setUsername(e.target.value);
               }}
-              value={props.user?.fullName || ""}
+              value={props.user?.username || ""}
             />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-gray-300">{locale.t("role")}</p>
-            <RolesCombobox role={props.user?.role} />
+            <RolesCombobox
+              role={props.user?.role}
+              onSelect={(val) => {
+                console.log(val);
+                setRole(val);
+              }}
+            />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
@@ -107,5 +115,3 @@ const UserDrawer = (props: Props) => {
     </div>
   );
 };
-
-export default UserDrawer;

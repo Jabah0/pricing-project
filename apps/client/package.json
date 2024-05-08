@@ -12,6 +12,7 @@
     "@corvu/tailwind": "^0.1.4",
     "@kobalte/core": "^0.12.6",
     "@rollup/rollup-win32-x64-msvc": "^4.17.0",
+    "@solid-primitives/storage": "^3.5.0",
     "@solidjs/router": "^0.13.1",
     "@tanstack/solid-query": "^4.35.7",
     "@ts-rest/core": "^3.40.1",

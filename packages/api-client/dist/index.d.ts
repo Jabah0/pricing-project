@@ -154,12 +154,15 @@ export declare const contract: {
                 200: z.ZodObject<{
                     username: z.ZodString;
                     fullName: z.ZodString;
+                    role: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     username: string;
                     fullName: string;
+                    role: string;
                 }, {
                     username: string;
                     fullName: string;
+                    role: string;
                 }>;
             };
             strictStatusCodes: true;
@@ -444,38 +447,110 @@ export declare const contract: {
     };
     users: {
         getAll: {
+            query: z.ZodObject<{
+                page: z.ZodNumber;
+                perPage: z.ZodOptional<z.ZodNumber>;
+            }, "strip", z.ZodTypeAny, {
+                page: number;
+                perPage?: number | undefined;
+            }, {
+                page: number;
+                perPage?: number | undefined;
+            }>;
             method: "GET";
             path: "/api/users";
             responses: {
-                200: z.ZodArray<z.ZodObject<Omit<{
-                    id: z.ZodNumber;
-                    username: z.ZodString;
-                    fullName: z.ZodString;
-                    role: z.ZodEnum<["ADMIN", "USER"]>;
-                    password: z.ZodString;
-                    createDate: z.ZodDate;
-                    updatedDate: z.ZodDate;
-                    lastLogin: z.ZodDate;
-                    hashRefreshToken: z.ZodString;
-                }, "password">, "strip", z.ZodTypeAny, {
-                    username: string;
-                    id: number;
-                    fullName: string;
-                    role: "ADMIN" | "USER";
-                    createDate: Date;
-                    updatedDate: Date;
-                    lastLogin: Date;
-                    hashRefreshToken: string;
+                200: z.ZodObject<{
+                    data: z.ZodArray<z.ZodObject<Omit<{
+                        id: z.ZodNumber;
+                        username: z.ZodString;
+                        fullName: z.ZodString;
+                        role: z.ZodEnum<["ADMIN", "USER"]>;
+                        password: z.ZodString;
+                        createDate: z.ZodDate;
+                        updatedDate: z.ZodDate;
+                        lastLogin: z.ZodDate;
+                        hashRefreshToken: z.ZodString;
+                    }, "password">, "strip", z.ZodTypeAny, {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                        role: "ADMIN" | "USER";
+                        createDate: Date;
+                        updatedDate: Date;
+                        lastLogin: Date;
+                        hashRefreshToken: string;
+                    }, {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                        role: "ADMIN" | "USER";
+                        createDate: Date;
+                        updatedDate: Date;
+                        lastLogin: Date;
+                        hashRefreshToken: string;
+                    }>, "many">;
+                    meta: z.ZodObject<{
+                        total: z.ZodNumber;
+                        lastPage: z.ZodNumber;
+                        currentPage: z.ZodNumber;
+                        perPage: z.ZodNumber;
+                        prev: z.ZodNullable<z.ZodNumber>;
+                        next: z.ZodNullable<z.ZodNumber>;
+                    }, "strip", z.ZodTypeAny, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }>;
+                }, "strip", z.ZodTypeAny, {
+                    data: {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                        role: "ADMIN" | "USER";
+                        createDate: Date;
+                        updatedDate: Date;
+                        lastLogin: Date;
+                        hashRefreshToken: string;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
                 }, {
-                    username: string;
-                    id: number;
-                    fullName: string;
-                    role: "ADMIN" | "USER";
-                    createDate: Date;
-                    updatedDate: Date;
-                    lastLogin: Date;
-                    hashRefreshToken: string;
-                }>, "many">;
+                    data: {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                        role: "ADMIN" | "USER";
+                        createDate: Date;
+                        updatedDate: Date;
+                        lastLogin: Date;
+                        hashRefreshToken: string;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
+                }>;
             };
             strictStatusCodes: true;
         };

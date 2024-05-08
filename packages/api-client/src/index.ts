@@ -85,6 +85,7 @@ export const contract = c.router(
           200: z.object({
             username: z.string(),
             fullName: z.string(),
+            role: z.string(),
           }),
         },
       },
@@ -182,8 +183,22 @@ export const contract = c.router(
       getAll: {
         method: "GET",
         path: "/users",
+        query: z.object({
+          page: z.coerce.number(),
+          perPage: z.coerce.number().optional(),
+        }),
         responses: {
-          200: UserSchema.omit({ password: true }).array(),
+          200: z.object({
+            data: UserSchema.omit({ password: true }).array(),
+            meta: z.object({
+              total: z.number(),
+              lastPage: z.number(),
+              currentPage: z.number(),
+              perPage: z.number(),
+              prev: z.number().nullable(),
+              next: z.number().nullable(),
+            }),
+          }),
         },
       },
       getOne: {

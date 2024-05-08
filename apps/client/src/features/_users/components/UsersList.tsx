@@ -24,10 +24,9 @@ export type AddUserType = {
 type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
+  const locale = useLocale();
   const navigator = useNavigate();
   const [_authUser, setAuth] = useUser();
-
-  const locale = useLocale();
 
   const queryClient = useQueryClient();
 
@@ -114,6 +113,27 @@ export const UsersList = () => {
   const onAddUser = (user: AddUserType) => {
     addUserMutation.mutate({ body: { ...user } });
   };
+
+  const updateUserMutation = apiClient.users.patch.createMutation({
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: ["users"],
+      });
+
+      const previousData = queryClient.getQueryData<Users>(["users"]);
+
+      queryClient.setQueryData<Users>(["users"], (old) => {
+        if (!old) return undefined;
+
+        return {
+          ...old,
+          body: [...old.body],
+        };
+      });
+
+      return { previousData };
+    },
+  });
 
   return (
     <div class="flex flex-col gap-6">

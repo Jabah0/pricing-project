@@ -11,6 +11,8 @@ import { SettingsIcon } from "@/assets/icons/SettingsIcon";
 import { MedicalServicesIcon } from "@/assets/icons/MedicalServicesIcon";
 import { PersonFilledIcon } from "@/assets/icons/PersonFilledIcon";
 import { HomeIcon } from "@/assets/icons/HomeIcon";
+import { RoleGuard } from "@/features/auth/components/RoleGuard";
+import { Roles } from "@/features/auth/enums/Roles.enum";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
@@ -36,12 +38,14 @@ export const MainLayout: ParentComponent = (props) => {
               title={locale.t("services")}
               icon={MedicalServicesIcon}
             />
-            <SidebarElement
-              active={location.pathname.includes("/users")}
-              path="/users"
-              title={locale.t("users")}
-              icon={UsersIcon}
-            />
+            <RoleGuard role={Roles.ADMIN}>
+              <SidebarElement
+                active={location.pathname.includes("/users")}
+                path="/users"
+                title={locale.t("users")}
+                icon={UsersIcon}
+              />
+            </RoleGuard>
             <SidebarElement
               active={location.pathname.includes("/profile")}
               path="/profile"

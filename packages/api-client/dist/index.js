@@ -71,6 +71,7 @@ exports.contract = c.router({
                 200: zod_1.z.object({
                     username: zod_1.z.string(),
                     fullName: zod_1.z.string(),
+                    role: zod_1.z.string(),
                 }),
             },
         },
@@ -161,8 +162,22 @@ exports.contract = c.router({
         getAll: {
             method: "GET",
             path: "/users",
+            query: zod_1.z.object({
+                page: zod_1.z.coerce.number(),
+                perPage: zod_1.z.coerce.number().optional(),
+            }),
             responses: {
-                200: exports.UserSchema.omit({ password: true }).array(),
+                200: zod_1.z.object({
+                    data: exports.UserSchema.omit({ password: true }).array(),
+                    meta: zod_1.z.object({
+                        total: zod_1.z.number(),
+                        lastPage: zod_1.z.number(),
+                        currentPage: zod_1.z.number(),
+                        perPage: zod_1.z.number(),
+                        prev: zod_1.z.number().nullable(),
+                        next: zod_1.z.number().nullable(),
+                    }),
+                }),
             },
         },
         getOne: {

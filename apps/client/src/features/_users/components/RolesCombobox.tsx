@@ -3,13 +3,19 @@ import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 import { Combobox } from "@kobalte/core";
 import { Roles } from "api-contract";
 
-const ALL_OPTIONS = [
+type RoleType = {
+  name: string;
+  value: Roles;
+};
+
+const ALL_OPTIONS: RoleType[] = [
   { name: "admin", value: "ADMIN" },
   { name: "user", value: "USER" },
 ];
 
 type Props = {
   role?: Roles;
+  onSelect?: (value: Roles) => void;
 };
 
 const RolesCombobox = (props: Props) => {
@@ -23,10 +29,11 @@ const RolesCombobox = (props: Props) => {
       optionLabel="name"
       defaultValue={ALL_OPTIONS[roleIndex]}
       placeholder="Search a Role"
+      onChange={(e) => props.onSelect && props.onSelect(e.value)}
       itemComponent={(props) => (
         <Combobox.Item
-          class="flex items-center justify-between px-2 bg-backPrimary border-b 
-          hover:opacity-75 border-gray-400 last:border-none"
+          class="flex items-center justify-between px-2 bg-transparent border-b 
+          hover:opacity-50 border-gray-400 last:border-none hover:cursor-pointer"
           item={props.item}
         >
           <Combobox.ItemLabel>{props.item.rawValue.name}</Combobox.ItemLabel>
