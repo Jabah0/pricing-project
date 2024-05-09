@@ -163,7 +163,7 @@ exports.contract = c.router({
             method: "GET",
             path: "/users",
             query: zod_1.z.object({
-                page: zod_1.z.coerce.number(),
+                page: zod_1.z.coerce.number().optional(),
                 perPage: zod_1.z.coerce.number().optional(),
             }),
             responses: {

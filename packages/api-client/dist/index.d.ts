@@ -448,13 +448,13 @@ export declare const contract: {
     users: {
         getAll: {
             query: z.ZodObject<{
-                page: z.ZodNumber;
+                page: z.ZodOptional<z.ZodNumber>;
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
-                page: number;
+                page?: number | undefined;
                 perPage?: number | undefined;
             }, {
-                page: number;
+                page?: number | undefined;
                 perPage?: number | undefined;
             }>;
             method: "GET";

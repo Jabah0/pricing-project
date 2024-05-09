@@ -17,7 +17,10 @@ const paginate: PaginateFunction = paginator({ perPage: 30 });
 export class DatabaseUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUsers(): Promise<PaginatedResult<UserM>> {
+  async getUsers(
+    page: number,
+    perPage?: number,
+  ): Promise<PaginatedResult<UserM>> {
     return paginate(
       this.prisma.user,
       {
@@ -33,7 +36,7 @@ export class DatabaseUserRepository implements UserRepository {
           updatedDate: true,
         } as Prisma.UserSelect,
       },
-      { page: 2 },
+      { page, perPage },
     );
   }
 

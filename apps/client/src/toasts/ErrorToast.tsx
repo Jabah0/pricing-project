@@ -5,7 +5,7 @@ type Props = {
   onDismiss: () => void;
 };
 
-const ErrorToast = (props: Props) => {
+export const ErrorToast = (props: Props) => {
   return (
     <div class="px-6 py-3 pr-12 bg-backgroundSec rounded-lg shadow-md font-medium relative">
       <div class="flex justify-center items-center gap-2">
@@ -21,5 +21,3 @@ const ErrorToast = (props: Props) => {
     </div>
   );
 };
-
-export default ErrorToast;

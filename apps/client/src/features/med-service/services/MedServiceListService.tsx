@@ -1,7 +1,7 @@
 import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
-import ErrorToast from "@/toasts/ErrorToast";
-import SuccessToast from "@/toasts/SuccessToast";
+import { ErrorToast } from "@/toasts/ErrorToast";
+import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { MedService, contract } from "api-contract";

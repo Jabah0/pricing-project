@@ -6,7 +6,7 @@ import toast from "solid-toast";
 import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import { useUser } from "../stores/UserStore";
-import SuccessToast from "@/toasts/SuccessToast";
+import { SuccessToast } from "@/toasts/SuccessToast";
 
 export const LoginForm = () => {
   const navigator = useNavigate();

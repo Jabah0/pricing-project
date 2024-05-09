@@ -2,15 +2,15 @@ import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
 import toast from "solid-toast";
 import { AddUser } from "./AddUser";
-import { For, Match, Switch } from "solid-js";
+import { For, Match, Switch, createEffect } from "solid-js";
 import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { UserItem } from "./UserItem";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { Roles, contract } from "api-contract";
 import { SearchIcon } from "@/assets/icons/SearchIcon";
-import SuccessToast from "@/toasts/SuccessToast";
-import ErrorToast from "@/toasts/ErrorToast";
+import { SuccessToast } from "@/toasts/SuccessToast";
+import { ErrorToast } from "@/toasts/ErrorToast";
 import { useNavigate } from "@solidjs/router";
 import { useUser } from "@/features/auth/stores/UserStore";
 
@@ -30,10 +30,11 @@ export const UsersList = () => {
 
   const queryClient = useQueryClient();
 
-  const usersQuery = apiClient.users.getAll.createQuery(
+  const usersQuery = apiClient.users.getAll.createInfiniteQuery(
     () => ["users"],
-    {},
+    ({ pageParam = 1 }) => pageParam,
     {
+      getNextPageParam: (lastPage, _pages) => lastPage.body.meta.next,
       onError(err) {
         if (err.status === 401) {
           setAuth(undefined);
@@ -43,96 +44,91 @@ export const UsersList = () => {
     }
   );
 
-  const addUserMutation = apiClient.users.create.createMutation({
-    onMutate: async (newUser) => {
-      await queryClient.cancelQueries({
-        queryKey: ["users"],
-      });
+  const users = () =>
+    usersQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
 
-      const previousData = queryClient.getQueryData<Users>(["users"]);
+  // const addUserMutation = apiClient.users.create.createMutation({
+  //   onMutate: async (newUser) => {
+  //     await queryClient.cancelQueries({
+  //       queryKey: ["users"],
+  //     });
 
-      queryClient.setQueryData<Users>(["users"], (old) => {
-        if (!old) return undefined;
+  //     const previousData = queryClient.getQueryData<Users>(["users"]);
 
-        return {
-          ...old,
-          body: [
-            ...old.body,
-            {
-              username: newUser.body.username,
-              fullName: newUser.body.fullName,
-              role: newUser.body.role,
-              hashRefreshToken: "",
-              lastLogin: new Date(2024, 1, 1),
-              createDate: new Date(2024, 1, 1),
-              updatedDate: new Date(2024, 1, 1),
-              id: 1000,
-            },
-          ],
-        };
-      });
+  //     queryClient.setQueryData<Users>(["users"], (old) => {
+  //       if (!old) return undefined;
 
-      return { previousData };
-    },
-    onError: (_err, __, context) => {
-      const typedContext = context as {
-        previousData: Users | undefined;
-      };
+  //       return {
+  //         ...old,
+  //         body: [
+  //           ...old.body,
+  //           {
+  //             username: newUser.body.username,
+  //             fullName: newUser.body.fullName,
+  //             role: newUser.body.role,
+  //             hashRefreshToken: "",
+  //             lastLogin: new Date(2024, 1, 1),
+  //             createDate: new Date(2024, 1, 1),
+  //             updatedDate: new Date(2024, 1, 1),
+  //             id: 1000,
+  //           },
+  //         ],
+  //       };
+  //     });
 
-      queryClient.setQueryData(["users"], typedContext.previousData);
+  //     return { previousData };
+  //   },
+  //   onError: (_err, __, context) => {
+  //     const typedContext = context as {
+  //       previousData: Users | undefined;
+  //     };
 
-      toast.custom(
-        (t) => (
-          <ErrorToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserFailed")}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-    onSuccess: () => {
-      toast.custom(
-        (t) => (
-          <SuccessToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserSuccess")}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-  });
+  //     queryClient.setQueryData(["users"], typedContext.previousData);
+
+  //     toast.custom(
+  //       (t) => (
+  //         <ErrorToast
+  //           onDismiss={() => toast.dismiss(t.id)}
+  //           message={locale.t("addUserFailed")}
+  //         />
+  //       ),
+  //       {
+  //         duration: 6000,
+  //         unmountDelay: 0,
+  //       }
+  //     );
+  //   },
+  //   onSuccess: () => {
+  //     toast.custom(
+  //       (t) => (
+  //         <SuccessToast
+  //           onDismiss={() => toast.dismiss(t.id)}
+  //           message={locale.t("addUserSuccess")}
+  //         />
+  //       ),
+  //       {
+  //         duration: 6000,
+  //         unmountDelay: 0,
+  //       }
+  //     );
+  //   },
+  // });
 
   const onAddUser = (user: AddUserType) => {
-    addUserMutation.mutate({ body: { ...user } });
+    //addUserMutation.mutate({ body: { ...user } });
   };
 
-  const updateUserMutation = apiClient.users.patch.createMutation({
-    onMutate: async () => {
-      await queryClient.cancelQueries({
-        queryKey: ["users"],
-      });
+  createEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        usersQuery.fetchNextPage();
+      }
+    });
 
-      const previousData = queryClient.getQueryData<Users>(["users"]);
+    let end = document.getElementById("scrollTrigger");
+    if (end) observer.observe(end);
 
-      queryClient.setQueryData<Users>(["users"], (old) => {
-        if (!old) return undefined;
-
-        return {
-          ...old,
-          body: [...old.body],
-        };
-      });
-
-      return { previousData };
-    },
+    console.log("executed");
   });
 
   return (
@@ -159,32 +155,32 @@ export const UsersList = () => {
         <AddUser onAdd={onAddUser} />
       </div>
 
-      <Switch>
-        <Match when={usersQuery.isLoading}>
-          <div class="flex justify-center items-center h-full">
-            <SpinnersBlocksShuffleIcon class="text-primary h-[12rem] w-[12rem]" />
-          </div>
-        </Match>
-        <Match when={usersQuery.isError && usersQuery.error}>
-          <p class="text-white">Error: {usersQuery.error?.body as string}</p>
-        </Match>
-        <Match when={usersQuery.isSuccess}>
-          <div class="flex flex-col gap-4">
+      <div>
+        <Switch>
+          <Match when={usersQuery.isLoading}>
+            <div class="flex justify-center items-center h-full">
+              <SpinnersBlocksShuffleIcon class="text-primary h-[12rem] w-[12rem]" />
+            </div>
+          </Match>
+          <Match when={usersQuery.isError && usersQuery.error}>
+            <p class="text-white">Error: {usersQuery.error?.body as string}</p>
+          </Match>
+          <Match when={usersQuery.isSuccess}>
             <Switch>
-              <Match when={usersQuery.data?.body.length === 0}>
+              <Match when={(users().length = 0)}>
                 <p class="text-white text-center font-bold">
                   {locale.t("noData")}
                 </p>
               </Match>
-              <Match when={usersQuery.data?.body.length !== 0}>
-                <For each={usersQuery.data?.body}>
-                  {(user) => <UserItem user={user} />}
-                </For>
+              <Match when={users().length > 0}>
+                <div id="scrollTrigger" class="flex flex-col gap-1">
+                  <For each={users()}>{(user) => <UserItem user={user} />}</For>
+                </div>
               </Match>
             </Switch>
-          </div>
-        </Match>
-      </Switch>
+          </Match>
+        </Switch>
+      </div>
     </div>
   );
 };
