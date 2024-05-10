@@ -2,7 +2,7 @@ import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
 import toast from "solid-toast";
 import { AddUser } from "./AddUser";
-import { For, Match, Switch, createEffect } from "solid-js";
+import { For, Match, Show, Switch, createEffect, createSignal } from "solid-js";
 import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { UserItem } from "./UserItem";
 import { useQueryClient } from "@tanstack/solid-query";
@@ -11,8 +11,8 @@ import { Roles, contract } from "api-contract";
 import { SearchIcon } from "@/assets/icons/SearchIcon";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { ErrorToast } from "@/toasts/ErrorToast";
-import { useNavigate } from "@solidjs/router";
 import { useUser } from "@/features/auth/stores/UserStore";
+import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
 
 export type AddUserType = {
   fullName: string;
@@ -25,21 +25,21 @@ type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
   const locale = useLocale();
-  const navigator = useNavigate();
   const [_authUser, setAuth] = useUser();
 
   const queryClient = useQueryClient();
 
   const usersQuery = apiClient.users.getAll.createInfiniteQuery(
     () => ["users"],
-    ({ pageParam = 1 }) => pageParam,
+    ({ pageParam = 1 }) => ({
+      query: {
+        page: pageParam,
+      },
+    }),
     {
-      getNextPageParam: (lastPage, _pages) => lastPage.body.meta.next,
-      onError(err) {
-        if (err.status === 401) {
-          setAuth(undefined);
-          navigator("/auth/login");
-        }
+      getNextPageParam: (lastPage, _pages) => {
+        if (lastPage.body.meta.next === null) return undefined;
+        else return lastPage.body.meta.next;
       },
     }
   );
@@ -118,17 +118,22 @@ export const UsersList = () => {
     //addUserMutation.mutate({ body: { ...user } });
   };
 
+  const [lastItem, setLastItem] = createSignal<HTMLElement>(
+    document.getElementById("lastItem")!
+  );
+
   createEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && !usersQuery.isFetchingNextPage) {
         usersQuery.fetchNextPage();
       }
     });
 
-    let end = document.getElementById("scrollTrigger");
-    if (end) observer.observe(end);
+    if (usersQuery.isSuccess) setLastItem(document.getElementById("lastItem")!);
 
-    console.log("executed");
+    if (lastItem()) observer.observe(lastItem());
+
+    return () => observer.disconnect();
   });
 
   return (
@@ -173,8 +178,14 @@ export const UsersList = () => {
                 </p>
               </Match>
               <Match when={users().length > 0}>
-                <div id="scrollTrigger" class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1 justify-center items-center overflow-auto h-[29rem]">
                   <For each={users()}>{(user) => <UserItem user={user} />}</For>
+                  <div id="lastItem" />
+                  <Show when={usersQuery.isFetchingNextPage}>
+                    <div>
+                      <DotsRotateIcon class="text-primary h-[2rem] w-[2rem]" />
+                    </div>
+                  </Show>
                 </div>
               </Match>
             </Switch>

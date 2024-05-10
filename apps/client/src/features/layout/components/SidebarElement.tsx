@@ -1,10 +1,10 @@
 import { Tooltip } from "@kobalte/core";
 import { A } from "@solidjs/router";
-import { IconTypes } from "solid-icons";
+import { JSXElement, JSX } from "solid-js";
 
 type Props = {
   title: string;
-  icon: IconTypes;
+  icon: (props: JSX.IntrinsicElements["svg"]) => JSXElement;
   active?: boolean;
   path: string;
 };
@@ -17,7 +17,7 @@ export const SidebarElement = (props: Props) => {
           href={props.path}
           class={`flex items-center justify-center gap-1 p-2 w-12 h-12
           hover:bg-backgroundSec rounded-2xl font-bold group
-          ${props.active ? "bg-backgroundSec" : "bg-transparent"}`}
+          ${props.active ? "bg-backgroundSec drop-shadow-lg" : "bg-transparent"}`}
         >
           <props.icon
             class={`w-6 h-6 group-hover:text-iconStroke

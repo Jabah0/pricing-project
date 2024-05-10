@@ -4,13 +4,15 @@ import { UpdateUser } from "./UpdateUser";
 
 type Props = {
   user: User;
+  id?: string;
 };
 
 export const UserItem = (props: Props) => {
   return (
     <div
+      id={props.id}
       class="flex justify-between items-center p-4 shadow-lg bg-backPrimary border-[0.01rem]
-    border-gray-600 rounded-lg min-h-16 w-full"
+      border-gray-600 rounded-lg min-h-16 w-full"
     >
       <div class="flex justify-center items-center">
         <div class="flex justify-center items-center gap-12">
