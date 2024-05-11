@@ -2,6 +2,19 @@ import { MedService } from 'src/domain/model/medService';
 import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
 import { PrismaService } from '../config/prisma-orm/prisma.service';
 import { Injectable } from '@nestjs/common';
+import {
+  PaginateFunction,
+  PaginatedResult,
+} from 'src/domain/model/apiResponse';
+import { paginator } from './paginator';
+import { Prisma } from '@prisma/client';
+
+const paginate: PaginateFunction = paginator({ perPage: 30 });
+
+type UserMedServiceResult = {
+  medService: MedService;
+  price: number;
+};
 
 @Injectable()
 export class DatabaseMedServiceRepository implements MedServiceRepository {
@@ -10,14 +23,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
   async insert(medService: MedService): Promise<MedService> {
     const newMedService = await this.prisma.medService.create({
       data: {
-        id: medService.id,
-        name: medService.name,
-        code: medService.code,
-        dalilName: medService.dalilName,
-        nationalCode: medService.nationalCode,
-        price: medService.price,
-        unitSize: medService.unitSize,
-        numberOfPricing: medService.numberOfPricing,
+        ...medService,
       },
     });
 
@@ -29,8 +35,8 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
-  ): Promise<MedService[]> {
-    const medServices = await this.prisma.medService.findMany({
+  ): Promise<PaginatedResult<MedService>> {
+    return paginate(this.prisma.medService, {
       where: {
         name: {
           contains: name,
@@ -41,14 +47,17 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         dalilName: {
           contains: dalilCode,
         },
-        users: {
-          every: {
-            userId: {
-              not: userId,
+        numberOfPricing: {
+          lt: this.prisma.medService.fields.limitNumberOfPricing,
+        },
+        NOT: {
+          users: {
+            some: {
+              userId: userId,
             },
           },
         },
-      },
+      } as Prisma.MedServiceWhereInput,
       include: {
         users: {
           select: {
@@ -62,15 +71,9 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
             },
           },
         },
-      },
-      orderBy: { id: 'asc' },
+      } as Prisma.MedServiceInclude,
+      orderBy: { id: 'desc' } as Prisma.MedServiceOrderByWithRelationInput,
     });
-
-    const filteredMedServices = medServices.filter(
-      (medService) => medService.users.length < medService.numberOfPricing,
-    );
-
-    return filteredMedServices;
   }
 
   async findByUser(
@@ -78,42 +81,57 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
-  ): Promise<MedService[]> {
-    const userMedServices = await this.prisma.userMedServices.findMany({
-      where: {
-        userId,
-        medService: {
-          name: {
-            contains: name,
+  ): Promise<PaginatedResult<MedService>> {
+    const result: PaginatedResult<UserMedServiceResult> = await paginate(
+      this.prisma.userMedServices,
+      {
+        where: {
+          userId,
+          medService: {
+            name: {
+              contains: name,
+            },
+            code: {
+              contains: code,
+            },
+            dalilName: {
+              contains: dalilCode,
+            },
           },
-          code: {
-            contains: code,
+        } as Prisma.MedServiceWhereInput,
+        select: {
+          medService: {
+            select: {
+              id: true,
+              name: true,
+              code: true,
+              dalilName: true,
+              nationalCode: true,
+              numberOfPricing: true,
+              unitSize: true,
+            },
           },
-          dalilName: {
-            contains: dalilCode,
-          },
-        },
+          price: true,
+        } as Prisma.MedServiceSelect,
       },
-      select: {
-        medService: {
-          select: {
-            id: true,
-            name: true,
-            code: true,
-            dalilName: true,
-            nationalCode: true,
-            numberOfPricing: true,
-            unitSize: true,
-          },
-        },
-        price: true,
-      },
-    });
+    );
 
-    return userMedServices.map((service) => ({
-      ...service.medService,
-      price: service.price,
-    }));
+    return {
+      meta: result.meta,
+      data: result.data.map(
+        (item) =>
+          ({
+            id: item.medService.id,
+            name: item.medService.name,
+            dalilName: item.medService.dalilName,
+            code: item.medService.code,
+            nationalCode: item.medService.nationalCode,
+            numberOfPricing: item.medService.numberOfPricing,
+            unitSize: item.medService.unitSize,
+            price: item.price,
+          }) as MedService,
+      ),
+    };
   }
 
   async findById(id: string): Promise<MedService> {
@@ -161,6 +179,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     const updatedService = await this.prisma.medService.update({
       where: { id: serviceId },
       data: {
+        numberOfPricing: { increment: 1 },
         users: {
           upsert: {
             create: {

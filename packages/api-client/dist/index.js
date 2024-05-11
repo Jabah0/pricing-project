@@ -26,6 +26,7 @@ exports.MedServiceSchema = zod_1.z.object({
     nationalCode: zod_1.z.string(),
     price: zod_1.z.number(),
     numberOfPricing: zod_1.z.number().default(0),
+    limitNumberOfPricing: zod_1.z.number().default(0),
     unitSize: zod_1.z.number(),
 });
 exports.CredentialSchema = zod_1.z.object({
@@ -92,9 +93,21 @@ exports.contract = c.router({
                 name: zod_1.z.string().optional(),
                 code: zod_1.z.string().optional(),
                 dalilCode: zod_1.z.string().optional(),
+                page: zod_1.z.coerce.number(),
+                perPage: zod_1.z.coerce.number().optional(),
             }),
             responses: {
-                200: exports.MedServiceSchema.array(),
+                200: zod_1.z.object({
+                    data: exports.MedServiceSchema.array(),
+                    meta: zod_1.z.object({
+                        total: zod_1.z.number(),
+                        lastPage: zod_1.z.number(),
+                        currentPage: zod_1.z.number(),
+                        perPage: zod_1.z.number(),
+                        prev: zod_1.z.number().nullable(),
+                        next: zod_1.z.number().nullable(),
+                    }),
+                }),
             },
         },
         getAllByUser: {
@@ -104,9 +117,21 @@ exports.contract = c.router({
                 name: zod_1.z.string().optional(),
                 code: zod_1.z.string().optional(),
                 dalilCode: zod_1.z.string().optional(),
+                page: zod_1.z.coerce.number(),
+                perPage: zod_1.z.coerce.number().optional(),
             }),
             responses: {
-                200: exports.MedServiceSchema.array(),
+                200: zod_1.z.object({
+                    data: exports.MedServiceSchema.array(),
+                    meta: zod_1.z.object({
+                        total: zod_1.z.number(),
+                        lastPage: zod_1.z.number(),
+                        currentPage: zod_1.z.number(),
+                        perPage: zod_1.z.number(),
+                        prev: zod_1.z.number().nullable(),
+                        next: zod_1.z.number().nullable(),
+                    }),
+                }),
             },
         },
         getOne: {

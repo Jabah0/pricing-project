@@ -1,3 +1,4 @@
+import { PaginatedResult } from 'src/domain/model/apiResponse';
 import { MedService } from '../../domain/model/medService';
 import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
 
@@ -9,12 +10,16 @@ export class GetUserMedServicesUseCase {
     name: string,
     code: string,
     dalilCode: string,
-  ): Promise<MedService[]> {
+    page: number,
+    perPage?: number,
+  ): Promise<PaginatedResult<MedService>> {
     return await this.medServiceRepository.findByUser(
       userId,
       name,
       code,
       dalilCode,
+      page,
+      perPage,
     );
   }
 }

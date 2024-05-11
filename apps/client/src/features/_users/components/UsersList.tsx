@@ -178,11 +178,11 @@ export const UsersList = () => {
                 </p>
               </Match>
               <Match when={users().length > 0}>
-                <div class="flex flex-col gap-1 justify-center items-center overflow-auto h-[29rem]">
+                <div class="flex flex-col gap-1 overflow-auto h-[46rem]">
                   <For each={users()}>{(user) => <UserItem user={user} />}</For>
                   <div id="lastItem" />
                   <Show when={usersQuery.isFetchingNextPage}>
-                    <div>
+                    <div class="flex justify-center items-center w-full">
                       <DotsRotateIcon class="text-primary h-[2rem] w-[2rem]" />
                     </div>
                   </Show>

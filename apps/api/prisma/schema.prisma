@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  
 }
 
 enum Role {
@@ -31,15 +32,16 @@ model User {
 }
 
 model MedService {
-  id                String  @id
-  name              String
-  dalilName         String
-  code              String
-  nationalCode      String
-  price             Float
-  unitSize          Int
-  numberOfPricing   Int     @default(0)
-  users             UserMedServices[]
+  id                    String  @id
+  name                  String
+  dalilName             String
+  code                  String
+  nationalCode          String
+  price                 Float
+  unitSize              Int
+  numberOfPricing       Int     @default(0)
+  limitNumberOfPricing  Int @default(0)
+  users                 UserMedServices[]
 }
 
 model UserMedServices {

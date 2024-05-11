@@ -35,6 +35,7 @@ export const MedServiceSchema = z.object({
   nationalCode: z.string(),
   price: z.number(),
   numberOfPricing: z.number().default(0),
+  limitNumberOfPricing: z.number().default(0),
   unitSize: z.number(),
 });
 
@@ -108,9 +109,21 @@ export const contract = c.router(
           name: z.string().optional(),
           code: z.string().optional(),
           dalilCode: z.string().optional(),
+          page: z.coerce.number(),
+          perPage: z.coerce.number().optional(),
         }),
         responses: {
-          200: MedServiceSchema.array(),
+          200: z.object({
+            data: MedServiceSchema.array(),
+            meta: z.object({
+              total: z.number(),
+              lastPage: z.number(),
+              currentPage: z.number(),
+              perPage: z.number(),
+              prev: z.number().nullable(),
+              next: z.number().nullable(),
+            }),
+          }),
         },
       },
 
@@ -121,9 +134,21 @@ export const contract = c.router(
           name: z.string().optional(),
           code: z.string().optional(),
           dalilCode: z.string().optional(),
+          page: z.coerce.number(),
+          perPage: z.coerce.number().optional(),
         }),
         responses: {
-          200: MedServiceSchema.array(),
+          200: z.object({
+            data: MedServiceSchema.array(),
+            meta: z.object({
+              total: z.number(),
+              lastPage: z.number(),
+              currentPage: z.number(),
+              perPage: z.number(),
+              prev: z.number().nullable(),
+              next: z.number().nullable(),
+            }),
+          }),
         },
       },
 

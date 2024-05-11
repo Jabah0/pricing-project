@@ -7,6 +7,7 @@ import { ClientInferResponses } from "@ts-rest/core";
 import { MedService, contract } from "api-contract";
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
+import { InfiniteData } from "@tanstack/solid-query";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
@@ -20,19 +21,23 @@ export const MedServiceListService = () => {
 
   const queryClient = useQueryClient();
 
-  const myServicesQuery = apiClient.medServices.getAllByUser.createQuery(
-    () => ["myServices", serviceName(), serviceCode()],
-    {
-      query: {
-        get name() {
-          return serviceName();
+  const myServicesQuery =
+    apiClient.medServices.getAllByUser.createInfiniteQuery(
+      () => ["myServices", serviceName(), serviceCode()],
+      ({ pageParam = 1 }) => ({
+        query: {
+          get name() {
+            return serviceName();
+          },
+          get code() {
+            return serviceCode();
+          },
+          get page() {
+            return pageParam;
+          },
         },
-        get code() {
-          return serviceCode();
-        },
-      },
-    }
-  );
+      })
+    );
 
   const updateMedServiceMutation =
     apiClient.medServices.patchOne.createMutation({
@@ -50,12 +55,14 @@ export const MedServiceListService = () => {
         ]);
 
         let updatedService: MedService;
-        queryClient.setQueryData<MedServices>(
+        queryClient.setQueryData<InfiniteData<MedServices>>(
           ["services", serviceName(), serviceCode()],
           (old) => {
             if (!old) return undefined;
 
-            const targetService = old.body.find(
+            console.log(old);
+
+            const targetService = old.pages.flatMap(
               (item) => item.id === newService.params.id
             );
 
@@ -68,7 +75,7 @@ export const MedServiceListService = () => {
 
             return {
               ...old,
-              body: [...old.body],
+              body: old.body,
             };
           }
         );
@@ -78,7 +85,7 @@ export const MedServiceListService = () => {
           (old) => {
             if (!old) return undefined;
 
-            const targetService = old.body.find(
+            const targetService = old.body.data.find(
               (item) => item.id === newService.params.id
             );
 
@@ -88,13 +95,13 @@ export const MedServiceListService = () => {
             } else {
               return {
                 ...old,
-                body: [...old.body, updatedService],
+                body: { ...old.body, data: [...old.body.data, updatedService] },
+                // body: [...old.body, updatedService],
               };
             }
 
             return {
               ...old,
-              body: [...old.body],
             };
           }
         );
@@ -146,9 +153,9 @@ export const MedServiceListService = () => {
     });
   };
 
-  const servicesQuery = apiClient.medServices.getAll.createQuery(
+  const servicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
     () => ["services", serviceName(), serviceCode()],
-    {
+    ({ pageParam = 1 }) => ({
       query: {
         get name() {
           return serviceName();
@@ -156,13 +163,22 @@ export const MedServiceListService = () => {
         get code() {
           return serviceCode();
         },
+        get page() {
+          return pageParam;
+        },
       },
-    }
+    })
   );
 
-  const services = () => {
-    return isMy() ? myServicesQuery : servicesQuery;
-  };
+  const myServicesData = () =>
+    myServicesQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
+
+  const allServicesData = () =>
+    servicesQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
+
+  const servicesData = () => (isMy() ? myServicesData() : allServicesData());
+
+  const services = () => (isMy() ? myServicesQuery : servicesQuery);
 
   return {
     onUpdateServicePrice,
@@ -173,5 +189,6 @@ export const MedServiceListService = () => {
     setIsMy,
     isMy,
     servicesQuery: services,
+    servicesData,
   };
 };
