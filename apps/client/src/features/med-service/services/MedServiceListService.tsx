@@ -36,7 +36,13 @@ export const MedServiceListService = () => {
             return pageParam;
           },
         },
-      })
+      }),
+      {
+        getNextPageParam: (lastPage, _pages) => {
+          if (lastPage.body.meta.next === null) return undefined;
+          else return lastPage.body.meta.next;
+        },
+      }
     );
 
   const updateMedServiceMutation =
@@ -60,9 +66,13 @@ export const MedServiceListService = () => {
           (old) => {
             if (!old) return undefined;
 
-            console.log(old);
+            const outerFlatService = old.pages.flatMap((page) => page);
 
-            const targetService = old.pages.flatMap(
+            const innerFlatService = outerFlatService.flatMap(
+              (item) => item.body.data
+            );
+
+            const targetService = innerFlatService.find(
               (item) => item.id === newService.params.id
             );
 
@@ -75,29 +85,30 @@ export const MedServiceListService = () => {
 
             return {
               ...old,
-              body: old.body,
             };
           }
         );
 
-        queryClient.setQueryData<MedServices>(
+        queryClient.setQueryData<InfiniteData<MedServices>>(
           ["myServices", serviceName(), serviceCode()],
           (old) => {
             if (!old) return undefined;
 
-            const targetService = old.body.data.find(
+            const outerFlatService = old.pages.flatMap((page) => page);
+
+            const innerFlatService = outerFlatService.flatMap(
+              (item) => item.body.data
+            );
+
+            const targetService = innerFlatService.find(
               (item) => item.id === newService.params.id
             );
 
             if (targetService) {
               targetService.price =
                 newService.body?.price || targetService.price;
-            } else {
-              return {
-                ...old,
-                body: { ...old.body, data: [...old.body.data, updatedService] },
-                // body: [...old.body, updatedService],
-              };
+
+              updatedService = targetService;
             }
 
             return {

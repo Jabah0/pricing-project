@@ -178,7 +178,7 @@ export const UsersList = () => {
                 </p>
               </Match>
               <Match when={users().length > 0}>
-                <div class="flex flex-col gap-1 overflow-auto h-[46rem]">
+                <div class="flex flex-col gap-1 overflow-auto h-[46rem] md:h-[29rem]">
                   <For each={users()}>{(user) => <UserItem user={user} />}</For>
                   <div id="lastItem" />
                   <Show when={usersQuery.isFetchingNextPage}>

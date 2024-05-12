@@ -1,14 +1,39 @@
-import { For, Match, Switch } from "solid-js";
+import { For, Match, Show, Switch, createEffect, createSignal } from "solid-js";
 import { useLocale } from "@/features/locale/locale.context";
 import { MedServiceItem } from "./MedServiceItem";
 import { MedServiceListService } from "../services/MedServiceListService";
 import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { SearchIcon } from "@/assets/icons/SearchIcon";
+import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
 
 export const MedServiceList = () => {
   const locale = useLocale();
 
   const medServicesService = MedServiceListService();
+
+  const [lastItem, setLastItem] = createSignal<HTMLElement>(
+    document.getElementById("lastItem")!
+  );
+
+  createEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (
+        entries[0].isIntersecting &&
+        !medServicesService.servicesQuery().isFetchingNextPage
+      ) {
+        medServicesService.servicesQuery().fetchNextPage();
+      }
+    });
+
+    if (medServicesService.servicesQuery().isSuccess)
+      setLastItem(document.getElementById("lastItem")!);
+
+    if (lastItem()) observer.observe(lastItem());
+
+    return () => observer.disconnect();
+  });
+
+  console.log(medServicesService.servicesQuery());
 
   return (
     <div class="flex flex-col gap-6">
@@ -92,19 +117,29 @@ export const MedServiceList = () => {
                 </p>
               </Match>
               <Match when={medServicesService.servicesData().length > 0}>
-                <For each={medServicesService.servicesData()}>
-                  {(ser) => (
-                    <MedServiceItem
-                      updateServicePrice={
-                        medServicesService.onUpdateServicePrice
-                      }
-                      updateServiceUnitSize={
-                        medServicesService.onUpdateServicePrice
-                      }
-                      medService={ser}
-                    />
-                  )}
-                </For>
+                <div class="flex flex-col gap-2 overflow-auto h-[48rem] md:h-[27rem]">
+                  <For each={medServicesService.servicesData()}>
+                    {(ser) => (
+                      <MedServiceItem
+                        updateServicePrice={
+                          medServicesService.onUpdateServicePrice
+                        }
+                        updateServiceUnitSize={
+                          medServicesService.onUpdateServicePrice
+                        }
+                        medService={ser}
+                      />
+                    )}
+                  </For>
+                </div>
+                <div id="lastItem" />
+                <Show
+                  when={medServicesService.servicesQuery().isFetchingNextPage}
+                >
+                  <div class="flex justify-center items-center w-full">
+                    <DotsRotateIcon class="text-primary h-[2rem] w-[2rem]" />
+                  </div>
+                </Show>
               </Match>
             </Switch>
           </div>
