@@ -35,8 +35,8 @@ export const MedServiceItem = (props: Props) => {
 
   return (
     <div
-      class="flex justify-between gap-12 items-center p-4 shadow-lg bg-backPrimary border-[0.01rem]
-     border-gray-600 rounded-lg min-h-16 w-full"
+      class="flex justify-between gap-12 items-center p-4 shadow-lg bg-backPrimary border-[1px]
+     border-gray-600 rounded-sm min-h-16 w-full"
     >
       <div class="flex gap-8">
         <div class="flex flex-col justify-center items-center">
@@ -53,16 +53,6 @@ export const MedServiceItem = (props: Props) => {
         </div>
       </div>
       <div class="flex justify-center items-center gap-4">
-        {/* <Show when={isEdit()}>
-          <div class="flex flex-col gap-2">
-            <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
-              <FaSolidPlus class="text-white" />
-            </button>
-            <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
-              <FaSolidMinus class="text-white" />
-            </button>
-          </div>
-        </Show> */}
         <Switch>
           <Match when={!isEdit()}>
             <div class="flex flex-col justify-center items-center">
@@ -102,16 +92,6 @@ export const MedServiceItem = (props: Props) => {
             </div>
           </Match>
         </Switch>
-        {/* <Show when={isEdit()}>
-          <div class="flex flex-col gap-2">
-            <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
-              <FaSolidPlus class="text-white" />
-            </button>
-            <button class="bg-iconStroke rounded-md p-0.5 shadow-lg">
-              <FaSolidMinus class="text-white" />
-            </button>
-          </div>
-        </Show> */}
         <EditPriceButton
           onEdit={onClickEdit}
           onCancel={onClickCancel}

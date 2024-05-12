@@ -72,7 +72,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           },
         },
       } as Prisma.MedServiceInclude,
-      orderBy: { id: 'asc' } as Prisma.MedServiceOrderByWithRelationInput,
+      orderBy: { price: 'desc' } as Prisma.MedServiceOrderByWithRelationInput,
     });
   }
 
@@ -113,7 +113,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           },
           price: true,
         } as Prisma.MedServiceSelect,
-        orderBy: { id: 'asc' } as Prisma.MedServiceOrderByWithRelationInput,
+        orderBy: { price: 'desc' } as Prisma.MedServiceOrderByWithRelationInput,
       },
     );
 

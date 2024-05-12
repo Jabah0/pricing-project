@@ -12,6 +12,7 @@ import { Login } from "./features/auth/pages/Login";
 import { UsersList } from "./features/_users/components/UsersList";
 import { RouteGuard } from "./features/auth/components/RouteGuard";
 import { DotsRotateIcon } from "./assets/icons/DotsRotateIcon";
+import { MedServicesTable } from "./features/med-service/components/MedServicesTable";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/" component={MedServiceList} />
               </Route>
               <Route path="/users" component={UsersList} />
+              <Route path="/services" component={MedServicesTable} />
             </Route>
             <Route path="/auth" component={AuthLayout}>
               <Route path="/login" component={Login} />
