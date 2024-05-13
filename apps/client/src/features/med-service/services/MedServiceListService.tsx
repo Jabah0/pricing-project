@@ -164,6 +164,13 @@ export const MedServiceListService = () => {
     });
   };
 
+  const onUpdateServiceUnit = (id: string, unitSize: number) => {
+    updateMedServiceMutation.mutate({
+      params: { id },
+      body: { unitSize },
+    });
+  };
+
   const servicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
     () => ["services", serviceName(), serviceCode()],
     ({ pageParam = 1 }) => ({
@@ -193,6 +200,7 @@ export const MedServiceListService = () => {
 
   return {
     onUpdateServicePrice,
+    onUpdateServiceUnit,
     setServiceName,
     setServiceCode,
     serviceName,

@@ -5,9 +5,11 @@ import { MedServiceListService } from "../services/MedServiceListService";
 export const MedServicesTable = () => {
   const service = MedServiceListService();
 
+  const medServicesData = () => service.servicesData();
+
   return (
-    <div>
-      <Table columns={Columns} data={service.servicesData()} />
+    <div class="">
+      <Table columns={Columns} data={medServicesData()} />
     </div>
   );
 };

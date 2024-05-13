@@ -1,3 +1,4 @@
+import { TableHeader } from "@/components/TableHeader";
 import { ColumnDef } from "@tanstack/solid-table";
 import { MedService } from "api-contract";
 
@@ -5,7 +6,9 @@ export const Columns: ColumnDef<MedService>[] = [
   {
     id: "id",
     accessorKey: "id",
-    header: "ID",
+    header: (row) => (
+      <TableHeader title="ID" isSorted={row.column.getIsSorted()} />
+    ),
     aggregationFn: () => console.log("ID"),
   },
   {

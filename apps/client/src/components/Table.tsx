@@ -1,5 +1,3 @@
-import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
-import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
 import {
   flexRender,
   getCoreRowModel,
@@ -29,19 +27,22 @@ export const Table = <T extends object>(props: Props<T>) => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    debugTable: true,
+    //debugTable: true,
   });
 
   return (
-    <div class="p-1 w-full h-full bg-backPrimary rounded-md shadow-lg text-white">
-      <table class="w-full h-full">
+    <div class="p-1 w-full bg-backPrimary rounded-md shadow-lg text-gray-400">
+      <table class="w-full">
         <thead>
           <For each={table.getHeaderGroups()}>
             {(headerGroup) => (
-              <tr class="shadow-lg h-10">
+              <tr class="shadow-lg h-10 py-4">
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th colSpan={header.colSpan} class="text-start">
+                    <th
+                      colSpan={header.colSpan}
+                      class="text-start border-e border-gray-600 px-[0.5rem]"
+                    >
                       <Show when={!header.isPlaceholder}>
                         <div
                           class={`flex gap-1 items-center
@@ -50,20 +51,11 @@ export const Table = <T extends object>(props: Props<T>) => {
                                 ? "cursor-pointer select-none"
                                 : undefined
                             }`}
-                          onClick={header.column.getToggleSortingHandler()}
                         >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {{
-                            asc: (
-                              <SortAscendingIcon class="text-primary h-6 w-6 drop-shadow" />
-                            ),
-                            desc: (
-                              <SortDescendingIcon class="text-primary h-6 w-6 drop-shadow" />
-                            ),
-                          }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       </Show>
                     </th>
@@ -79,7 +71,7 @@ export const Table = <T extends object>(props: Props<T>) => {
               <tr class="h-10 border-y border-y-background">
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td>
+                    <td class="px-[0.5rem]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
