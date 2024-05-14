@@ -32,10 +32,29 @@ export class MedServiceController {
   async getAll(@Req() request) {
     return tsRestHandler(
       contract.medServices.getAll,
-      async ({ query: { name, code, dalilCode, page, perPage } }) => {
+      async ({
+        query: {
+          name,
+          code,
+          dalilCode,
+          orderBy,
+          orderDirection,
+          page,
+          perPage,
+        },
+      }) => {
         const users = await this.getMedServicesUseCaseProxy
           .getInstance()
-          .execute(request.user.id, name, code, dalilCode, page, perPage);
+          .execute(
+            request.user.id,
+            name,
+            code,
+            dalilCode,
+            orderBy,
+            orderDirection,
+            page,
+            perPage,
+          );
         return {
           status: 200,
           body: users,
@@ -49,10 +68,29 @@ export class MedServiceController {
   async getAllByUser(@Req() req) {
     return tsRestHandler(
       contract.medServices.getAllByUser,
-      async ({ query: { name, code, dalilCode, page, perPage } }) => {
+      async ({
+        query: {
+          name,
+          code,
+          dalilCode,
+          orderBy,
+          orderDirection,
+          page,
+          perPage,
+        },
+      }) => {
         const users = await this.getUserMedServicesUseCaseProxy
           .getInstance()
-          .execute(req.user.id, name, code, dalilCode, page, perPage);
+          .execute(
+            req.user.id,
+            name,
+            code,
+            dalilCode,
+            orderBy,
+            orderDirection,
+            page,
+            perPage,
+          );
         return {
           status: 200,
           body: users,

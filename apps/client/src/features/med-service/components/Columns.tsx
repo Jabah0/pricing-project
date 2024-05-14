@@ -6,39 +6,48 @@ export const Columns: ColumnDef<MedService>[] = [
   {
     id: "id",
     accessorKey: "id",
-    header: (row) => (
-      <TableHeader title="ID" isSorted={row.column.getIsSorted()} />
+    size: 6 / 1,
+    header: (param) => (
+      <TableHeader
+        title="ID"
+        isSorted={param.column.getIsSorted()}
+        toggleSort={() => param.column.toggleSorting()}
+      />
     ),
-    aggregationFn: () => console.log("ID"),
   },
   {
     id: "name",
     accessorKey: "name",
     header: "Name",
-    aggregationFn: () => console.log("Name"),
+    size: 6 / 1,
   },
   {
     id: "code",
     accessorKey: "code",
     header: "Code",
-    aggregationFn: () => console.log("Code"),
+    size: 6 / 1,
   },
   {
     id: "dalilName",
     accessorKey: "dalilName",
     header: "Dalil Name",
-    aggregationFn: () => console.log("Dalil Name"),
+    size: 6 / 1,
   },
   {
     id: "price",
     accessorKey: "price",
-    header: "Price",
-    aggregationFn: () => console.log("Price"),
+    header: (param) => (
+      <TableHeader
+        title="Price"
+        isSorted={param.column.getIsSorted()}
+        toggleSort={() => param.column.toggleSorting()}
+      />
+    ),
   },
   {
     id: "unitSize",
     accessorKey: "unitSize",
     header: "Unit Size",
-    aggregationFn: () => console.log("Unit Size"),
+    size: 6 / 1,
   },
 ];

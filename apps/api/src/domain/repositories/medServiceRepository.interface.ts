@@ -9,6 +9,8 @@ export interface MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    orderBy: string,
+    orderDirection: string,
     page: number,
     perPage?: number,
   ): Promise<PaginatedResult<MedService>>;
@@ -18,6 +20,8 @@ export interface MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    orderBy: string,
+    orderDirection: string,
     page: number,
     perPage?: number,
   ): Promise<PaginatedResult<MedService>>;

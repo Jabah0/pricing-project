@@ -7,9 +7,18 @@ export const MedServicesTable = () => {
 
   const medServicesData = () => service.servicesData();
 
+  const onOrderChange = (sortBy: string, sortDirection: "asc" | "desc") => {
+    service.setOrderBy(sortBy);
+    service.setOrderDirection(sortDirection);
+  };
+
   return (
-    <div class="">
-      <Table columns={Columns} data={medServicesData()} />
+    <div class="h-[47rem]">
+      <Table
+        columns={Columns}
+        data={medServicesData()}
+        onSort={onOrderChange}
+      />
     </div>
   );
 };

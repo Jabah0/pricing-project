@@ -21,6 +21,7 @@ export const MedServiceList = () => {
         entries[0].isIntersecting &&
         !medServicesService.servicesQuery().isFetchingNextPage
       ) {
+        console.log("fetch executed");
         medServicesService.servicesQuery().fetchNextPage();
       }
     });
@@ -32,8 +33,6 @@ export const MedServiceList = () => {
 
     return () => observer.disconnect();
   });
-
-  console.log(medServicesService.servicesQuery());
 
   return (
     <div class="flex flex-col gap-6">
@@ -117,7 +116,7 @@ export const MedServiceList = () => {
                 </p>
               </Match>
               <Match when={medServicesService.servicesData().length > 0}>
-                <div class="flex flex-col gap-2 overflow-auto h-[48rem] md:h-[27rem]">
+                <div class="flex flex-col gap-2 overflow-auto lg:h-[42rem] md:h-[27rem]">
                   <For each={medServicesService.servicesData()}>
                     {(ser) => (
                       <MedServiceItem

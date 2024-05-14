@@ -35,45 +35,58 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    orderBy: string,
+    orderDirection: string,
+    page: number,
+    perPage: number,
   ): Promise<PaginatedResult<MedService>> {
-    return paginate(this.prisma.medService, {
-      where: {
-        name: {
-          contains: name,
-        },
-        code: {
-          contains: code,
-        },
-        dalilName: {
-          contains: dalilCode,
-        },
-        numberOfPricing: {
-          lt: this.prisma.medService.fields.limitNumberOfPricing,
-        },
-        NOT: {
-          users: {
-            some: {
-              userId: userId,
-            },
+    const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
+    const sortBy = orderBy ? orderBy : 'price';
+
+    return paginate(
+      this.prisma.medService,
+      {
+        where: {
+          name: {
+            contains: name,
           },
-        },
-      } as Prisma.MedServiceWhereInput,
-      include: {
-        users: {
-          select: {
-            price: true,
-            user: {
-              select: {
-                id: true,
-                fullName: true,
-                username: true,
+          code: {
+            contains: code,
+          },
+          dalilName: {
+            contains: dalilCode,
+          },
+          numberOfPricing: {
+            lt: this.prisma.medService.fields.limitNumberOfPricing,
+          },
+          NOT: {
+            users: {
+              some: {
+                userId: userId,
               },
             },
           },
-        },
-      } as Prisma.MedServiceInclude,
-      orderBy: { price: 'desc' } as Prisma.MedServiceOrderByWithRelationInput,
-    });
+        } as Prisma.MedServiceWhereInput,
+        include: {
+          users: {
+            select: {
+              price: true,
+              user: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        } as Prisma.MedServiceInclude,
+        orderBy: {
+          [sortBy]: sortOrder,
+        } as Prisma.MedServiceOrderByWithRelationInput,
+      },
+      { page, perPage },
+    );
   }
 
   async findByUser(
@@ -81,7 +94,14 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    orderBy: string,
+    orderDirection: string,
+    page: number,
+    perPage: number,
   ): Promise<PaginatedResult<MedService>> {
+    const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
+    const sortBy = orderBy ? orderBy : 'price';
+
     const result: PaginatedResult<UserMedServiceResult> = await paginate(
       this.prisma.userMedServices,
       {
@@ -113,8 +133,10 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           },
           price: true,
         } as Prisma.MedServiceSelect,
-        orderBy: { price: 'desc' } as Prisma.MedServiceOrderByWithRelationInput,
-      },
+        orderBy: { [sortBy]: sortOrder },
+      } as Prisma.MedServiceOrderByWithRelationInput,
+
+      { page, perPage },
     );
 
     return {

@@ -5,7 +5,7 @@ import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { MedService, contract } from "api-contract";
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import toast from "solid-toast";
 import { InfiniteData } from "@tanstack/solid-query";
 
@@ -18,12 +18,20 @@ export const MedServiceListService = () => {
 
   const [serviceName, setServiceName] = createSignal<string>();
   const [serviceCode, setServiceCode] = createSignal<string>();
+  const [orderBy, setOrderBy] = createSignal<string>();
+  const [orderDirection, setOrderDirection] = createSignal<"asc" | "desc">();
 
   const queryClient = useQueryClient();
 
   const myServicesQuery =
     apiClient.medServices.getAllByUser.createInfiniteQuery(
-      () => ["myServices", serviceName(), serviceCode()],
+      () => [
+        "myServices",
+        serviceName(),
+        serviceCode(),
+        orderBy(),
+        orderDirection(),
+      ],
       ({ pageParam = 1 }) => ({
         query: {
           get name() {
@@ -31,6 +39,12 @@ export const MedServiceListService = () => {
           },
           get code() {
             return serviceCode();
+          },
+          get orderBy() {
+            return orderBy();
+          },
+          get orderDirection() {
+            return orderDirection();
           },
           get page() {
             return pageParam;
@@ -172,7 +186,13 @@ export const MedServiceListService = () => {
   };
 
   const servicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
-    () => ["services", serviceName(), serviceCode()],
+    () => [
+      "services",
+      serviceName(),
+      serviceCode(),
+      orderBy(),
+      orderDirection(),
+    ],
     ({ pageParam = 1 }) => ({
       query: {
         get name() {
@@ -180,6 +200,12 @@ export const MedServiceListService = () => {
         },
         get code() {
           return serviceCode();
+        },
+        get orderBy() {
+          return orderBy();
+        },
+        get orderDirection() {
+          return orderDirection();
         },
         get page() {
           return pageParam;
@@ -205,6 +231,8 @@ export const MedServiceListService = () => {
     setServiceCode,
     serviceName,
     serviceCode,
+    setOrderBy,
+    setOrderDirection,
     setIsMy,
     isMy,
     servicesQuery: services,

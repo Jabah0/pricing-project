@@ -246,6 +246,8 @@ export declare const contract: {
                 name: z.ZodOptional<z.ZodString>;
                 code: z.ZodOptional<z.ZodString>;
                 dalilCode: z.ZodOptional<z.ZodString>;
+                orderBy: z.ZodOptional<z.ZodString>;
+                orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodNumber;
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
@@ -253,12 +255,16 @@ export declare const contract: {
                 name?: string | undefined;
                 code?: string | undefined;
                 dalilCode?: string | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
                 page: number;
                 name?: string | undefined;
                 code?: string | undefined;
                 dalilCode?: string | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }>;
             method: "GET";
@@ -367,6 +373,8 @@ export declare const contract: {
                 name: z.ZodOptional<z.ZodString>;
                 code: z.ZodOptional<z.ZodString>;
                 dalilCode: z.ZodOptional<z.ZodString>;
+                orderBy: z.ZodOptional<z.ZodString>;
+                orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodNumber;
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
@@ -374,12 +382,16 @@ export declare const contract: {
                 name?: string | undefined;
                 code?: string | undefined;
                 dalilCode?: string | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
                 page: number;
                 name?: string | undefined;
                 code?: string | undefined;
                 dalilCode?: string | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }>;
             method: "GET";

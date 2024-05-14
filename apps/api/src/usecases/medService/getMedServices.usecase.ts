@@ -10,6 +10,8 @@ export class GetMedServicesUseCase {
     name: string,
     code: string,
     dalilCode: string,
+    orderBy: string,
+    orderDirection: string,
     page: number,
     perPage?: number,
   ): Promise<PaginatedResult<MedService>> {
@@ -18,6 +20,8 @@ export class GetMedServicesUseCase {
       name,
       code,
       dalilCode,
+      orderBy,
+      orderDirection,
       page,
       perPage,
     );
