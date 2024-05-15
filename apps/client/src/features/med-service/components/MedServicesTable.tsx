@@ -13,7 +13,7 @@ export const MedServicesTable = () => {
   };
 
   return (
-    <div class="h-[47rem]">
+    <div class="h-[47rem] md:h-[30rem]">
       <Table
         columns={Columns}
         data={medServicesData()}

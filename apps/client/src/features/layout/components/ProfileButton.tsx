@@ -37,7 +37,7 @@ export const ProfileButton = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           class="bg-backPrimary border border-gray-600 
-          rounded-lg my-6 w-[12rem]"
+          rounded-lg my-6 w-[12rem] z-50"
         >
           <div class="flex flex-col gap-3 justify-center items-center my-6 mx-4">
             <div class="flex flex-col gap-3 justify-center items-center">

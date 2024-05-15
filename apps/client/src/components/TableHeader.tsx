@@ -11,6 +11,7 @@ type Props = {
   onSort?: (sort: Sort) => void;
   isSorted: Sort;
   toggleSort?: () => void;
+  onHide?: () => void;
 };
 
 export const TableHeader = (props: Props) => {
@@ -43,6 +44,7 @@ export const TableHeader = (props: Props) => {
         <MoreOptions
           isFiltering={isFiltering()}
           toggleFiltering={toggleFiltering}
+          hide={props.onHide}
         />
       </div>
     </div>
@@ -52,6 +54,7 @@ export const TableHeader = (props: Props) => {
 const MoreOptions = (props: {
   isFiltering: boolean;
   toggleFiltering: () => void;
+  hide: () => void;
 }) => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger as="button">
@@ -61,7 +64,10 @@ const MoreOptions = (props: {
       <DropdownMenu.Content>
         <div class="bg-backPrimary border border-gray-600 rounded-sm my-4 p-2 w-[12rem] text-white">
           <button
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              props.hide();
+            }}
             class="w-full text-start hover:opacity-75"
           >
             hide

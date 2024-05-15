@@ -13,7 +13,7 @@ export const FloatMenu = () => {
 
   return (
     <div
-      class={`bg-secondary rounded-full fixed -top-24 -right-24 h-64 w-64
+      class={`bg-secondary rounded-full fixed -top-24 -right-24 h-64 w-64 z-50
       ${!isVisible() && "invisible"}`}
     >
       <div class="relative">

@@ -116,7 +116,7 @@ export const MedServiceList = () => {
                 </p>
               </Match>
               <Match when={medServicesService.servicesData().length > 0}>
-                <div class="flex flex-col gap-2 overflow-auto lg:h-[42rem] md:h-[27rem]">
+                <div class="flex flex-col gap-2 overflow-auto h-[42rem] md:h-[27rem]">
                   <For each={medServicesService.servicesData()}>
                     {(ser) => (
                       <MedServiceItem

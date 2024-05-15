@@ -12,6 +12,7 @@ export const Columns: ColumnDef<MedService>[] = [
         title="ID"
         isSorted={param.column.getIsSorted()}
         toggleSort={() => param.column.toggleSorting()}
+        onHide={() => param.column.toggleVisibility()}
       />
     ),
   },
