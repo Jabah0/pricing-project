@@ -12,12 +12,19 @@ export const MedServicesTable = () => {
     service.setOrderDirection(sortDirection);
   };
 
+  const fetchNextData = () => {
+    service.servicesQuery().fetchNextPage();
+  };
+
   return (
     <div class="h-[47rem] md:h-[30rem]">
       <Table
         columns={Columns}
         data={medServicesData()}
         onSort={onOrderChange}
+        onFetchNextData={fetchNextData}
+        isFetchingNextPage={service.servicesQuery().isFetchingNextPage}
+        isFetchSuccess={service.servicesQuery().isSuccess}
       />
     </div>
   );

@@ -13,14 +13,13 @@ type Props<T> = {
   columns: Array<ColumnDef<T>>;
   data: Array<T>;
   onSort?: (sortBy: string, sortDirection: "asc" | "desc") => void;
+  onFetchNextData?: () => void;
+  isFetchingNextPage?: boolean;
+  isFetchSuccess?: boolean;
 };
 
 export const Table = <T extends object>(props: Props<T>) => {
   const [sorting, setSorting] = createSignal<SortingState>([]);
-
-  createEffect(() => {
-    console.log(props.data);
-  });
 
   const handleSorting = async (newSorting: Updater<SortingState>) => {
     setSorting(newSorting);
@@ -43,6 +42,26 @@ export const Table = <T extends object>(props: Props<T>) => {
     onSortingChange: (newSorting) => handleSorting(newSorting),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+  });
+
+  const [lastItem, setLastItem] = createSignal<HTMLElement>(
+    document.getElementById("lastItem")!
+  );
+
+  createEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !props.isFetchingNextPage) {
+        if (props.onFetchNextData) {
+          props.onFetchNextData();
+        }
+      }
+    });
+
+    if (props.isFetchSuccess) setLastItem(document.getElementById("lastItem")!);
+
+    if (lastItem()) observer.observe(lastItem());
+
+    return () => observer.disconnect();
   });
 
   return (
@@ -99,6 +118,7 @@ export const Table = <T extends object>(props: Props<T>) => {
           </For>
         </tbody>
       </table>
+      <div id="lastItem" />
     </div>
   );
 };

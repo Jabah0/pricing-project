@@ -4,7 +4,7 @@ import { ErrorToast } from "@/toasts/ErrorToast";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
-import { MedService, contract } from "api-contract";
+import { contract } from "api-contract";
 import { createEffect, createSignal } from "solid-js";
 import toast from "solid-toast";
 import { InfiniteData } from "@tanstack/solid-query";
@@ -74,7 +74,6 @@ export const MedServiceListService = () => {
           serviceCode(),
         ]);
 
-        let updatedService: MedService;
         queryClient.setQueryData<InfiniteData<MedServices>>(
           ["services", serviceName(), serviceCode()],
           (old) => {
@@ -93,8 +92,6 @@ export const MedServiceListService = () => {
             if (targetService) {
               targetService.price =
                 newService.body?.price || targetService.price;
-
-              updatedService = targetService;
             }
 
             return {
@@ -121,8 +118,6 @@ export const MedServiceListService = () => {
             if (targetService) {
               targetService.price =
                 newService.body?.price || targetService.price;
-
-              updatedService = targetService;
             }
 
             return {
@@ -185,7 +180,7 @@ export const MedServiceListService = () => {
     });
   };
 
-  const servicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
+  const allServicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
     () => [
       "services",
       serviceName(),
@@ -211,18 +206,24 @@ export const MedServiceListService = () => {
           return pageParam;
         },
       },
-    })
+    }),
+    {
+      getNextPageParam: (lastPage, _pages) => {
+        if (lastPage.body.meta.next === null) return undefined;
+        else return lastPage.body.meta.next;
+      },
+    }
   );
 
   const myServicesData = () =>
     myServicesQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
 
   const allServicesData = () =>
-    servicesQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
+    allServicesQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
 
   const servicesData = () => (isMy() ? myServicesData() : allServicesData());
 
-  const services = () => (isMy() ? myServicesQuery : servicesQuery);
+  const servicesQuery = () => (isMy() ? myServicesQuery : allServicesQuery);
 
   return {
     onUpdateServicePrice,
@@ -235,7 +236,7 @@ export const MedServiceListService = () => {
     setOrderDirection,
     setIsMy,
     isMy,
-    servicesQuery: services,
+    servicesQuery,
     servicesData,
   };
 };

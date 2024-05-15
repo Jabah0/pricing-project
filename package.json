@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@types/passport-local": "^1.0.38",
-    "turbo": "^1.13.0"
+    "turbo": "^1.13.3"
   },
   "workspaces": [
     "apps/*",

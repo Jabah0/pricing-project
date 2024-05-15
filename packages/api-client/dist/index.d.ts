@@ -252,16 +252,16 @@ export declare const contract: {
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
-                name?: string | undefined;
                 code?: string | undefined;
+                name?: string | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
                 page: number;
-                name?: string | undefined;
                 code?: string | undefined;
+                name?: string | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
@@ -379,16 +379,16 @@ export declare const contract: {
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
-                name?: string | undefined;
                 code?: string | undefined;
+                name?: string | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
                 page: number;
-                name?: string | undefined;
                 code?: string | undefined;
+                name?: string | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
