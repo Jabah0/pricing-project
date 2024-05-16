@@ -21,7 +21,6 @@ export const MedServiceList = () => {
         entries[0].isIntersecting &&
         !medServicesService.servicesQuery().isFetchingNextPage
       ) {
-        console.log("fetch executed");
         medServicesService.servicesQuery().fetchNextPage();
       }
     });
