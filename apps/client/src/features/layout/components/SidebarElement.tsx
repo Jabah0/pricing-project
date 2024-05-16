@@ -26,13 +26,9 @@ export const SidebarElement = (props: Props) => {
           />
         </A>
       </Tooltip.Trigger>
-      <Tooltip.Content class="bg-secondary m-0.5 p-2 rounded-md transition-all">
+      <Tooltip.Content class="bg-iconStroke m-0.5 p-2 rounded-sm drop-shadow-lg z-50 ">
         <Tooltip.Arrow class="w-1 h-1" />
-        <p
-          class={`text-start text-xs text-white group-hover:text-black hover:font-bold`}
-        >
-          {props.title}
-        </p>
+        <p class={`text-start text-lg text-white font-bold`}>{props.title}</p>
       </Tooltip.Content>
     </Tooltip.Root>
   );

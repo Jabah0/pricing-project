@@ -20,8 +20,8 @@ export const MedServicesTable = () => {
   };
 
   return (
-    <div class="flex flex-col gap-2 h-full">
-      <div class="flex flex-grow-0">
+    <div class="flex flex-col gap-4 h-full">
+      <div class="flex">
         <div class="flex gap-2">
           <div class="flex justify-center items-center gap-2 bg-backPrimary shadow-lg px-2 rounded-sm h-[2.5rem]">
             <button
@@ -53,7 +53,7 @@ export const MedServicesTable = () => {
           </div>
         </div>
       </div>
-      <div id="tableContainer" class="flex-1 overflow-auto">
+      <div id="tableContainer" class="flex-grow overflow-auto">
         <Table
           columns={Columns}
           data={medServicesData()}

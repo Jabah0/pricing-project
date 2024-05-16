@@ -1,5 +1,4 @@
 import { ParentComponent } from "solid-js";
-import { FaSolidBuildingColumns } from "solid-icons/fa";
 import { Sidebar } from "./Sidebar";
 import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
@@ -13,6 +12,7 @@ import { PersonFilledIcon } from "@/assets/icons/PersonFilledIcon";
 import { HomeIcon } from "@/assets/icons/HomeIcon";
 import { RoleGuard } from "@/features/auth/components/RoleGuard";
 import { Roles } from "@/features/auth/enums/Roles.enum";
+import { LogoIcon } from "@/assets/icons/LogoIcon";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
@@ -23,7 +23,7 @@ export const MainLayout: ParentComponent = (props) => {
       <Sidebar>
         <div class="flex flex-col gap-y-8 w-full">
           <div class="flex justify-center">
-            <FaSolidBuildingColumns class="w-8 h-8 stroke-white fill-white" />
+            <LogoIcon />
           </div>
           <div class="flex flex-col justify-center items-center gap-4 w-full">
             <SidebarElement
@@ -61,10 +61,10 @@ export const MainLayout: ParentComponent = (props) => {
           </div>
         </div>
       </Sidebar>
-      <div class="flex flex-col items-center w-full min-h-full py-5 2xl:px-20 sm:px-2 overflow-auto">
-        <div class="flex flex-col gap-8 w-full px-4">
+      <div class="flex flex-col items-center w-full py-4 2xl:px-15 sm:px-2 overflow-auto">
+        <div class="flex flex-col gap-6 w-full h-full">
           <Navbar />
-          <div class="min-h-full">{props.children}</div>
+          <div class="min-h-full py-2">{props.children}</div>
         </div>
       </div>
       <Toaster position="bottom-right" />
