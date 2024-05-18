@@ -138,7 +138,7 @@ input:focus {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--secondary) var(--primary);
+  scrollbar-color: #334155 #292e4e;
 }
 
 /* Chrome, Edge, and Safari */

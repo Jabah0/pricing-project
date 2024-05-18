@@ -13,6 +13,13 @@ module.exports = {
       },
     },
     extend: {
+      scrollbar: {
+        thin: {
+          width: "thin",
+          color: "var(--tw-primary)",
+          track: "var(--primary)",
+        },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

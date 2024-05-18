@@ -132,9 +132,18 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
             },
           },
           price: true,
-        } as Prisma.MedServiceSelect,
-        orderBy: { [sortBy]: sortOrder },
-      } as Prisma.MedServiceOrderByWithRelationInput,
+        } as Prisma.UserMedServicesSelect,
+        orderBy:
+          sortBy === 'price' || sortBy === 'unitSize'
+            ? ({
+                [sortBy]: sortOrder,
+              } as Prisma.UserMedServicesOrderByWithRelationInput)
+            : ({
+                medService: {
+                  [sortBy]: sortOrder,
+                },
+              } as Prisma.UserMedServicesOrderByWithRelationInput),
+      },
 
       { page, perPage },
     );

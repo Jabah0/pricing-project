@@ -6,8 +6,23 @@ import {
   ColumnDef,
   createSolidTable,
   Updater,
+  Column,
+  ColumnFiltersState,
 } from "@tanstack/solid-table";
-import { createEffect, createSignal, For, Show } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
+import { TableHeader } from "./TableHeader";
+import { ContextMenu } from "@kobalte/core";
+import { CancelIcon } from "@/assets/icons/CancelIcon";
+import { ExcelIcon } from "@/assets/icons/ExcelIcon";
+import { ColumnsIcon } from "@/assets/icons/ColumnsIcon";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
@@ -20,6 +35,15 @@ type Props<T> = {
 
 export const Table = <T extends object>(props: Props<T>) => {
   const [sorting, setSorting] = createSignal<SortingState>([]);
+  const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
+    []
+  );
+
+  createEffect(() => {
+    console.log(columnFilters());
+  });
+
+  const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
   const handleSorting = async (newSorting: Updater<SortingState>) => {
     setSorting(newSorting);
@@ -33,16 +57,26 @@ export const Table = <T extends object>(props: Props<T>) => {
     get data() {
       return props.data;
     },
-    columns: props.columns,
+    get columns() {
+      return props.columns;
+    },
     state: {
       get sorting() {
         return sorting();
       },
+      get columnFilters() {
+        return columnFilters();
+      },
     },
     onSortingChange: (newSorting) => handleSorting(newSorting),
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+
+  const hiddenHeaders = createMemo(() =>
+    table.getAllColumns().filter((item) => !item.getIsVisible())
+  );
 
   const [lastItem, setLastItem] = createSignal<HTMLElement>(
     document.getElementById("lastItem")!
@@ -65,60 +99,145 @@ export const Table = <T extends object>(props: Props<T>) => {
   });
 
   return (
-    <div class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-md shadow-lg text-gray-400 relative">
-      <table class="w-full">
-        <thead class="sticky top-0 bg-backPrimary z-10">
-          <For each={table.getHeaderGroups()}>
-            {(headerGroup) => (
-              <tr class="shadow-lg h-10 py-4">
-                <For each={headerGroup.headers}>
-                  {(header) => (
-                    <th
-                      colSpan={header.colSpan}
-                      class="text-start border-e border-gray-600 px-[0.5rem]"
-                    >
-                      <Show when={!header.isPlaceholder}>
-                        <div
-                          class={`flex gap-1 items-center
-                            ${
-                              header.column.getCanSort()
-                                ? "cursor-pointer select-none"
-                                : undefined
-                            }`}
-                        >
-                          {flexRender(
+    <ContextMenu.Root>
+      <ContextMenu.Trigger
+        as="div"
+        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm shadow-lg 
+        text-gray-400"
+      >
+        <table class="w-full relative">
+          <thead class="sticky top-0 bg-backPrimary z-40">
+            <For each={table.getHeaderGroups()}>
+              {(headerGroup) => (
+                <tr class="shadow-lg h-10 py-4">
+                  <For each={headerGroup.headers}>
+                    {(header) => (
+                      <th
+                        colSpan={header.colSpan}
+                        class="text-start border-e border-gray-600 px-[0.5rem]"
+                      >
+                        <TableHeader
+                          isSorted={header.column.getIsSorted()}
+                          hide={() => header.column.toggleVisibility()}
+                          title={flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                        </div>
-                      </Show>
-                    </th>
-                  )}
-                </For>
-              </tr>
-            )}
-          </For>
-        </thead>
-        <tbody>
-          <For each={table.getRowModel().rows}>
-            {(row) => (
-              <tr class="h-10 border-y border-y-background">
-                <For each={row.getVisibleCells()}>
-                  {(cell) => (
-                    <td class="px-[0.5rem]">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  )}
-                </For>
-              </tr>
-            )}
-          </For>
-        </tbody>
-      </table>
-      <div id="lastItem" />
+                          toggleSort={() => header.column.toggleSorting()}
+                          setFilter={(val) => header.column.setFilterValue(val)}
+                          filter={() => header.column.getFilterValue()}
+                        />
+                      </th>
+                    )}
+                  </For>
+                </tr>
+              )}
+            </For>
+          </thead>
+          <tbody>
+            <For each={table.getRowModel().rows}>
+              {(row) => (
+                <tr class="h-10 border-y border-y-background">
+                  <For each={row.getVisibleCells()}>
+                    {(cell) => (
+                      <td class="px-[0.5rem]">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    )}
+                  </For>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+        <Show when={chooserIsVisible()}>
+          <ColumnsChooser
+            columns={hiddenHeaders()}
+            close={() => setChooserIsVisible(false)}
+          />
+        </Show>
+        <div id="lastItem" />
+      </ContextMenu.Trigger>
+      <ContextMenu.Portal>
+        <ContextMenu.Content as={"div"} class="z-50">
+          <TableContext
+            showChooser={() => {
+              setChooserIsVisible(true);
+            }}
+            exportExcel={() => {}}
+          />
+        </ContextMenu.Content>
+      </ContextMenu.Portal>
+    </ContextMenu.Root>
+  );
+};
+
+const ColumnsChooser = <T extends object>(props: {
+  columns: Column<T, unknown>[];
+  close: () => void;
+}) => {
+  return (
+    <div
+      class="fixed bottom-7 end-5 h-[20rem] w-[15rem] bg-elementBack border 
+      border-gray-600 shadow-lg z-50"
+    >
+      <div class="flex flex-col gap-2 h-full w-full px-2 py-2">
+        <button onClick={props.close}>
+          <CancelIcon class="h-4 w-4 text-red-700" />
+        </button>
+        <Switch>
+          <Match when={props.columns.length === 0}>
+            <div class="flex justify-center items-center h-full">
+              <p class="text-lg font-bold text-center">{"noHiddenColumns"}</p>
+            </div>
+          </Match>
+          <Match when={props.columns.length > 0}>
+            <For each={props.columns}>
+              {(column) => (
+                <button
+                  class="flex items-center justify-start w-full px-2 rounded-sm bg-backgroundSec 
+                  shadow-lg"
+                  onClick={() => column.toggleVisibility()}
+                >
+                  <p>{column.columnDef.meta as string}</p>
+                </button>
+              )}
+            </For>
+          </Match>
+        </Switch>
+      </div>
+    </div>
+  );
+};
+
+const TableContext = (props: {
+  showChooser: () => void;
+  exportExcel: () => void;
+}) => {
+  return (
+    <div
+      class="flex flex-col gap-2 h-fit w-fit border border-gray-600 bg-backPrimary px-2 py-4 
+    text-white"
+    >
+      <button
+        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
+        shadow-lg"
+        onClick={() => props.showChooser()}
+      >
+        <ColumnsIcon class="text-blue-700" />
+        <p>{"columnsChooser"}</p>
+      </button>
+      <button
+        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
+        shadow-lg"
+        onClick={() => props.exportExcel()}
+      >
+        <ExcelIcon class="text-green-700" />
+        <p>{"exportExcel"}</p>
+      </button>
     </div>
   );
 };

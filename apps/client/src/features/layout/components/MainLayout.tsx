@@ -23,7 +23,7 @@ export const MainLayout: ParentComponent = (props) => {
       <Sidebar>
         <div class="flex flex-col gap-y-8 w-full">
           <div class="flex justify-center">
-            <LogoIcon />
+            <LogoIcon class="drop-shadow-lg" />
           </div>
           <div class="flex flex-col justify-center items-center gap-4 w-full">
             <SidebarElement
@@ -61,10 +61,10 @@ export const MainLayout: ParentComponent = (props) => {
           </div>
         </div>
       </Sidebar>
-      <div class="flex flex-col items-center w-full py-4 2xl:px-15 sm:px-2 overflow-auto">
+      <div class="flex flex-col items-center h-full w-full py-4 2xl:px-15 sm:px-2 overflow-auto">
         <div class="flex flex-col gap-6 w-full h-full">
           <Navbar />
-          <div class="min-h-full py-2">{props.children}</div>
+          <div class="flex-1 py-2 overflow-auto">{props.children}</div>
         </div>
       </div>
       <Toaster position="bottom-right" />
