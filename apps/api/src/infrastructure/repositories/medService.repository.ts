@@ -38,7 +38,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     orderBy: string,
     orderDirection: string,
     page: number,
-    perPage: number,
+    perPage?: number,
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
@@ -97,16 +97,22 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     orderBy: string,
     orderDirection: string,
     page: number,
-    perPage: number,
+    perPage?: number,
+    priceFilter?: { gt: number; lt: number },
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
+
+    const price = priceFilter
+      ? { gt: priceFilter.gt, lt: priceFilter.lt }
+      : undefined;
 
     const result: PaginatedResult<UserMedServiceResult> = await paginate(
       this.prisma.userMedServices,
       {
         where: {
           userId,
+          price,
           medService: {
             name: {
               contains: name,

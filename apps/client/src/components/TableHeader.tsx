@@ -5,7 +5,7 @@ import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
 import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
 import { DropdownMenu } from "@kobalte/core";
 import { SortDirection } from "@tanstack/solid-table";
-import { JSX, createEffect, createSignal } from "solid-js";
+import { JSX, Show, mergeProps } from "solid-js";
 
 type Sort = SortDirection | false;
 
@@ -15,15 +15,14 @@ type Props = {
   toggleSort?: () => void;
   hide: () => void;
   setFilter: (value: string | number) => void;
-  filter: () => void;
+  filter: number | string | undefined;
+  isFilterOpen: boolean;
+  toggleFilterOpen: () => void;
+  filterType?: "number" | "string";
 };
 
-export const TableHeader = (props: Props) => {
-  const [isFiltering, setIsFiltering] = createSignal(false);
-
-  const toggleFiltering = () => {
-    setIsFiltering(!isFiltering());
-  };
+export const TableHeader = (propsWithoutDefault: Props) => {
+  const props = mergeProps({ filterType: "string" }, propsWithoutDefault);
 
   return (
     <div class="flex flex-col gap-2 py-2 px-1">
@@ -42,21 +41,44 @@ export const TableHeader = (props: Props) => {
             ),
           }[props.isSorted as string] ?? null}
           <MoreOptions
-            isFiltering={isFiltering()}
-            toggleFiltering={toggleFiltering}
+            isFiltering={props.isFilterOpen}
+            toggleFiltering={props.toggleFilterOpen}
             hide={props.hide}
           />
         </div>
       </div>
-      <div>
-        <input
-          onInput={(e) => props.setFilter(e.currentTarget.value)}
-          class="px-2 w-full rounded-sm bg-transparent border border-gray-400"
-        />
-      </div>
+      <Show when={props.isFilterOpen}>
+        <div class="pe-2">
+          <Show when={props.filterType === "string"}>
+            <StringFilter
+              value={props.filter || ""}
+              onInput={(e) => props.setFilter(e.currentTarget.value)}
+            />
+          </Show>
+        </div>
+      </Show>
     </div>
   );
 };
+
+const StringFilter = (
+  props: Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type">
+) => (
+  <input
+    {...props}
+    type="text"
+    class="px-2 w-full rounded-sm bg-transparent border border-gray-400"
+    placeholder={"textSearch..."}
+  />
+);
+
+const NumberFilter = (
+  props: Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type">
+) => (
+  <div class="flex flex-col">
+    <input type="number" class="bg-" />
+  </div>
+);
 
 const MoreOptions = (props: {
   isFiltering: boolean;
@@ -86,7 +108,7 @@ const MoreOptions = (props: {
         </button>
         <button
           class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
-            bg-backgroundSec px-2"
+          bg-backgroundSec px-2"
           onClick={(e) => {
             e.stopPropagation();
             props.toggleFiltering();

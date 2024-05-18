@@ -23,14 +23,19 @@ import { ContextMenu } from "@kobalte/core";
 import { CancelIcon } from "@/assets/icons/CancelIcon";
 import { ExcelIcon } from "@/assets/icons/ExcelIcon";
 import { ColumnsIcon } from "@/assets/icons/ColumnsIcon";
+import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
+import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
+import { FilterIcon } from "@/assets/icons/FilterIcon";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
   data: Array<T>;
-  onSort?: (sortBy: string, sortDirection: "asc" | "desc") => void;
-  onFetchNextData?: () => void;
+  isFetching?: boolean;
   isFetchingNextPage?: boolean;
   isFetchSuccess?: boolean;
+  onFetchNextData?: () => void;
+  onSort?: (sortBy: string, sortDirection: "asc" | "desc") => void;
+  onFilter?: (filters: ColumnFiltersState) => void;
 };
 
 export const Table = <T extends object>(props: Props<T>) => {
@@ -38,19 +43,21 @@ export const Table = <T extends object>(props: Props<T>) => {
   const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
     []
   );
-
-  createEffect(() => {
-    console.log(columnFilters());
-  });
+  const [isFilterHeaderOpen, setIsFilterHeaderOpen] = createSignal(false);
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
-  const handleSorting = async (newSorting: Updater<SortingState>) => {
+  const handleSorting = (newSorting: Updater<SortingState>) => {
     setSorting(newSorting);
     if (!sorting()[0]) return;
     const sortBy = sorting()[0].id;
     const sortDirection = sorting()[0].desc ? "desc" : "asc";
     if (props.onSort) props.onSort(sortBy, sortDirection);
+  };
+
+  const handleFiltering = (newFilters: Updater<ColumnFiltersState>) => {
+    setColumnFilters(newFilters);
+    if (props.onFilter) props.onFilter(columnFilters());
   };
 
   const table = createSolidTable({
@@ -69,7 +76,7 @@ export const Table = <T extends object>(props: Props<T>) => {
       },
     },
     onSortingChange: (newSorting) => handleSorting(newSorting),
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: (newFilters) => handleFiltering(newFilters),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
@@ -125,7 +132,16 @@ export const Table = <T extends object>(props: Props<T>) => {
                           )}
                           toggleSort={() => header.column.toggleSorting()}
                           setFilter={(val) => header.column.setFilterValue(val)}
-                          filter={() => header.column.getFilterValue()}
+                          filter={
+                            header.column.getFilterValue() as
+                              | string
+                              | number
+                              | undefined
+                          }
+                          isFilterOpen={isFilterHeaderOpen()}
+                          toggleFilterOpen={() =>
+                            setIsFilterHeaderOpen((pre) => !pre)
+                          }
                         />
                       </th>
                     )}
@@ -153,6 +169,16 @@ export const Table = <T extends object>(props: Props<T>) => {
             </For>
           </tbody>
         </table>
+        <Show when={props.isFetching}>
+          <div class="flex items-center justify-center h-full w-full">
+            <SpinnersBlocksShuffleIcon class="text-primary w-36 h-36" />
+          </div>
+        </Show>
+        <Show when={props.isFetchingNextPage}>
+          <div class="flex justify-center h-full w-full">
+            <DotsRotateIcon class="text-primary w-12 h-12" />
+          </div>
+        </Show>
         <Show when={chooserIsVisible()}>
           <ColumnsChooser
             columns={hiddenHeaders()}
@@ -167,6 +193,8 @@ export const Table = <T extends object>(props: Props<T>) => {
             showChooser={() => {
               setChooserIsVisible(true);
             }}
+            toggleFiltering={() => setIsFilterHeaderOpen((pre) => !pre)}
+            isFiltering={isFilterHeaderOpen()}
             exportExcel={() => {}}
           />
         </ContextMenu.Content>
@@ -190,7 +218,7 @@ const ColumnsChooser = <T extends object>(props: {
         </button>
         <Switch>
           <Match when={props.columns.length === 0}>
-            <div class="flex justify-center items-center h-full">
+            <div class="flex flex-col justify-center items-center h-full">
               <p class="text-lg font-bold text-center">{"noHiddenColumns"}</p>
             </div>
           </Match>
@@ -216,6 +244,8 @@ const ColumnsChooser = <T extends object>(props: {
 const TableContext = (props: {
   showChooser: () => void;
   exportExcel: () => void;
+  toggleFiltering: () => void;
+  isFiltering: boolean;
 }) => {
   return (
     <div
@@ -229,6 +259,14 @@ const TableContext = (props: {
       >
         <ColumnsIcon class="text-blue-700" />
         <p>{"columnsChooser"}</p>
+      </button>
+      <button
+        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
+        shadow-lg"
+        onClick={() => props.toggleFiltering()}
+      >
+        <FilterIcon class="text-blue-700" />
+        <p>{props.isFiltering ? "disableFiltering" : "enableFilter"}</p>
       </button>
       <button
         class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 

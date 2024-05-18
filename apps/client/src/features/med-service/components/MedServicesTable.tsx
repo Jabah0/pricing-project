@@ -2,6 +2,7 @@ import { Table } from "@/components/Table";
 import { Columns } from "./Columns";
 import { MedServiceListService } from "../services/MedServiceListService";
 import { useLocale } from "@/features/locale/locale.context";
+import { ColumnFiltersState } from "@tanstack/solid-table";
 
 export const MedServicesTable = () => {
   const locale = useLocale();
@@ -17,6 +18,13 @@ export const MedServicesTable = () => {
 
   const fetchNextData = () => {
     service.servicesQuery().fetchNextPage();
+  };
+
+  const onFilter = (filters: ColumnFiltersState) => {
+    filters.map((item) => {
+      item.id === "name" && service.setServiceName(item.value as string);
+      item.id === "code" && service.setServiceCode(item.value as string);
+    });
   };
 
   return (
@@ -57,8 +65,9 @@ export const MedServicesTable = () => {
         <Table
           columns={Columns}
           data={medServicesData()}
-          onSort={onOrderChange}
           onFetchNextData={fetchNextData}
+          onSort={onOrderChange}
+          onFilter={onFilter}
           isFetchingNextPage={service.servicesQuery().isFetchingNextPage}
           isFetchSuccess={service.servicesQuery().isSuccess}
         />

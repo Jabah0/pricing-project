@@ -2,7 +2,6 @@ import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
 import toast from "solid-toast";
 import { AddUser } from "./AddUser";
-import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { Roles, contract } from "api-contract";
@@ -122,6 +121,7 @@ export const UsersList = () => {
         <Table
           columns={Columns}
           data={users()}
+          isFetching={usersQuery.isFetching}
           onFetchNextData={usersQuery.fetchNextPage}
           isFetchingNextPage={usersQuery.isFetchingNextPage}
           isFetchSuccess={usersQuery.isSuccess}

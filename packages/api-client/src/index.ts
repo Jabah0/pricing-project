@@ -113,6 +113,12 @@ export const contract = c.router(
           orderDirection: z.string().optional(),
           page: z.coerce.number(),
           perPage: z.coerce.number().optional(),
+          price: z
+            .object({
+              lt: z.coerce.number(),
+              gt: z.coerce.number(),
+            })
+            .optional(),
         }),
         responses: {
           200: z.object({
@@ -140,6 +146,12 @@ export const contract = c.router(
           orderDirection: z.string().optional(),
           page: z.coerce.number(),
           perPage: z.coerce.number().optional(),
+          price: z
+            .object({
+              lt: z.coerce.number(),
+              gt: z.coerce.number(),
+            })
+            .optional(),
         }),
         responses: {
           200: z.object({

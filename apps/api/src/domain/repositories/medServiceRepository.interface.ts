@@ -24,6 +24,7 @@ export interface MedServiceRepository {
     orderDirection: string,
     page: number,
     perPage?: number,
+    price?: { gt: number; lt: number },
   ): Promise<PaginatedResult<MedService>>;
 
   findById(id: string): Promise<MedService>;

@@ -97,6 +97,12 @@ exports.contract = c.router({
                 orderDirection: zod_1.z.string().optional(),
                 page: zod_1.z.coerce.number(),
                 perPage: zod_1.z.coerce.number().optional(),
+                price: zod_1.z
+                    .object({
+                    lt: zod_1.z.coerce.number(),
+                    gt: zod_1.z.coerce.number(),
+                })
+                    .optional(),
             }),
             responses: {
                 200: zod_1.z.object({
@@ -123,6 +129,12 @@ exports.contract = c.router({
                 orderDirection: zod_1.z.string().optional(),
                 page: zod_1.z.coerce.number(),
                 perPage: zod_1.z.coerce.number().optional(),
+                price: zod_1.z
+                    .object({
+                    lt: zod_1.z.coerce.number(),
+                    gt: zod_1.z.coerce.number(),
+                })
+                    .optional(),
             }),
             responses: {
                 200: zod_1.z.object({

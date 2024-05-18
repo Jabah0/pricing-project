@@ -14,6 +14,7 @@ export class GetUserMedServicesUseCase {
     orderDirection: string,
     page: number,
     perPage?: number,
+    price?: { gt: number; lt: number },
   ): Promise<PaginatedResult<MedService>> {
     return await this.medServiceRepository.findByUser(
       userId,
@@ -24,6 +25,7 @@ export class GetUserMedServicesUseCase {
       orderDirection,
       page,
       perPage,
+      price,
     );
   }
 }

@@ -77,6 +77,7 @@ export class MedServiceController {
           orderDirection,
           page,
           perPage,
+          price,
         },
       }) => {
         const users = await this.getUserMedServicesUseCaseProxy
@@ -90,6 +91,7 @@ export class MedServiceController {
             orderDirection,
             page,
             perPage,
+            price,
           );
         return {
           status: 200,

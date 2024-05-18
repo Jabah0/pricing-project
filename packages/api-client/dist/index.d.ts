@@ -250,10 +250,24 @@ export declare const contract: {
                 orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodNumber;
                 perPage: z.ZodOptional<z.ZodNumber>;
+                price: z.ZodOptional<z.ZodObject<{
+                    lt: z.ZodNumber;
+                    gt: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    lt: number;
+                    gt: number;
+                }, {
+                    lt: number;
+                    gt: number;
+                }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
+                price?: {
+                    lt: number;
+                    gt: number;
+                } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
@@ -262,6 +276,10 @@ export declare const contract: {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
+                price?: {
+                    lt: number;
+                    gt: number;
+                } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
@@ -377,10 +395,24 @@ export declare const contract: {
                 orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodNumber;
                 perPage: z.ZodOptional<z.ZodNumber>;
+                price: z.ZodOptional<z.ZodObject<{
+                    lt: z.ZodNumber;
+                    gt: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    lt: number;
+                    gt: number;
+                }, {
+                    lt: number;
+                    gt: number;
+                }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
+                price?: {
+                    lt: number;
+                    gt: number;
+                } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
@@ -389,6 +421,10 @@ export declare const contract: {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
+                price?: {
+                    lt: number;
+                    gt: number;
+                } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
