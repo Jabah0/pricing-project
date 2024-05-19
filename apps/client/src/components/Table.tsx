@@ -138,10 +138,9 @@ export const Table = <T extends object>(props: Props<T>) => {
                               | number
                               | undefined
                           }
-                          isFilterOpen={isFilterHeaderOpen()}
-                          toggleFilterOpen={() =>
-                            setIsFilterHeaderOpen((pre) => !pre)
-                          }
+                          filterType={table
+                            .getPreFilteredRowModel()
+                            .flatRows[0]?.getValue(header.column.id)}
                         />
                       </th>
                     )}
