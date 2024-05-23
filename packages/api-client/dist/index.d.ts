@@ -248,41 +248,61 @@ export declare const contract: {
                 dalilCode: z.ZodOptional<z.ZodString>;
                 orderBy: z.ZodOptional<z.ZodString>;
                 orderDirection: z.ZodOptional<z.ZodString>;
-                page: z.ZodNumber;
+                page: z.ZodDefault<z.ZodNumber>;
                 perPage: z.ZodOptional<z.ZodNumber>;
                 price: z.ZodOptional<z.ZodObject<{
-                    lt: z.ZodNumber;
-                    gt: z.ZodNumber;
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
                 }, "strip", z.ZodTypeAny, {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 }, {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
                 price?: {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
-                page: number;
                 code?: string | undefined;
                 name?: string | undefined;
                 price?: {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
+                page?: number | undefined;
                 perPage?: number | undefined;
             }>;
             method: "GET";
@@ -393,41 +413,61 @@ export declare const contract: {
                 dalilCode: z.ZodOptional<z.ZodString>;
                 orderBy: z.ZodOptional<z.ZodString>;
                 orderDirection: z.ZodOptional<z.ZodString>;
-                page: z.ZodNumber;
+                page: z.ZodDefault<z.ZodNumber>;
                 perPage: z.ZodOptional<z.ZodNumber>;
                 price: z.ZodOptional<z.ZodObject<{
-                    lt: z.ZodNumber;
-                    gt: z.ZodNumber;
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
                 }, "strip", z.ZodTypeAny, {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 }, {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
                 name?: string | undefined;
                 price?: {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
                 perPage?: number | undefined;
             }, {
-                page: number;
                 code?: string | undefined;
                 name?: string | undefined;
                 price?: {
-                    lt: number;
-                    gt: number;
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
                 } | undefined;
                 dalilCode?: string | undefined;
                 orderBy?: string | undefined;
                 orderDirection?: string | undefined;
+                page?: number | undefined;
                 perPage?: number | undefined;
             }>;
             method: "GET";

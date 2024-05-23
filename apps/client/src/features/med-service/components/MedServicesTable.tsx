@@ -1,4 +1,4 @@
-import { Table } from "@/components/Table";
+import { NumberFilter, Table } from "@/components/Table";
 import { Columns } from "./Columns";
 import { MedServiceListService } from "../services/MedServiceListService";
 import { useLocale } from "@/features/locale/locale.context";
@@ -21,9 +21,15 @@ export const MedServicesTable = () => {
   };
 
   const onFilter = (filters: ColumnFiltersState) => {
+    service.setServiceName("");
+    service.setServiceCode("");
+    service.setServicePrice(undefined);
     filters.map((item) => {
+      console.log(item);
       item.id === "name" && service.setServiceName(item.value as string);
       item.id === "code" && service.setServiceCode(item.value as string);
+      item.id === "price" &&
+        service.setServicePrice(item.value as NumberFilter);
     });
   };
 

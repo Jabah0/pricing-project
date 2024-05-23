@@ -1,6 +1,9 @@
 import { PaginatedResult } from 'src/domain/model/apiResponse';
 import { MedService } from '../../domain/model/medService';
-import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
+import {
+  MedServiceRepository,
+  PriceFilter,
+} from '../../domain/repositories/medServiceRepository.interface';
 
 export class GetUserMedServicesUseCase {
   constructor(private readonly medServiceRepository: MedServiceRepository) {}
@@ -14,7 +17,7 @@ export class GetUserMedServicesUseCase {
     orderDirection: string,
     page: number,
     perPage?: number,
-    price?: { gt: number; lt: number },
+    price?: PriceFilter,
   ): Promise<PaginatedResult<MedService>> {
     return await this.medServiceRepository.findByUser(
       userId,

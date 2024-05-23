@@ -1,4 +1,4 @@
-import ChevronDownIcon from "@/assets/icons/ChevronDownIcon";
+import { ChevronDownIcon } from "@/assets/icons/ChevronDownIcon";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 import { Combobox } from "@kobalte/core";
 import { Roles } from "api-contract";

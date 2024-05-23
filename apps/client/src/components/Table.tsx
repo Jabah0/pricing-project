@@ -1,7 +1,6 @@
 import {
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   SortingState,
   ColumnDef,
   createSolidTable,
@@ -34,29 +33,51 @@ type Props<T> = {
   isFetchingNextPage?: boolean;
   isFetchSuccess?: boolean;
   onFetchNextData?: () => void;
-  onSort?: (sortBy: string, sortDirection: "asc" | "desc") => void;
+  onSort?: (sortBy?: string, sortDirection?: "asc" | "desc") => void;
   onFilter?: (filters: ColumnFiltersState) => void;
+};
+
+export type NumberFilter = {
+  equals?: number;
+  not?: number;
+  gt?: number;
+  gte?: number;
+  lt?: number;
+  lte?: number;
+};
+
+type ColumnsFilter = {
+  id: string;
+  value: string | number | NumberFilter | undefined;
 };
 
 export const Table = <T extends object>(props: Props<T>) => {
   const [sorting, setSorting] = createSignal<SortingState>([]);
-  const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = createSignal<ColumnsFilter[]>([]);
   const [isFilterHeaderOpen, setIsFilterHeaderOpen] = createSignal(false);
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
   const handleSorting = (newSorting: Updater<SortingState>) => {
     setSorting(newSorting);
-    if (!sorting()[0]) return;
+    if (!sorting()[0]) {
+      if (props.onSort) props.onSort(undefined, undefined);
+      return;
+    }
     const sortBy = sorting()[0].id;
     const sortDirection = sorting()[0].desc ? "desc" : "asc";
     if (props.onSort) props.onSort(sortBy, sortDirection);
   };
 
-  const handleFiltering = (newFilters: Updater<ColumnFiltersState>) => {
-    setColumnFilters(newFilters);
+  const handleFiltering = (newFilter: ColumnsFilter) => {
+    setColumnFilters((pre) => {
+      if (!pre.find((item) => item.id === newFilter.id))
+        return [...pre, newFilter];
+      return pre.map((item) => {
+        if (item.id === newFilter.id) return newFilter;
+        else return item;
+      });
+    });
     if (props.onFilter) props.onFilter(columnFilters());
   };
 
@@ -71,14 +92,11 @@ export const Table = <T extends object>(props: Props<T>) => {
       get sorting() {
         return sorting();
       },
-      get columnFilters() {
-        return columnFilters();
-      },
     },
     onSortingChange: (newSorting) => handleSorting(newSorting),
-    onColumnFiltersChange: (newFilters) => handleFiltering(newFilters),
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    manualFiltering: true,
+    manualSorting: true,
   });
 
   const hiddenHeaders = createMemo(() =>
@@ -118,32 +136,36 @@ export const Table = <T extends object>(props: Props<T>) => {
               {(headerGroup) => (
                 <tr class="shadow-lg h-10 py-4">
                   <For each={headerGroup.headers}>
-                    {(header) => (
-                      <th
-                        colSpan={header.colSpan}
-                        class="text-start border-e border-gray-600 px-[0.5rem]"
-                      >
-                        <TableHeader
-                          isSorted={header.column.getIsSorted()}
-                          hide={() => header.column.toggleVisibility()}
-                          title={flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          toggleSort={() => header.column.toggleSorting()}
-                          setFilter={(val) => header.column.setFilterValue(val)}
-                          filter={
-                            header.column.getFilterValue() as
-                              | string
-                              | number
-                              | undefined
-                          }
-                          filterType={table
-                            .getPreFilteredRowModel()
-                            .flatRows[0]?.getValue(header.column.id)}
-                        />
-                      </th>
-                    )}
+                    {(header) => {
+                      return (
+                        <th
+                          colSpan={header.colSpan}
+                          class="text-start border-e border-gray-600 px-[0.5rem]"
+                        >
+                          <TableHeader
+                            isSorted={header.column.getIsSorted()}
+                            hide={() => header.column.toggleVisibility()}
+                            title={flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            toggleSort={() => header.column.toggleSorting()}
+                            setFilter={(val) => {
+                              handleFiltering({
+                                id: header.column.id,
+                                value: val,
+                              });
+                            }}
+                            filter={
+                              columnFilters().find(
+                                (item) => item.id === header.column.id
+                              )?.value
+                            }
+                            filterType={header.column.columnDef?.meta?.type}
+                          />
+                        </th>
+                      );
+                    }}
                   </For>
                 </tr>
               )}
@@ -229,7 +251,7 @@ const ColumnsChooser = <T extends object>(props: {
                   shadow-lg"
                   onClick={() => column.toggleVisibility()}
                 >
-                  <p>{column.columnDef.meta as string}</p>
+                  <p>{column.columnDef.meta?.title as string}</p>
                 </button>
               )}
             </For>
@@ -249,7 +271,7 @@ const TableContext = (props: {
   return (
     <div
       class="flex flex-col gap-2 h-fit w-fit border border-gray-600 bg-backPrimary px-2 py-4 
-    text-white"
+      text-white"
     >
       <button
         class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 

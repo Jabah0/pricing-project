@@ -5,7 +5,7 @@ import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { contract } from "api-contract";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { InfiniteData } from "@tanstack/solid-query";
 
@@ -16,10 +16,14 @@ export const MedServiceListService = () => {
 
   const [isMy, setIsMy] = createSignal(false);
 
-  const [serviceName, setServiceName] = createSignal<string>();
-  const [serviceCode, setServiceCode] = createSignal<string>();
+  const [serviceName, setServiceName] = createSignal<string>("");
+  const [serviceCode, setServiceCode] = createSignal<string>("");
   const [orderBy, setOrderBy] = createSignal<string>();
   const [orderDirection, setOrderDirection] = createSignal<"asc" | "desc">();
+  const [servicePrice, setServicePrice] = createSignal<{
+    gt?: number;
+    lt?: number;
+  }>();
 
   const queryClient = useQueryClient();
 
@@ -29,16 +33,20 @@ export const MedServiceListService = () => {
         "myServices",
         serviceName(),
         serviceCode(),
+        servicePrice(),
         orderBy(),
         orderDirection(),
       ],
       ({ pageParam = 1 }) => ({
         query: {
           get name() {
-            return serviceName();
+            return serviceName() || "";
           },
           get code() {
-            return serviceCode();
+            return serviceCode() || "";
+          },
+          get price() {
+            return servicePrice();
           },
           get orderBy() {
             return orderBy();
@@ -72,6 +80,8 @@ export const MedServiceListService = () => {
           "services",
           serviceName(),
           serviceCode(),
+          orderBy(),
+          orderDirection(),
         ]);
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
@@ -101,7 +111,13 @@ export const MedServiceListService = () => {
         );
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
-          ["myServices", serviceName(), serviceCode()],
+          [
+            "myServices",
+            serviceName(),
+            serviceCode(),
+            orderBy(),
+            orderDirection(),
+          ],
           (old) => {
             if (!old) return undefined;
 
@@ -134,7 +150,13 @@ export const MedServiceListService = () => {
         };
 
         queryClient.setQueryData(
-          ["services", serviceName(), serviceCode()],
+          [
+            "services",
+            serviceName(),
+            serviceCode(),
+            orderBy(),
+            orderDirection(),
+          ],
           typedContext.previousData
         );
         toast.custom((t) => (
@@ -157,11 +179,15 @@ export const MedServiceListService = () => {
           "services",
           serviceName(),
           serviceCode(),
+          orderBy(),
+          orderDirection(),
         ]);
         queryClient.invalidateQueries([
           "myServices",
           serviceName(),
           serviceCode(),
+          orderBy(),
+          orderDirection(),
         ]);
       },
     });
@@ -185,16 +211,20 @@ export const MedServiceListService = () => {
       "services",
       serviceName(),
       serviceCode(),
+      servicePrice(),
       orderBy(),
       orderDirection(),
     ],
     ({ pageParam = 1 }) => ({
       query: {
         get name() {
-          return serviceName();
+          return serviceName() || "";
         },
         get code() {
-          return serviceCode();
+          return serviceCode() || "";
+        },
+        get price() {
+          return servicePrice();
         },
         get orderBy() {
           return orderBy();
@@ -236,6 +266,8 @@ export const MedServiceListService = () => {
     setOrderDirection,
     setIsMy,
     isMy,
+    servicePrice,
+    setServicePrice,
     servicesQuery,
     servicesData,
   };

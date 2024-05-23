@@ -16,4 +16,3 @@ export function ChevronDownIcon(props: JSX.IntrinsicElements["svg"]) {
     </svg>
   );
 }
-export default ChevronDownIcon;

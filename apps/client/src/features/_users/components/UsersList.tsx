@@ -117,6 +117,12 @@ export const UsersList = () => {
 
   return (
     <div class="flex flex-col gap-4 h-full">
+      <div class="flex">
+        <button class="h-10 w-20 text-white bg-primary shadow-lg rounded-sm">
+          {"addUser"}
+        </button>
+      </div>
+
       <div id="tableContainer" class="flex-grow overflow-auto">
         <Table
           columns={Columns}

@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from "@/assets/icons/ChevronDownIcon";
 import { EyeOffIcon } from "@/assets/icons/EyeOffIcon";
 import { FilterIcon } from "@/assets/icons/FilterIcon";
 import { MenuIcon } from "@/assets/icons/MenuIcon";
@@ -5,7 +6,8 @@ import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
 import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
 import { DropdownMenu, Popover } from "@kobalte/core";
 import { SortDirection } from "@tanstack/solid-table";
-import { JSX, Match, Switch, mergeProps } from "solid-js";
+import { JSX, Match, Switch, createSignal, mergeProps } from "solid-js";
+import { NumberFilter as NumberFilterType } from "./Table";
 
 type Sort = SortDirection | false;
 
@@ -14,20 +16,26 @@ type Props = {
   isSorted: Sort;
   toggleSort?: () => void;
   hide: () => void;
-  setFilter: (value: string | number) => void;
-  filter: number | string | undefined;
+  setFilter: (value: string | number | NumberFilterType | undefined) => void;
+  filter: number | string | NumberFilterType | undefined;
   filterType?: FilterType;
-  filterWay?: FilterWay;
-  setFilterWay?: () => void;
 };
+
+type FilterWay =
+  | "equals"
+  | "notEqual"
+  | "between"
+  | "lessThan"
+  | "lessThanOrEqual"
+  | "greaterThan"
+  | "greaterThanOrEqual";
 
 export const TableHeader = (propsWithoutDefault: Props) => {
   const props = mergeProps(
     { filterType: "string" as FilterType },
     propsWithoutDefault
   );
-
-  console.log("filterType ", props.filterType);
+  const [filterWay, setFilterWay] = createSignal<FilterWay>("equals");
 
   return (
     <div class="flex flex-col gap-2 py-2 px-1 group">
@@ -48,14 +56,69 @@ export const TableHeader = (propsWithoutDefault: Props) => {
             ),
           }[props.isSorted as string] ?? null}
           <Filter
+            filter={props.filter}
+            setFilter={props.setFilter}
             filterType={props.filterType}
-            filterWay={props.filterWay}
-            setFilterWay={props.setFilterWay}
+            filterWay={filterWay()}
+            setFilterWay={(way) => setFilterWay(way)}
           />
           <MoreOptions hide={props.hide} />
         </div>
       </div>
     </div>
+  );
+};
+
+const Filter = (props: {
+  filter: number | string | NumberFilterType | undefined;
+  setFilter: (value: string | number | NumberFilterType | undefined) => void;
+  filterType: FilterType;
+  filterWay?: FilterWay;
+  setFilterWay?: (way: FilterWay) => void;
+}) => {
+  const onInputChange = (
+    val: number | string | NumberFilterType | undefined
+  ) => {
+    props.setFilter(val);
+  };
+
+  return (
+    <Popover.Root placement="bottom-end">
+      <Popover.Trigger
+        as={"button"}
+        class="flex items-center gap-2 w-full text-start hover:opacity-75 drop-shadow-lg px-2 group-hover:visible invisible"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <FilterIcon class="text-gray-400" />
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content
+          as={"div"}
+          class="w-fit text-white px-2 py-4 bg-backPrimary border border-gray-600 z-50 top-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Switch>
+            <Match when={props.filterType === "number"}>
+              <NumberFilter
+                filter={props.filter as NumberFilterType}
+                setFilter={(val) => onInputChange(val)}
+                filterWay={props.filterWay}
+                setFilterWay={(val) => {
+                  if (props.setFilterWay) props.setFilterWay(val);
+                }}
+              />
+            </Match>
+
+            <Match when={props.filterType !== "number"}>
+              <StringFilter
+                value={(props.filter as string) || ""}
+                onInput={(e) => onInputChange(e.target.value)}
+              />
+            </Match>
+          </Switch>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 };
 
@@ -72,19 +135,57 @@ const StringFilter = (
   />
 );
 
-type FilterWay =
-  | "equal"
-  | "notEqual"
-  | "between"
-  | "lessThan"
-  | "lessThanOrEqual"
-  | "greaterThan"
-  | "greaterThanOrEqual";
+const BetweenNumberFilter = (props: {
+  filter: NumberFilterType;
+  onChange: (value: NumberFilterType | undefined) => void;
+}) => {
+  return (
+    <>
+      <NumberInput
+        placeholder={"From"}
+        value={props.filter?.gt}
+        onInput={(e) => {
+          if (e.target.value === undefined && !props.filter.lt)
+            return props.onChange(undefined);
+
+          props.onChange({
+            gt: Number.isNaN(parseInt(e.target.value))
+              ? undefined
+              : parseInt(e.target.value),
+            lt: props.filter?.lt || undefined,
+          });
+        }}
+      />
+      <p>{"Between"}</p>
+      <NumberInput
+        placeholder="To"
+        value={props.filter?.lt}
+        onInput={(e) => {
+          if (e.target.value === undefined && !props.filter.gt)
+            return props.onChange(undefined);
+
+          props.onChange({
+            gt: props.filter?.gt || undefined,
+            lt: Number.isNaN(parseInt(e.target.value))
+              ? undefined
+              : parseInt(e.target.value),
+          });
+        }}
+      />
+    </>
+  );
+};
 
 const NumberFilter = (props: {
+  filter: NumberFilterType | undefined;
+  setFilter: (value: NumberFilterType | undefined) => void;
   filterWay?: FilterWay;
-  setFilterWay?: () => void;
+  setFilterWay?: (way: FilterWay) => void;
 }) => {
+  const onChange = (value: NumberFilterType | undefined) => {
+    props.setFilter(value);
+  };
+
   return (
     <div class="flex flex-col gap-3">
       <FilterWaySelection
@@ -94,12 +195,76 @@ const NumberFilter = (props: {
       <div class="flex justify-between items-center gap-2">
         <Switch>
           <Match when={props.filterWay === "between"}>
-            <NumberInput />
-            <p>{"Between"}</p>
-            <NumberInput />
+            <BetweenNumberFilter
+              filter={props.filter as NumberFilterType}
+              onChange={(value) => onChange(value)}
+            />
           </Match>
-          <Match when={props.filterWay !== "between"}>
-            <NumberInput />
+          <Match when={props.filterWay === "equals"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.equals}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ equals: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
+          </Match>
+          <Match when={props.filterWay === "notEqual"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.equals}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ not: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
+          </Match>
+          <Match when={props.filterWay === "greaterThan"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.gt}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ gt: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
+          </Match>
+          <Match when={props.filterWay === "greaterThanOrEqual"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.gte}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ gte: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
+          </Match>
+          <Match when={props.filterWay === "lessThan"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.lt}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ lt: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
+          </Match>
+          <Match when={props.filterWay === "lessThanOrEqual"}>
+            <NumberInput
+              placeholder="Value"
+              value={props.filter?.lte}
+              onInput={(e) => {
+                if (e.target.value)
+                  props.setFilter({ lte: parseInt(e.target.value) });
+                else props.setFilter(undefined);
+              }}
+            />
           </Match>
         </Switch>
       </div>
@@ -107,10 +272,13 @@ const NumberFilter = (props: {
   );
 };
 
-const NumberInput = () => {
+const NumberInput = (
+  props: Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type">
+) => {
   return (
     <div class="flex gap-2">
       <input
+        {...props}
         type="number"
         min={0}
         class="bg-backgroundSec shadow-lg rounded-sm border border-background w-[5rem] px-2"
@@ -121,16 +289,21 @@ const NumberInput = () => {
 
 const FilterWaySelection = (props: {
   filterWay?: FilterWay;
-  setFilterWay?: () => void;
+  setFilterWay?: (way: FilterWay) => void;
 }) => {
+  const onWayChange = (val: FilterWay) => {
+    if (props.setFilterWay) props.setFilterWay(val);
+  };
+
   return (
     <DropdownMenu.Root placement="bottom-end">
       <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
         <div
-          class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
+          class="flex items-center justify-between gap-2 w-full text-start hover:opacity-75 shadow-lg 
           bg-backgroundSec px-2 border border-background"
         >
-          <p>{"Between"}</p>
+          <p>{props.filterWay}</p>
+          <ChevronDownIcon class="text-background scale-150" />
         </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -144,6 +317,15 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("between")}
+          >
+            <p>{"Between"}</p>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            as={"button"}
+            class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
+            bg-backgroundSec px-2"
+            onSelect={() => onWayChange("equals")}
           >
             <p>{"Equal"}</p>
           </DropdownMenu.Item>
@@ -151,6 +333,7 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("notEqual")}
           >
             <p>{"Not Equal"}</p>
           </DropdownMenu.Item>
@@ -158,6 +341,7 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("lessThan")}
           >
             <p>{"Less Than"}</p>
           </DropdownMenu.Item>
@@ -165,6 +349,7 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("lessThanOrEqual")}
           >
             <p>{"Less Than Or Equal"}</p>
           </DropdownMenu.Item>
@@ -172,6 +357,7 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("greaterThan")}
           >
             <p>{"Greater Than"}</p>
           </DropdownMenu.Item>
@@ -179,6 +365,7 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
+            onSelect={() => onWayChange("greaterThanOrEqual")}
           >
             <p>{"Greater Than Or Equal"}</p>
           </DropdownMenu.Item>
@@ -215,41 +402,3 @@ const MoreOptions = (props: { hide: () => void }) => (
     </DropdownMenu.Portal>
   </DropdownMenu.Root>
 );
-
-const Filter = (props: {
-  filterType: FilterType;
-  filterWay?: FilterWay;
-  setFilterWay?: () => void;
-}) => {
-  return (
-    <Popover.Root placement="bottom-end">
-      <Popover.Trigger
-        as={"button"}
-        class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg px-2 group-hover:visible invisible"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <FilterIcon class="text-gray-400" />
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          as={"div"}
-          class="w-fit text-white px-2 py-4 bg-backPrimary border border-gray-600 z-50 top-4"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Switch>
-            <Match when={props.filterType === "number"}>
-              <NumberFilter
-                filterWay={props.filterWay}
-                setFilterWay={props.setFilterWay}
-              />
-            </Match>
-
-            <Match when={props.filterType === "string"}>
-              <StringFilter />
-            </Match>
-          </Switch>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
-  );
-};

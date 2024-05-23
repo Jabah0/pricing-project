@@ -1,6 +1,15 @@
 import { PaginatedResult } from '../model/apiResponse';
 import { MedService } from '../model/medService';
 
+export type PriceFilter = {
+  equals?: number;
+  not?: number;
+  gt?: number;
+  gte?: number;
+  lt?: number;
+  lte?: number;
+};
+
 export interface MedServiceRepository {
   insert(medService: MedService): Promise<MedService>;
 
@@ -13,6 +22,7 @@ export interface MedServiceRepository {
     orderDirection: string,
     page: number,
     perPage?: number,
+    priceFilter?: PriceFilter,
   ): Promise<PaginatedResult<MedService>>;
 
   findByUser(
@@ -24,7 +34,7 @@ export interface MedServiceRepository {
     orderDirection: string,
     page: number,
     perPage?: number,
-    price?: { gt: number; lt: number },
+    price?: PriceFilter,
   ): Promise<PaginatedResult<MedService>>;
 
   findById(id: string): Promise<MedService>;

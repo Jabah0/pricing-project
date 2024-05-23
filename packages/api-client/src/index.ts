@@ -111,12 +111,16 @@ export const contract = c.router(
           dalilCode: z.string().optional(),
           orderBy: z.string().optional(),
           orderDirection: z.string().optional(),
-          page: z.coerce.number(),
+          page: z.coerce.number().default(1),
           perPage: z.coerce.number().optional(),
           price: z
             .object({
-              lt: z.coerce.number(),
-              gt: z.coerce.number(),
+              equals: z.coerce.number().optional(),
+              not: z.coerce.number().optional(),
+              gt: z.coerce.number().optional(),
+              gte: z.coerce.number().optional(),
+              lt: z.coerce.number().optional(),
+              lte: z.coerce.number().optional(),
             })
             .optional(),
         }),
@@ -144,12 +148,16 @@ export const contract = c.router(
           dalilCode: z.string().optional(),
           orderBy: z.string().optional(),
           orderDirection: z.string().optional(),
-          page: z.coerce.number(),
+          page: z.coerce.number().default(1),
           perPage: z.coerce.number().optional(),
           price: z
             .object({
-              lt: z.coerce.number(),
-              gt: z.coerce.number(),
+              equals: z.coerce.number().optional(),
+              not: z.coerce.number().optional(),
+              gt: z.coerce.number().optional(),
+              gte: z.coerce.number().optional(),
+              lt: z.coerce.number().optional(),
+              lte: z.coerce.number().optional(),
             })
             .optional(),
         }),

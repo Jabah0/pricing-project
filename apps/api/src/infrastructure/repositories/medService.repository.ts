@@ -1,5 +1,8 @@
 import { MedService } from 'src/domain/model/medService';
-import { MedServiceRepository } from '../../domain/repositories/medServiceRepository.interface';
+import {
+  MedServiceRepository,
+  PriceFilter,
+} from '../../domain/repositories/medServiceRepository.interface';
 import { PrismaService } from '../config/prisma-orm/prisma.service';
 import { Injectable } from '@nestjs/common';
 import {
@@ -39,14 +42,18 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     orderDirection: string,
     page: number,
     perPage?: number,
+    priceFilter?: PriceFilter,
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
+
+    const price = priceFilter ? priceFilter : undefined;
 
     return paginate(
       this.prisma.medService,
       {
         where: {
+          price,
           name: {
             contains: name,
           },
@@ -98,21 +105,19 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     orderDirection: string,
     page: number,
     perPage?: number,
-    priceFilter?: { gt: number; lt: number },
+    priceFilter?: PriceFilter,
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
 
-    const price = priceFilter
-      ? { gt: priceFilter.gt, lt: priceFilter.lt }
-      : undefined;
+    const price = priceFilter ? priceFilter : undefined;
 
     const result: PaginatedResult<UserMedServiceResult> = await paginate(
       this.prisma.userMedServices,
       {
         where: {
           userId,
-          price,
+          price: price,
           medService: {
             name: {
               contains: name,

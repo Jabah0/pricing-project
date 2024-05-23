@@ -95,12 +95,16 @@ exports.contract = c.router({
                 dalilCode: zod_1.z.string().optional(),
                 orderBy: zod_1.z.string().optional(),
                 orderDirection: zod_1.z.string().optional(),
-                page: zod_1.z.coerce.number(),
+                page: zod_1.z.coerce.number().default(1),
                 perPage: zod_1.z.coerce.number().optional(),
                 price: zod_1.z
                     .object({
-                    lt: zod_1.z.coerce.number(),
-                    gt: zod_1.z.coerce.number(),
+                    equals: zod_1.z.coerce.number().optional(),
+                    not: zod_1.z.coerce.number().optional(),
+                    gt: zod_1.z.coerce.number().optional(),
+                    gte: zod_1.z.coerce.number().optional(),
+                    lt: zod_1.z.coerce.number().optional(),
+                    lte: zod_1.z.coerce.number().optional(),
                 })
                     .optional(),
             }),
@@ -127,12 +131,16 @@ exports.contract = c.router({
                 dalilCode: zod_1.z.string().optional(),
                 orderBy: zod_1.z.string().optional(),
                 orderDirection: zod_1.z.string().optional(),
-                page: zod_1.z.coerce.number(),
+                page: zod_1.z.coerce.number().default(1),
                 perPage: zod_1.z.coerce.number().optional(),
                 price: zod_1.z
                     .object({
-                    lt: zod_1.z.coerce.number(),
-                    gt: zod_1.z.coerce.number(),
+                    equals: zod_1.z.coerce.number().optional(),
+                    not: zod_1.z.coerce.number().optional(),
+                    gt: zod_1.z.coerce.number().optional(),
+                    gte: zod_1.z.coerce.number().optional(),
+                    lt: zod_1.z.coerce.number().optional(),
+                    lte: zod_1.z.coerce.number().optional(),
                 })
                     .optional(),
             }),
