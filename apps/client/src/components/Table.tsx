@@ -7,6 +7,8 @@ import {
   Updater,
   Column,
   ColumnFiltersState,
+  RowSelectionState,
+  Row,
 } from "@tanstack/solid-table";
 import {
   createEffect,
@@ -35,6 +37,7 @@ type Props<T> = {
   onFetchNextData?: () => void;
   onSort?: (sortBy?: string, sortDirection?: "asc" | "desc") => void;
   onFilter?: (filters: ColumnFiltersState) => void;
+  onSelect?: (row: T) => void;
 };
 
 export type NumberFilter = {
@@ -54,7 +57,7 @@ type ColumnsFilter = {
 export const Table = <T extends object>(props: Props<T>) => {
   const [sorting, setSorting] = createSignal<SortingState>([]);
   const [columnFilters, setColumnFilters] = createSignal<ColumnsFilter[]>([]);
-  const [isFilterHeaderOpen, setIsFilterHeaderOpen] = createSignal(false);
+  const [rowSelection, setRowSelection] = createSignal<RowSelectionState>({});
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
@@ -81,6 +84,16 @@ export const Table = <T extends object>(props: Props<T>) => {
     if (props.onFilter) props.onFilter(columnFilters());
   };
 
+  const clearFiltering = () => {
+    setColumnFilters([]);
+    if (props.onFilter) props.onFilter(columnFilters());
+  };
+
+  const onSelectRow = (row: Row<T>) => {
+    row.toggleSelected();
+    props.onSelect && props.onSelect(row.original);
+  };
+
   const table = createSolidTable({
     get data() {
       return props.data;
@@ -92,11 +105,16 @@ export const Table = <T extends object>(props: Props<T>) => {
       get sorting() {
         return sorting();
       },
+      get rowSelection() {
+        return rowSelection();
+      },
     },
     onSortingChange: (newSorting) => handleSorting(newSorting),
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     manualFiltering: true,
     manualSorting: true,
+    enableMultiRowSelection: false,
   });
 
   const hiddenHeaders = createMemo(() =>
@@ -174,7 +192,12 @@ export const Table = <T extends object>(props: Props<T>) => {
           <tbody>
             <For each={table.getRowModel().rows}>
               {(row) => (
-                <tr class="h-10 border-y border-y-background">
+                <tr
+                  class={`h-10 border-y border-y-background
+                  ${row.getIsSelected() ? "bg-opacity-75" : ""}
+                  `}
+                  onClick={() => onSelectRow(row)}
+                >
                   <For each={row.getVisibleCells()}>
                     {(cell) => (
                       <td class="px-[0.5rem]">
@@ -214,8 +237,8 @@ export const Table = <T extends object>(props: Props<T>) => {
             showChooser={() => {
               setChooserIsVisible(true);
             }}
-            toggleFiltering={() => setIsFilterHeaderOpen((pre) => !pre)}
-            isFiltering={isFilterHeaderOpen()}
+            clearFiltering={() => clearFiltering()}
+            isFiltering={columnFilters().length > 0}
             exportExcel={() => {}}
           />
         </ContextMenu.Content>
@@ -265,7 +288,7 @@ const ColumnsChooser = <T extends object>(props: {
 const TableContext = (props: {
   showChooser: () => void;
   exportExcel: () => void;
-  toggleFiltering: () => void;
+  clearFiltering: () => void;
   isFiltering: boolean;
 }) => {
   return (
@@ -284,19 +307,22 @@ const TableContext = (props: {
       <button
         class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
         shadow-lg"
-        onClick={() => props.toggleFiltering()}
-      >
-        <FilterIcon class="text-blue-700" />
-        <p>{props.isFiltering ? "disableFiltering" : "enableFilter"}</p>
-      </button>
-      <button
-        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
-        shadow-lg"
         onClick={() => props.exportExcel()}
       >
         <ExcelIcon class="text-green-700" />
         <p>{"exportExcel"}</p>
       </button>
+
+      <Show when={props.isFiltering}>
+        <button
+          class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
+          shadow-lg"
+          onClick={() => props.clearFiltering()}
+        >
+          <FilterIcon class="text-blue-700" />
+          <p>{"disableFiltering"}</p>
+        </button>
+      </Show>
     </div>
   );
 };

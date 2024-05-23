@@ -1,29 +1,26 @@
 import { User } from "api-contract";
 import { Drawer } from "corvu/drawer";
 import { UserDrawer } from "./UserDrawer";
-import { EditIcon } from "@/assets/icons/EditIcon";
+import { createEffect, createSignal } from "solid-js";
 
 type Props = {
-  user: User;
+  user: User | undefined;
+  onClose: () => void;
 };
 
 export const UpdateUser = (props: Props) => {
+  const [isOpen, setIsOpen] = createSignal(props.user !== undefined);
+  createEffect(() => console.log(isOpen()));
   return (
     <Drawer
       breakPoints={[0.5]}
       velocityFunction={() => 1}
       side="right"
       closeOnOutsidePointer={false}
+      open={isOpen()}
     >
       {(drawerProps) => (
         <>
-          <Drawer.Trigger
-            as="button"
-            class="flex items-center justify-center bg-backgroundSec rounded-md w-[4.5rem] h-8 p-2 border border-gray-700 text-white
-          shadow-lg"
-          >
-            <EditIcon class="text-yellow-300" />
-          </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay
               class="fixed inset-0 z-50 corvu-transitioning:transition-colors backdrop-brightness-75
@@ -38,7 +35,10 @@ export const UpdateUser = (props: Props) => {
             >
               <UserDrawer
                 user={props.user}
-                onClose={() => drawerProps.setOpen(false)}
+                onClose={() => {
+                  setIsOpen(false);
+                  props.onClose();
+                }}
                 onSave={() => {}}
               />
             </Drawer.Content>

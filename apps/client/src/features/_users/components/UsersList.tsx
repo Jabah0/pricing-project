@@ -1,15 +1,16 @@
+import toast from "solid-toast";
+import { Roles, User, contract } from "api-contract";
+import { InfiniteData, useQueryClient } from "@tanstack/solid-query";
 import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
-import toast from "solid-toast";
-import { AddUser } from "./AddUser";
-import { useQueryClient } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
-import { Roles, contract } from "api-contract";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { ErrorToast } from "@/toasts/ErrorToast";
-import { useUser } from "@/features/auth/stores/UserStore";
 import { Table } from "@/components/Table";
 import { Columns } from "./Columns";
+import { AddUser } from "./AddUser";
+import { UpdateUser } from "./UpdateUser";
+import { Show, createSignal } from "solid-js";
 
 export type AddUserType = {
   fullName: string;
@@ -22,7 +23,6 @@ type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
   const locale = useLocale();
-  const [_authUser, setAuth] = useUser();
 
   const queryClient = useQueryClient();
 
@@ -44,83 +44,86 @@ export const UsersList = () => {
   const users = () =>
     usersQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
 
-  // const addUserMutation = apiClient.users.create.createMutation({
-  //   onMutate: async (newUser) => {
-  //     await queryClient.cancelQueries({
-  //       queryKey: ["users"],
-  //     });
+  const addUserMutation = apiClient.users.create.createMutation({
+    onMutate: async (newUser): Promise<{ previousData: Users | undefined }> => {
+      await queryClient.cancelQueries({
+        queryKey: ["users"],
+      });
 
-  //     const previousData = queryClient.getQueryData<Users>(["users"]);
+      const previousData = queryClient.getQueryData<Users>(["users"]);
 
-  //     queryClient.setQueryData<Users>(["users"], (old) => {
-  //       if (!old) return undefined;
+      queryClient.setQueryData<InfiniteData<Users>>(["users"], (old) => {
+        if (!old) return undefined;
 
-  //       return {
-  //         ...old,
-  //         body: [
-  //           ...old.body,
-  //           {
-  //             username: newUser.body.username,
-  //             fullName: newUser.body.fullName,
-  //             role: newUser.body.role,
-  //             hashRefreshToken: "",
-  //             lastLogin: new Date(2024, 1, 1),
-  //             createDate: new Date(2024, 1, 1),
-  //             updatedDate: new Date(2024, 1, 1),
-  //             id: 1000,
-  //           },
-  //         ],
-  //       };
-  //     });
+        old.pages[old.pages.length - 1].body.data.push({
+          id: 1000,
+          username: newUser.body.username,
+          fullName: newUser.body.fullName,
+          role: newUser.body.role,
+          hashRefreshToken: "",
+          lastLogin: new Date(2024, 1, 1),
+          createDate: new Date(2024, 1, 1),
+          updatedDate: new Date(2024, 1, 1),
+        });
 
-  //     return { previousData };
-  //   },
-  //   onError: (_err, __, context) => {
-  //     const typedContext = context as {
-  //       previousData: Users | undefined;
-  //     };
+        return {
+          ...old,
+        };
+      });
 
-  //     queryClient.setQueryData(["users"], typedContext.previousData);
+      return { previousData };
+    },
+    onError: (_err, __, context) => {
+      const typedContext = context as {
+        previousData: Users | undefined;
+      };
 
-  //     toast.custom(
-  //       (t) => (
-  //         <ErrorToast
-  //           onDismiss={() => toast.dismiss(t.id)}
-  //           message={locale.t("addUserFailed")}
-  //         />
-  //       ),
-  //       {
-  //         duration: 6000,
-  //         unmountDelay: 0,
-  //       }
-  //     );
-  //   },
-  //   onSuccess: () => {
-  //     toast.custom(
-  //       (t) => (
-  //         <SuccessToast
-  //           onDismiss={() => toast.dismiss(t.id)}
-  //           message={locale.t("addUserSuccess")}
-  //         />
-  //       ),
-  //       {
-  //         duration: 6000,
-  //         unmountDelay: 0,
-  //       }
-  //     );
-  //   },
-  // });
+      queryClient.setQueryData(["users"], typedContext.previousData);
+
+      toast.custom(
+        (t) => (
+          <ErrorToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("addUserFailed")}
+          />
+        ),
+        {
+          duration: 6000,
+          unmountDelay: 0,
+        }
+      );
+    },
+    onSuccess: () => {
+      toast.custom(
+        (t) => (
+          <SuccessToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("addUserSuccess")}
+          />
+        ),
+        {
+          duration: 6000,
+          unmountDelay: 0,
+        }
+      );
+    },
+  });
 
   const onAddUser = (user: AddUserType) => {
-    //addUserMutation.mutate({ body: { ...user } });
+    addUserMutation.mutate({ body: { ...user } });
+  };
+
+  const [currentUser, setCurrentUser] = createSignal<User>();
+
+  const onUpdateUser = (props: { user: User }) => {
+    console.log("executed");
+    return setCurrentUser(props.user);
   };
 
   return (
     <div class="flex flex-col gap-4 h-full">
-      <div class="flex">
-        <button class="h-10 w-20 text-white bg-primary shadow-lg rounded-sm">
-          {"addUser"}
-        </button>
+      <div class="flex h-10">
+        <AddUser onAdd={onAddUser} />
       </div>
 
       <div id="tableContainer" class="flex-grow overflow-auto">
@@ -131,6 +134,11 @@ export const UsersList = () => {
           onFetchNextData={usersQuery.fetchNextPage}
           isFetchingNextPage={usersQuery.isFetchingNextPage}
           isFetchSuccess={usersQuery.isSuccess}
+          onSelect={(user: User) => onUpdateUser({ user })}
+        />
+        <UpdateUser
+          onClose={() => setCurrentUser(undefined)}
+          user={currentUser()}
         />
       </div>
     </div>

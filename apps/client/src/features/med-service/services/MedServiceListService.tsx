@@ -21,8 +21,12 @@ export const MedServiceListService = () => {
   const [orderBy, setOrderBy] = createSignal<string>();
   const [orderDirection, setOrderDirection] = createSignal<"asc" | "desc">();
   const [servicePrice, setServicePrice] = createSignal<{
+    equal?: number;
+    not?: number;
     gt?: number;
+    gte?: number;
     lt?: number;
+    lte?: number;
   }>();
 
   const queryClient = useQueryClient();
@@ -73,19 +77,34 @@ export const MedServiceListService = () => {
         newService
       ): Promise<{ previousData: MedServices | undefined }> => {
         await queryClient.cancelQueries({
-          queryKey: ["services", serviceName(), serviceCode()],
+          queryKey: [
+            "services",
+            serviceName(),
+            serviceCode(),
+            servicePrice(),
+            orderBy(),
+            orderDirection(),
+          ],
         });
 
         const previousData = queryClient.getQueryData<MedServices>([
           "services",
           serviceName(),
           serviceCode(),
+          servicePrice(),
           orderBy(),
           orderDirection(),
         ]);
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
-          ["services", serviceName(), serviceCode()],
+          [
+            "services",
+            serviceName(),
+            serviceCode(),
+            servicePrice(),
+            orderBy(),
+            orderDirection(),
+          ],
           (old) => {
             if (!old) return undefined;
 
@@ -112,9 +131,10 @@ export const MedServiceListService = () => {
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
           [
-            "myServices",
+            "services",
             serviceName(),
             serviceCode(),
+            servicePrice(),
             orderBy(),
             orderDirection(),
           ],
@@ -154,6 +174,7 @@ export const MedServiceListService = () => {
             "services",
             serviceName(),
             serviceCode(),
+            servicePrice(),
             orderBy(),
             orderDirection(),
           ],
@@ -179,6 +200,7 @@ export const MedServiceListService = () => {
           "services",
           serviceName(),
           serviceCode(),
+          servicePrice(),
           orderBy(),
           orderDirection(),
         ]);
@@ -186,6 +208,7 @@ export const MedServiceListService = () => {
           "myServices",
           serviceName(),
           serviceCode(),
+          servicePrice(),
           orderBy(),
           orderDirection(),
         ]);
