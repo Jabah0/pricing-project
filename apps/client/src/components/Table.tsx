@@ -10,6 +10,7 @@ import {
   RowSelectionState,
   Row,
 } from "@tanstack/solid-table";
+
 import {
   createEffect,
   createMemo,
@@ -28,8 +29,14 @@ import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
 import { FilterIcon } from "@/assets/icons/FilterIcon";
 
+type Meta = {
+  title: string;
+  type: string;
+  options?: { value: string; label: string }[];
+};
+
 type Props<T> = {
-  columns: Array<ColumnDef<T>>;
+  columns: Array<ColumnDef<T, Meta>>;
   data: Array<T>;
   isFetching?: boolean;
   isFetchingNextPage?: boolean;
@@ -276,7 +283,7 @@ const ColumnsChooser = <T extends object>(props: {
               {(column) => (
                 <button
                   class="flex items-center justify-start w-full px-2 rounded-sm bg-backgroundSec 
-                  shadow-lg"
+                  shadow-lg hover:bg-opacity-50"
                   onClick={() => column.toggleVisibility()}
                 >
                   <p>{column.columnDef.meta?.title as string}</p>

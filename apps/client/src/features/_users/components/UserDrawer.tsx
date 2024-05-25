@@ -75,7 +75,6 @@ export const UserDrawer = (props: Props) => {
             <RolesCombobox
               role={props.user?.role}
               onSelect={(val) => {
-                console.log(val);
                 setRole(val);
               }}
             />
