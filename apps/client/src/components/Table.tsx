@@ -158,7 +158,7 @@ export const Table = <T extends object>(props: Props<T>) => {
                       return (
                         <th
                           colSpan={header.colSpan}
-                          class="text-start border-e border-gray-600 px-[0.5rem]"
+                          class={`text-start border-e border-gray-600 px-[0.5rem]`}
                         >
                           <TableHeader
                             isSorted={header.column.getIsSorted()}
@@ -180,6 +180,9 @@ export const Table = <T extends object>(props: Props<T>) => {
                               )?.value
                             }
                             filterType={header.column.columnDef?.meta?.type}
+                            filterOptions={
+                              header.column.columnDef.meta?.options
+                            }
                           />
                         </th>
                       );
@@ -194,7 +197,9 @@ export const Table = <T extends object>(props: Props<T>) => {
               {(row) => (
                 <tr
                   class={`h-10 border-y border-y-background
+                  hover:bg-backgroundSec
                   ${row.getIsSelected() ? "bg-opacity-75" : ""}
+                  ${props.onSelect ? "cursor-pointer" : ""}
                   `}
                   onClick={() => onSelectRow(row)}
                 >
@@ -213,7 +218,7 @@ export const Table = <T extends object>(props: Props<T>) => {
             </For>
           </tbody>
         </table>
-        <Show when={props.isFetching}>
+        <Show when={props.isFetching && !props.isFetchingNextPage}>
           <div class="flex items-center justify-center h-full w-full">
             <SpinnersBlocksShuffleIcon class="text-primary w-36 h-36" />
           </div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from '../../common/enums/role.enum';
+import { Role, Roles } from '../../common/enums/role.enum';
 
 interface IsAuthorizedParams {
   currentRole: Role;
@@ -12,8 +12,8 @@ export class AccessControlService {
   private priority: number = 1;
 
   constructor() {
-    this.buildRoles([Role.USER, Role.ADMIN]);
-    this.buildRoles([Role.ADMIN]);
+    this.buildRoles([Roles.USER, Roles.ADMIN]);
+    this.buildRoles([Roles.ADMIN]);
   }
 
   private buildRoles(roles: Role[]) {

@@ -20,11 +20,24 @@ export class DatabaseUserRepository implements UserRepository {
   async getUsers(
     page: number,
     perPage?: number,
+    role?: Role,
+    username?: string,
+    fullName?: string,
   ): Promise<PaginatedResult<UserM>> {
     return paginate(
       this.prisma.user,
       {
-        where: {} as Prisma.UserWhereInput,
+        where: {
+          role,
+          fullName: {
+            contains: fullName,
+            mode: 'insensitive',
+          },
+          username: {
+            contains: username,
+            mode: 'insensitive',
+          },
+        } as Prisma.UserWhereInput,
         select: {
           id: true,
           username: true,

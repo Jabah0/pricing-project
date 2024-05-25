@@ -1,3 +1,4 @@
+import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { Roles, User, contract } from "api-contract";
 import { InfiniteData, useQueryClient } from "@tanstack/solid-query";
@@ -10,7 +11,7 @@ import { Table } from "@/components/Table";
 import { Columns } from "./Columns";
 import { AddUser } from "./AddUser";
 import { UpdateUser } from "./UpdateUser";
-import { Show, createSignal } from "solid-js";
+import { ColumnFiltersState } from "@tanstack/solid-table";
 
 export type AddUserType = {
   fullName: string;
@@ -26,11 +27,24 @@ export const UsersList = () => {
 
   const queryClient = useQueryClient();
 
+  const [role, setRole] = createSignal<Roles>();
+  const [username, setUsername] = createSignal<string>();
+  const [fullName, setFullName] = createSignal<string>();
+
   const usersQuery = apiClient.users.getAll.createInfiniteQuery(
-    () => ["users"],
+    () => ["users", role(), username(), fullName()],
     ({ pageParam = 1 }) => ({
       query: {
         page: pageParam,
+        get role() {
+          return role();
+        },
+        get username() {
+          return username();
+        },
+        get fullName() {
+          return fullName();
+        },
       },
     }),
     {
@@ -115,14 +129,27 @@ export const UsersList = () => {
 
   const [currentUser, setCurrentUser] = createSignal<User>();
 
-  const onUpdateUser = (props: { user: User }) => {
-    console.log("executed");
-    return setCurrentUser(props.user);
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const onSelectUser = (props: { user: User }) => {
+    setCurrentUser(props.user);
+    setIsOpen(true);
+  };
+
+  const onFilter = (filters: ColumnFiltersState) => {
+    setRole(undefined);
+    setUsername(undefined);
+    setFullName(undefined);
+    filters.map((item) => {
+      item.id === "role" && setRole(item.value as Roles);
+      item.id === "username" && setUsername(item.value as string);
+      item.id === "fullName" && setFullName(item.value as string);
+    });
   };
 
   return (
     <div class="flex flex-col gap-4 h-full">
-      <div class="flex h-10">
+      <div class="flex">
         <AddUser onAdd={onAddUser} />
       </div>
 
@@ -134,13 +161,18 @@ export const UsersList = () => {
           onFetchNextData={usersQuery.fetchNextPage}
           isFetchingNextPage={usersQuery.isFetchingNextPage}
           isFetchSuccess={usersQuery.isSuccess}
-          onSelect={(user: User) => onUpdateUser({ user })}
-        />
-        <UpdateUser
-          onClose={() => setCurrentUser(undefined)}
-          user={currentUser()}
+          onSelect={(user: User) => onSelectUser({ user })}
+          onFilter={(filters) => onFilter(filters)}
         />
       </div>
+      <UpdateUser
+        onClose={() => {
+          setIsOpen(false);
+          setCurrentUser(undefined);
+        }}
+        user={currentUser()}
+        isOpen={isOpen()}
+      />
     </div>
   );
 };

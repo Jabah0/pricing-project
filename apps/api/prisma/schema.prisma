@@ -34,7 +34,7 @@ model User {
 model MedService {
   id                    String  @id
   name                  String
-  dalilName             String
+  dalilCode             String
   code                  String
   nationalCode          String
   price                 Float

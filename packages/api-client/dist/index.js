@@ -22,7 +22,7 @@ exports.MedServiceSchema = zod_1.z.object({
     id: zod_1.z.string(),
     name: zod_1.z.string(),
     code: zod_1.z.string(),
-    dalilName: zod_1.z.string(),
+    dalilCode: zod_1.z.string(),
     nationalCode: zod_1.z.string(),
     price: zod_1.z.number(),
     numberOfPricing: zod_1.z.number().default(0),
@@ -74,6 +74,69 @@ exports.contract = c.router({
                     fullName: zod_1.z.string(),
                     role: zod_1.z.string(),
                 }),
+            },
+        },
+    },
+    users: {
+        getAll: {
+            method: "GET",
+            path: "/users",
+            query: zod_1.z.object({
+                role: exports.RolesSchema.optional(),
+                username: zod_1.z.string().optional(),
+                fullName: zod_1.z.string().optional(),
+                page: zod_1.z.coerce.number().optional(),
+                perPage: zod_1.z.coerce.number().optional(),
+            }),
+            responses: {
+                200: zod_1.z.object({
+                    data: exports.UserSchema.omit({ password: true }).array(),
+                    meta: zod_1.z.object({
+                        total: zod_1.z.number(),
+                        lastPage: zod_1.z.number(),
+                        currentPage: zod_1.z.number(),
+                        perPage: zod_1.z.number(),
+                        prev: zod_1.z.number().nullable(),
+                        next: zod_1.z.number().nullable(),
+                    }),
+                }),
+            },
+        },
+        getOne: {
+            method: "GET",
+            path: "/users/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.number(),
+            }),
+            responses: {
+                200: exports.UserSchema.omit({ password: true }),
+                404: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
+            },
+        },
+        create: {
+            method: "POST",
+            path: "/users",
+            body: zod_1.z.object({
+                fullName: zod_1.z.string(),
+                username: zod_1.z.string(),
+                password: zod_1.z.string(),
+                role: exports.RolesSchema,
+            }),
+            responses: {
+                201: exports.UserSchema.omit({ password: true }),
+            },
+        },
+        patch: {
+            method: "PATCH",
+            path: "/users/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.number(),
+            }),
+            body: exports.UserSchema.partial().omit({ id: true }),
+            responses: {
+                200: exports.UserSchema.omit({ password: true }),
             },
         },
     },
@@ -204,66 +267,6 @@ exports.contract = c.router({
                 404: zod_1.z.object({
                     message: zod_1.z.string(),
                 }),
-            },
-        },
-    },
-    users: {
-        getAll: {
-            method: "GET",
-            path: "/users",
-            query: zod_1.z.object({
-                page: zod_1.z.coerce.number().optional(),
-                perPage: zod_1.z.coerce.number().optional(),
-            }),
-            responses: {
-                200: zod_1.z.object({
-                    data: exports.UserSchema.omit({ password: true }).array(),
-                    meta: zod_1.z.object({
-                        total: zod_1.z.number(),
-                        lastPage: zod_1.z.number(),
-                        currentPage: zod_1.z.number(),
-                        perPage: zod_1.z.number(),
-                        prev: zod_1.z.number().nullable(),
-                        next: zod_1.z.number().nullable(),
-                    }),
-                }),
-            },
-        },
-        getOne: {
-            method: "GET",
-            path: "/users/:id",
-            pathParams: zod_1.z.object({
-                id: zod_1.z.coerce.number(),
-            }),
-            responses: {
-                200: exports.UserSchema.omit({ password: true }),
-                404: zod_1.z.object({
-                    message: zod_1.z.string(),
-                }),
-            },
-        },
-        create: {
-            method: "POST",
-            path: "/users",
-            body: zod_1.z.object({
-                fullName: zod_1.z.string(),
-                username: zod_1.z.string(),
-                password: zod_1.z.string(),
-                role: exports.RolesSchema,
-            }),
-            responses: {
-                201: exports.UserSchema.omit({ password: true }),
-            },
-        },
-        patch: {
-            method: "PATCH",
-            path: "/users/:id",
-            pathParams: zod_1.z.object({
-                id: zod_1.z.coerce.number(),
-            }),
-            body: exports.UserSchema.partial().omit({ id: true }),
-            responses: {
-                200: exports.UserSchema.omit({ password: true }),
             },
         },
     },

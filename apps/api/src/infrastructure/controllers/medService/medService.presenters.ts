@@ -7,7 +7,7 @@ export class MedServicePresenters {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  dalilName: string;
+  dalilCode: string;
   @ApiProperty()
   code: string;
   @ApiProperty()
@@ -21,7 +21,7 @@ export class MedServicePresenters {
     this.id = medService.id;
     this.name = medService.name;
     this.code = medService.code;
-    this.dalilName = medService.dalilName;
+    this.dalilCode = medService.dalilCode;
     this.nationalCode = medService.nationalCode;
     this.price = medService.price;
     this.unitSize = medService.unitSize;

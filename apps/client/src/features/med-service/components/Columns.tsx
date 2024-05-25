@@ -24,10 +24,10 @@ export const Columns: ColumnDef<MedService>[] = [
     size: 6 / 1,
   },
   {
-    id: "dalilName",
-    accessorKey: "dalilName",
-    header: "Dalil Name",
-    meta: { title: "Dalil Name", type: "sting" },
+    id: "dalilCode",
+    accessorKey: "dalilCode",
+    header: "Dalil Code",
+    meta: { title: "Dalil Name", type: "string" },
     size: 6 / 1,
   },
   {

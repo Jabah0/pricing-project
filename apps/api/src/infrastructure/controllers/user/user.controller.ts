@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
 import { GetUserUseCase } from 'src/usecases/user/getUser.usecase';
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
-import { Role } from 'src/infrastructure/common/enums/role.enum';
+import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
 
 @Controller()
@@ -37,16 +37,16 @@ export class UserController {
     });
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(RolesEnum.ADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @TsRestHandler(contract.users.getAll)
   async getUsers() {
     return tsRestHandler(
       contract.users.getAll,
-      async ({ query: { page, perPage } }) => {
+      async ({ query: { page, perPage, role, username, fullName } }) => {
         const users = await this.getUsersUsecaseProxy
           .getInstance()
-          .execute(page, perPage);
+          .execute(page, perPage, role, username, fullName);
         return { status: 200, body: users };
       },
     );

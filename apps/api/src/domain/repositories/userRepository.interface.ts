@@ -4,7 +4,13 @@ import { PaginatedResult } from '../model/apiResponse';
 
 export interface UserRepository {
   getUser(id: number): Promise<UserM>;
-  getUsers(page: number, perPage?: number): Promise<PaginatedResult<UserM>>;
+  getUsers(
+    page: number,
+    perPage?: number,
+    role?: Role,
+    username?: string,
+    fullName?: string,
+  ): Promise<PaginatedResult<UserM>>;
   deleteUser(id: number): Promise<UserM>;
   getUserByUsername(username: string): Promise<UserM>;
   addNewUser(

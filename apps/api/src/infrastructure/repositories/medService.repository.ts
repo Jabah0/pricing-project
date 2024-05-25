@@ -56,12 +56,15 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           price,
           name: {
             contains: name,
+            mode: 'insensitive',
           },
           code: {
             contains: code,
+            mode: 'insensitive',
           },
-          dalilName: {
+          dalilCode: {
             contains: dalilCode,
+            mode: 'insensitive',
           },
           numberOfPricing: {
             lt: this.prisma.medService.fields.limitNumberOfPricing,
@@ -121,22 +124,25 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           medService: {
             name: {
               contains: name,
+              mode: 'insensitive',
             },
             code: {
               contains: code,
+              mode: 'insensitive',
             },
-            dalilName: {
+            dalilCode: {
               contains: dalilCode,
+              mode: 'insensitive',
             },
           },
-        } as Prisma.MedServiceWhereInput,
+        } as Prisma.UserMedServicesWhereInput,
         select: {
           medService: {
             select: {
               id: true,
               name: true,
               code: true,
-              dalilName: true,
+              dalilCode: true,
               nationalCode: true,
               numberOfPricing: true,
               unitSize: true,
@@ -166,7 +172,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           ({
             id: item.medService.id,
             name: item.medService.name,
-            dalilName: item.medService.dalilName,
+            dalilCode: item.medService.dalilCode,
             code: item.medService.code,
             nationalCode: item.medService.nationalCode,
             numberOfPricing: item.medService.numberOfPricing,

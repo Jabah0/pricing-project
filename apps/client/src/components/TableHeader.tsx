@@ -4,22 +4,18 @@ import { FilterIcon } from "@/assets/icons/FilterIcon";
 import { MenuIcon } from "@/assets/icons/MenuIcon";
 import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
 import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
-import { DropdownMenu, Popover } from "@kobalte/core";
+import { Combobox, DropdownMenu, Popover } from "@kobalte/core";
 import { SortDirection } from "@tanstack/solid-table";
-import { JSX, Match, Switch, createSignal, mergeProps } from "solid-js";
+import { JSX, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
 import { NumberFilter as NumberFilterType } from "./Table";
+import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
+import { CancelIcon } from "@/assets/icons/CancelIcon";
 
 type Sort = SortDirection | false;
 
-type Props = {
-  title: JSX.Element;
-  isSorted: Sort;
-  toggleSort?: () => void;
-  hide: () => void;
-  setFilter: (value: string | number | NumberFilterType | undefined) => void;
-  filter: number | string | NumberFilterType | undefined;
-  filterType?: FilterType;
-};
+type FilterType = "number" | "string" | "select";
+
+export type FilterOptions = Array<{ label: string; value: string }>;
 
 type FilterWay =
   | "equals"
@@ -29,6 +25,17 @@ type FilterWay =
   | "lessThanOrEqual"
   | "greaterThan"
   | "greaterThanOrEqual";
+
+type Props = {
+  title: JSX.Element;
+  isSorted: Sort;
+  toggleSort?: () => void;
+  hide: () => void;
+  setFilter: (value: string | number | NumberFilterType | undefined) => void;
+  filter: number | string | NumberFilterType | undefined;
+  filterType?: FilterType;
+  filterOptions?: FilterOptions;
+};
 
 export const TableHeader = (propsWithoutDefault: Props) => {
   const props = mergeProps(
@@ -61,6 +68,7 @@ export const TableHeader = (propsWithoutDefault: Props) => {
             filterType={props.filterType}
             filterWay={filterWay()}
             setFilterWay={(way) => setFilterWay(way)}
+            filterOptions={props.filterOptions}
           />
           <MoreOptions hide={props.hide} />
         </div>
@@ -75,6 +83,7 @@ const Filter = (props: {
   filterType: FilterType;
   filterWay?: FilterWay;
   setFilterWay?: (way: FilterWay) => void;
+  filterOptions?: FilterOptions;
 }) => {
   const onInputChange = (
     val: number | string | NumberFilterType | undefined
@@ -109,10 +118,17 @@ const Filter = (props: {
               />
             </Match>
 
-            <Match when={props.filterType !== "number"}>
+            <Match when={props.filterType === "string"}>
               <StringFilter
                 value={(props.filter as string) || ""}
                 onInput={(e) => onInputChange(e.target.value)}
+              />
+            </Match>
+            <Match when={props.filterType === "select"}>
+              <SelectFilter
+                filterOptions={props.filterOptions || []}
+                setFilter={props.setFilter}
+                filter={props.filter as string}
               />
             </Match>
           </Switch>
@@ -121,8 +137,6 @@ const Filter = (props: {
     </Popover.Root>
   );
 };
-
-type FilterType = "number" | "string";
 
 const StringFilter = (
   props: Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type">
@@ -363,7 +377,7 @@ const FilterWaySelection = (props: {
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
-            class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
+            class="flex items-center gap-2 w-export type FilterOptions = Array<{label: string, value: string}>full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("greaterThanOrEqual")}
           >
@@ -402,3 +416,63 @@ const MoreOptions = (props: { hide: () => void }) => (
     </DropdownMenu.Portal>
   </DropdownMenu.Root>
 );
+
+const SelectFilter = (props: {
+  filterOptions: FilterOptions;
+  filter: string | undefined;
+  setFilter: (value: string | undefined) => void;
+}) => {
+  const roleIndex = () =>
+    props.filterOptions.findIndex((item) => item.value === props.filter);
+
+  return (
+    <Combobox.Root
+      options={props.filterOptions}
+      optionValue="value"
+      optionTextValue="label"
+      optionLabel="label"
+      placeholder="Select"
+      defaultValue={props.filterOptions[roleIndex()]}
+      onChange={(e) => props.setFilter && props.setFilter(e.value)}
+      itemComponent={(itemProps) => (
+        <Combobox.Item
+          class="flex items-center justify-between px-2 bg-backgroundSec shadow-lg
+          hover:opacity-50 hover:cursor-pointer"
+          item={itemProps.item}
+        >
+          <Combobox.ItemLabel>
+            {itemProps.item.rawValue.label}
+          </Combobox.ItemLabel>
+          <Combobox.ItemIndicator>
+            <ConfirmIcon />
+          </Combobox.ItemIndicator>
+        </Combobox.Item>
+      )}
+    >
+      <Combobox.Control
+        class="flex justify-center items-center bg-backgroundSec shadow-lg 
+        h-[2rem] px-2 text-white"
+      >
+        <Combobox.Input class="bg-transparent" />
+        <Show when={props.filter}>
+          <button onClick={() => props.setFilter(undefined)}>
+            <CancelIcon class="text-red-700" />
+          </button>
+        </Show>
+        <Combobox.Trigger>
+          <Combobox.Icon>
+            <ChevronDownIcon class="scale-150" />
+          </Combobox.Icon>
+        </Combobox.Trigger>
+      </Combobox.Control>
+      <Combobox.Portal>
+        <Combobox.Content
+          class="bg-backPrimary shadow-lg z-50 text-white border 
+          border-gray-600 p-2"
+        >
+          <Combobox.Listbox class="flex flex-col gap-2" />
+        </Combobox.Content>
+      </Combobox.Portal>
+    </Combobox.Root>
+  );
+};

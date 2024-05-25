@@ -31,7 +31,7 @@ export const MedServiceSchema = z.object({
   id: z.string(),
   name: z.string(),
   code: z.string(),
-  dalilName: z.string(),
+  dalilCode: z.string(),
   nationalCode: z.string(),
   price: z.number(),
   numberOfPricing: z.number().default(0),
@@ -88,6 +88,70 @@ export const contract = c.router(
             fullName: z.string(),
             role: z.string(),
           }),
+        },
+      },
+    },
+
+    users: {
+      getAll: {
+        method: "GET",
+        path: "/users",
+        query: z.object({
+          role: RolesSchema.optional(),
+          username: z.string().optional(),
+          fullName: z.string().optional(),
+          page: z.coerce.number().optional(),
+          perPage: z.coerce.number().optional(),
+        }),
+        responses: {
+          200: z.object({
+            data: UserSchema.omit({ password: true }).array(),
+            meta: z.object({
+              total: z.number(),
+              lastPage: z.number(),
+              currentPage: z.number(),
+              perPage: z.number(),
+              prev: z.number().nullable(),
+              next: z.number().nullable(),
+            }),
+          }),
+        },
+      },
+      getOne: {
+        method: "GET",
+        path: "/users/:id",
+        pathParams: z.object({
+          id: z.coerce.number(),
+        }),
+        responses: {
+          200: UserSchema.omit({ password: true }),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+      create: {
+        method: "POST",
+        path: "/users",
+        body: z.object({
+          fullName: z.string(),
+          username: z.string(),
+          password: z.string(),
+          role: RolesSchema,
+        }),
+        responses: {
+          201: UserSchema.omit({ password: true }),
+        },
+      },
+      patch: {
+        method: "PATCH",
+        path: "/users/:id",
+        pathParams: z.object({
+          id: z.coerce.number(),
+        }),
+        body: UserSchema.partial().omit({ id: true }),
+        responses: {
+          200: UserSchema.omit({ password: true }),
         },
       },
     },
@@ -224,67 +288,6 @@ export const contract = c.router(
           404: z.object({
             message: z.string(),
           }),
-        },
-      },
-    },
-
-    users: {
-      getAll: {
-        method: "GET",
-        path: "/users",
-        query: z.object({
-          page: z.coerce.number().optional(),
-          perPage: z.coerce.number().optional(),
-        }),
-        responses: {
-          200: z.object({
-            data: UserSchema.omit({ password: true }).array(),
-            meta: z.object({
-              total: z.number(),
-              lastPage: z.number(),
-              currentPage: z.number(),
-              perPage: z.number(),
-              prev: z.number().nullable(),
-              next: z.number().nullable(),
-            }),
-          }),
-        },
-      },
-      getOne: {
-        method: "GET",
-        path: "/users/:id",
-        pathParams: z.object({
-          id: z.coerce.number(),
-        }),
-        responses: {
-          200: UserSchema.omit({ password: true }),
-          404: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-      create: {
-        method: "POST",
-        path: "/users",
-        body: z.object({
-          fullName: z.string(),
-          username: z.string(),
-          password: z.string(),
-          role: RolesSchema,
-        }),
-        responses: {
-          201: UserSchema.omit({ password: true }),
-        },
-      },
-      patch: {
-        method: "PATCH",
-        path: "/users/:id",
-        pathParams: z.object({
-          id: z.coerce.number(),
-        }),
-        body: UserSchema.partial().omit({ id: true }),
-        responses: {
-          200: UserSchema.omit({ password: true }),
         },
       },
     },

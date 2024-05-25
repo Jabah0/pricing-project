@@ -11,7 +11,7 @@ export const MedServicesTable = () => {
 
   const medServicesData = () => service.servicesData();
 
-  const onOrderChange = (sortBy: string, sortDirection: "asc" | "desc") => {
+  const onOrderChange = (sortBy?: string, sortDirection?: "asc" | "desc") => {
     service.setOrderBy(sortBy);
     service.setOrderDirection(sortDirection);
   };
@@ -21,13 +21,14 @@ export const MedServicesTable = () => {
   };
 
   const onFilter = (filters: ColumnFiltersState) => {
-    service.setServiceName("");
-    service.setServiceCode("");
+    service.setServiceName(undefined);
+    service.setServiceCode(undefined);
+    service.setDalilCode(undefined);
     service.setServicePrice(undefined);
     filters.map((item) => {
-      console.log(item);
       item.id === "name" && service.setServiceName(item.value as string);
       item.id === "code" && service.setServiceCode(item.value as string);
+      item.id === "dalilCode" && service.setDalilCode(item.value as string);
       item.id === "price" &&
         service.setServicePrice(item.value as NumberFilter);
     });

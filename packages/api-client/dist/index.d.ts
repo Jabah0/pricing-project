@@ -67,7 +67,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
     code: z.ZodString;
-    dalilName: z.ZodString;
+    dalilCode: z.ZodString;
     nationalCode: z.ZodString;
     price: z.ZodNumber;
     numberOfPricing: z.ZodDefault<z.ZodNumber>;
@@ -77,7 +77,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     code: string;
     id: string;
     name: string;
-    dalilName: string;
+    dalilCode: string;
     nationalCode: string;
     price: number;
     numberOfPricing: number;
@@ -87,7 +87,7 @@ export declare const MedServiceSchema: z.ZodObject<{
     code: string;
     id: string;
     name: string;
-    dalilName: string;
+    dalilCode: string;
     nationalCode: string;
     price: number;
     unitSize: number;
@@ -171,535 +171,24 @@ export declare const contract: {
             strictStatusCodes: true;
         };
     };
-    medServices: {
-        create: {
-            method: "POST";
-            body: z.ZodObject<{
-                id: z.ZodString;
-                name: z.ZodString;
-                code: z.ZodString;
-                dalilName: z.ZodString;
-                nationalCode: z.ZodString;
-                price: z.ZodNumber;
-                numberOfPricing: z.ZodDefault<z.ZodNumber>;
-                limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
-                unitSize: z.ZodNumber;
-            }, "strip", z.ZodTypeAny, {
-                code: string;
-                id: string;
-                name: string;
-                dalilName: string;
-                nationalCode: string;
-                price: number;
-                numberOfPricing: number;
-                limitNumberOfPricing: number;
-                unitSize: number;
-            }, {
-                code: string;
-                id: string;
-                name: string;
-                dalilName: string;
-                nationalCode: string;
-                price: number;
-                unitSize: number;
-                numberOfPricing?: number | undefined;
-                limitNumberOfPricing?: number | undefined;
-            }>;
-            path: "/api/med-services";
-            responses: {
-                201: z.ZodObject<{
-                    id: z.ZodString;
-                    name: z.ZodString;
-                    code: z.ZodString;
-                    dalilName: z.ZodString;
-                    nationalCode: z.ZodString;
-                    price: z.ZodNumber;
-                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
-                    limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
-                    unitSize: z.ZodNumber;
-                }, "strip", z.ZodTypeAny, {
-                    code: string;
-                    id: string;
-                    name: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    numberOfPricing: number;
-                    limitNumberOfPricing: number;
-                    unitSize: number;
-                }, {
-                    code: string;
-                    id: string;
-                    name: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    unitSize: number;
-                    numberOfPricing?: number | undefined;
-                    limitNumberOfPricing?: number | undefined;
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-        getAll: {
-            query: z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                code: z.ZodOptional<z.ZodString>;
-                dalilCode: z.ZodOptional<z.ZodString>;
-                orderBy: z.ZodOptional<z.ZodString>;
-                orderDirection: z.ZodOptional<z.ZodString>;
-                page: z.ZodDefault<z.ZodNumber>;
-                perPage: z.ZodOptional<z.ZodNumber>;
-                price: z.ZodOptional<z.ZodObject<{
-                    equals: z.ZodOptional<z.ZodNumber>;
-                    not: z.ZodOptional<z.ZodNumber>;
-                    gt: z.ZodOptional<z.ZodNumber>;
-                    gte: z.ZodOptional<z.ZodNumber>;
-                    lt: z.ZodOptional<z.ZodNumber>;
-                    lte: z.ZodOptional<z.ZodNumber>;
-                }, "strip", z.ZodTypeAny, {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                }, {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                }>>;
-            }, "strip", z.ZodTypeAny, {
-                page: number;
-                code?: string | undefined;
-                name?: string | undefined;
-                price?: {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                } | undefined;
-                dalilCode?: string | undefined;
-                orderBy?: string | undefined;
-                orderDirection?: string | undefined;
-                perPage?: number | undefined;
-            }, {
-                code?: string | undefined;
-                name?: string | undefined;
-                price?: {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                } | undefined;
-                dalilCode?: string | undefined;
-                orderBy?: string | undefined;
-                orderDirection?: string | undefined;
-                page?: number | undefined;
-                perPage?: number | undefined;
-            }>;
-            method: "GET";
-            path: "/api/med-services";
-            responses: {
-                200: z.ZodObject<{
-                    data: z.ZodArray<z.ZodObject<{
-                        id: z.ZodString;
-                        name: z.ZodString;
-                        code: z.ZodString;
-                        dalilName: z.ZodString;
-                        nationalCode: z.ZodString;
-                        price: z.ZodNumber;
-                        numberOfPricing: z.ZodDefault<z.ZodNumber>;
-                        limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
-                        unitSize: z.ZodNumber;
-                    }, "strip", z.ZodTypeAny, {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        numberOfPricing: number;
-                        limitNumberOfPricing: number;
-                        unitSize: number;
-                    }, {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        unitSize: number;
-                        numberOfPricing?: number | undefined;
-                        limitNumberOfPricing?: number | undefined;
-                    }>, "many">;
-                    meta: z.ZodObject<{
-                        total: z.ZodNumber;
-                        lastPage: z.ZodNumber;
-                        currentPage: z.ZodNumber;
-                        perPage: z.ZodNumber;
-                        prev: z.ZodNullable<z.ZodNumber>;
-                        next: z.ZodNullable<z.ZodNumber>;
-                    }, "strip", z.ZodTypeAny, {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    }, {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    }>;
-                }, "strip", z.ZodTypeAny, {
-                    data: {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        numberOfPricing: number;
-                        limitNumberOfPricing: number;
-                        unitSize: number;
-                    }[];
-                    meta: {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    };
-                }, {
-                    data: {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        unitSize: number;
-                        numberOfPricing?: number | undefined;
-                        limitNumberOfPricing?: number | undefined;
-                    }[];
-                    meta: {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    };
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-        getAllByUser: {
-            query: z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                code: z.ZodOptional<z.ZodString>;
-                dalilCode: z.ZodOptional<z.ZodString>;
-                orderBy: z.ZodOptional<z.ZodString>;
-                orderDirection: z.ZodOptional<z.ZodString>;
-                page: z.ZodDefault<z.ZodNumber>;
-                perPage: z.ZodOptional<z.ZodNumber>;
-                price: z.ZodOptional<z.ZodObject<{
-                    equals: z.ZodOptional<z.ZodNumber>;
-                    not: z.ZodOptional<z.ZodNumber>;
-                    gt: z.ZodOptional<z.ZodNumber>;
-                    gte: z.ZodOptional<z.ZodNumber>;
-                    lt: z.ZodOptional<z.ZodNumber>;
-                    lte: z.ZodOptional<z.ZodNumber>;
-                }, "strip", z.ZodTypeAny, {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                }, {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                }>>;
-            }, "strip", z.ZodTypeAny, {
-                page: number;
-                code?: string | undefined;
-                name?: string | undefined;
-                price?: {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                } | undefined;
-                dalilCode?: string | undefined;
-                orderBy?: string | undefined;
-                orderDirection?: string | undefined;
-                perPage?: number | undefined;
-            }, {
-                code?: string | undefined;
-                name?: string | undefined;
-                price?: {
-                    equals?: number | undefined;
-                    not?: number | undefined;
-                    gt?: number | undefined;
-                    gte?: number | undefined;
-                    lt?: number | undefined;
-                    lte?: number | undefined;
-                } | undefined;
-                dalilCode?: string | undefined;
-                orderBy?: string | undefined;
-                orderDirection?: string | undefined;
-                page?: number | undefined;
-                perPage?: number | undefined;
-            }>;
-            method: "GET";
-            path: "/api/med-services/user";
-            responses: {
-                200: z.ZodObject<{
-                    data: z.ZodArray<z.ZodObject<{
-                        id: z.ZodString;
-                        name: z.ZodString;
-                        code: z.ZodString;
-                        dalilName: z.ZodString;
-                        nationalCode: z.ZodString;
-                        price: z.ZodNumber;
-                        numberOfPricing: z.ZodDefault<z.ZodNumber>;
-                        limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
-                        unitSize: z.ZodNumber;
-                    }, "strip", z.ZodTypeAny, {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        numberOfPricing: number;
-                        limitNumberOfPricing: number;
-                        unitSize: number;
-                    }, {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        unitSize: number;
-                        numberOfPricing?: number | undefined;
-                        limitNumberOfPricing?: number | undefined;
-                    }>, "many">;
-                    meta: z.ZodObject<{
-                        total: z.ZodNumber;
-                        lastPage: z.ZodNumber;
-                        currentPage: z.ZodNumber;
-                        perPage: z.ZodNumber;
-                        prev: z.ZodNullable<z.ZodNumber>;
-                        next: z.ZodNullable<z.ZodNumber>;
-                    }, "strip", z.ZodTypeAny, {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    }, {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    }>;
-                }, "strip", z.ZodTypeAny, {
-                    data: {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        numberOfPricing: number;
-                        limitNumberOfPricing: number;
-                        unitSize: number;
-                    }[];
-                    meta: {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    };
-                }, {
-                    data: {
-                        code: string;
-                        id: string;
-                        name: string;
-                        dalilName: string;
-                        nationalCode: string;
-                        price: number;
-                        unitSize: number;
-                        numberOfPricing?: number | undefined;
-                        limitNumberOfPricing?: number | undefined;
-                    }[];
-                    meta: {
-                        perPage: number;
-                        total: number;
-                        lastPage: number;
-                        currentPage: number;
-                        prev: number | null;
-                        next: number | null;
-                    };
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-        getOne: {
-            pathParams: z.ZodObject<{
-                id: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                id: string;
-            }, {
-                id: string;
-            }>;
-            method: "GET";
-            path: "/api/med-services/:id";
-            responses: {
-                200: z.ZodObject<{
-                    id: z.ZodString;
-                    name: z.ZodString;
-                    code: z.ZodString;
-                    dalilName: z.ZodString;
-                    nationalCode: z.ZodString;
-                    price: z.ZodNumber;
-                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
-                    limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
-                    unitSize: z.ZodNumber;
-                }, "strip", z.ZodTypeAny, {
-                    code: string;
-                    id: string;
-                    name: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    numberOfPricing: number;
-                    limitNumberOfPricing: number;
-                    unitSize: number;
-                }, {
-                    code: string;
-                    id: string;
-                    name: string;
-                    dalilName: string;
-                    nationalCode: string;
-                    price: number;
-                    unitSize: number;
-                    numberOfPricing?: number | undefined;
-                    limitNumberOfPricing?: number | undefined;
-                }>;
-                404: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-        remove: {
-            pathParams: z.ZodObject<{
-                id: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                id: string;
-            }, {
-                id: string;
-            }>;
-            method: "DELETE";
-            body: z.ZodAny;
-            path: "/api/med-services/:id";
-            responses: {
-                204: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-                404: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-        patchOne: {
-            pathParams: z.ZodObject<{
-                id: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                id: string;
-            }, {
-                id: string;
-            }>;
-            method: "PATCH";
-            body: z.ZodObject<{
-                price: z.ZodOptional<z.ZodNumber>;
-                unitSize: z.ZodOptional<z.ZodNumber>;
-            }, "strip", z.ZodTypeAny, {
-                price?: number | undefined;
-                unitSize?: number | undefined;
-            }, {
-                price?: number | undefined;
-                unitSize?: number | undefined;
-            }>;
-            path: "/api/med-services/:id";
-            responses: {
-                200: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-                404: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-            };
-            strictStatusCodes: true;
-        };
-    };
     users: {
         getAll: {
             query: z.ZodObject<{
+                role: z.ZodOptional<z.ZodEnum<["ADMIN", "USER"]>>;
+                username: z.ZodOptional<z.ZodString>;
+                fullName: z.ZodOptional<z.ZodString>;
                 page: z.ZodOptional<z.ZodNumber>;
                 perPage: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
+                username?: string | undefined;
+                fullName?: string | undefined;
+                role?: "ADMIN" | "USER" | undefined;
                 page?: number | undefined;
                 perPage?: number | undefined;
             }, {
+                username?: string | undefined;
+                fullName?: string | undefined;
+                role?: "ADMIN" | "USER" | undefined;
                 page?: number | undefined;
                 perPage?: number | undefined;
             }>;
@@ -970,6 +459,526 @@ export declare const contract: {
                     updatedDate: Date;
                     lastLogin: Date;
                     hashRefreshToken: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+    };
+    medServices: {
+        create: {
+            method: "POST";
+            body: z.ZodObject<{
+                id: z.ZodString;
+                name: z.ZodString;
+                code: z.ZodString;
+                dalilCode: z.ZodString;
+                nationalCode: z.ZodString;
+                price: z.ZodNumber;
+                numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
+                unitSize: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                code: string;
+                id: string;
+                name: string;
+                dalilCode: string;
+                nationalCode: string;
+                price: number;
+                numberOfPricing: number;
+                limitNumberOfPricing: number;
+                unitSize: number;
+            }, {
+                code: string;
+                id: string;
+                name: string;
+                dalilCode: string;
+                nationalCode: string;
+                price: number;
+                unitSize: number;
+                numberOfPricing?: number | undefined;
+                limitNumberOfPricing?: number | undefined;
+            }>;
+            path: "/api/med-services";
+            responses: {
+                201: z.ZodObject<{
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilCode: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                    limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
+                    unitSize: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    code: string;
+                    id: string;
+                    name: string;
+                    dalilCode: string;
+                    nationalCode: string;
+                    price: number;
+                    numberOfPricing: number;
+                    limitNumberOfPricing: number;
+                    unitSize: number;
+                }, {
+                    code: string;
+                    id: string;
+                    name: string;
+                    dalilCode: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
+                    numberOfPricing?: number | undefined;
+                    limitNumberOfPricing?: number | undefined;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        getAll: {
+            query: z.ZodObject<{
+                name: z.ZodOptional<z.ZodString>;
+                code: z.ZodOptional<z.ZodString>;
+                dalilCode: z.ZodOptional<z.ZodString>;
+                orderBy: z.ZodOptional<z.ZodString>;
+                orderDirection: z.ZodOptional<z.ZodString>;
+                page: z.ZodDefault<z.ZodNumber>;
+                perPage: z.ZodOptional<z.ZodNumber>;
+                price: z.ZodOptional<z.ZodObject<{
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
+                }, "strip", z.ZodTypeAny, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                page: number;
+                code?: string | undefined;
+                name?: string | undefined;
+                dalilCode?: string | undefined;
+                price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                perPage?: number | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
+            }, {
+                code?: string | undefined;
+                name?: string | undefined;
+                dalilCode?: string | undefined;
+                price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                page?: number | undefined;
+                perPage?: number | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
+            }>;
+            method: "GET";
+            path: "/api/med-services";
+            responses: {
+                200: z.ZodObject<{
+                    data: z.ZodArray<z.ZodObject<{
+                        id: z.ZodString;
+                        name: z.ZodString;
+                        code: z.ZodString;
+                        dalilCode: z.ZodString;
+                        nationalCode: z.ZodString;
+                        price: z.ZodNumber;
+                        numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                        limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
+                        unitSize: z.ZodNumber;
+                    }, "strip", z.ZodTypeAny, {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        numberOfPricing: number;
+                        limitNumberOfPricing: number;
+                        unitSize: number;
+                    }, {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        unitSize: number;
+                        numberOfPricing?: number | undefined;
+                        limitNumberOfPricing?: number | undefined;
+                    }>, "many">;
+                    meta: z.ZodObject<{
+                        total: z.ZodNumber;
+                        lastPage: z.ZodNumber;
+                        currentPage: z.ZodNumber;
+                        perPage: z.ZodNumber;
+                        prev: z.ZodNullable<z.ZodNumber>;
+                        next: z.ZodNullable<z.ZodNumber>;
+                    }, "strip", z.ZodTypeAny, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }>;
+                }, "strip", z.ZodTypeAny, {
+                    data: {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        numberOfPricing: number;
+                        limitNumberOfPricing: number;
+                        unitSize: number;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
+                }, {
+                    data: {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        unitSize: number;
+                        numberOfPricing?: number | undefined;
+                        limitNumberOfPricing?: number | undefined;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        getAllByUser: {
+            query: z.ZodObject<{
+                name: z.ZodOptional<z.ZodString>;
+                code: z.ZodOptional<z.ZodString>;
+                dalilCode: z.ZodOptional<z.ZodString>;
+                orderBy: z.ZodOptional<z.ZodString>;
+                orderDirection: z.ZodOptional<z.ZodString>;
+                page: z.ZodDefault<z.ZodNumber>;
+                perPage: z.ZodOptional<z.ZodNumber>;
+                price: z.ZodOptional<z.ZodObject<{
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
+                }, "strip", z.ZodTypeAny, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                page: number;
+                code?: string | undefined;
+                name?: string | undefined;
+                dalilCode?: string | undefined;
+                price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                perPage?: number | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
+            }, {
+                code?: string | undefined;
+                name?: string | undefined;
+                dalilCode?: string | undefined;
+                price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                page?: number | undefined;
+                perPage?: number | undefined;
+                orderBy?: string | undefined;
+                orderDirection?: string | undefined;
+            }>;
+            method: "GET";
+            path: "/api/med-services/user";
+            responses: {
+                200: z.ZodObject<{
+                    data: z.ZodArray<z.ZodObject<{
+                        id: z.ZodString;
+                        name: z.ZodString;
+                        code: z.ZodString;
+                        dalilCode: z.ZodString;
+                        nationalCode: z.ZodString;
+                        price: z.ZodNumber;
+                        numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                        limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
+                        unitSize: z.ZodNumber;
+                    }, "strip", z.ZodTypeAny, {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        numberOfPricing: number;
+                        limitNumberOfPricing: number;
+                        unitSize: number;
+                    }, {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        unitSize: number;
+                        numberOfPricing?: number | undefined;
+                        limitNumberOfPricing?: number | undefined;
+                    }>, "many">;
+                    meta: z.ZodObject<{
+                        total: z.ZodNumber;
+                        lastPage: z.ZodNumber;
+                        currentPage: z.ZodNumber;
+                        perPage: z.ZodNumber;
+                        prev: z.ZodNullable<z.ZodNumber>;
+                        next: z.ZodNullable<z.ZodNumber>;
+                    }, "strip", z.ZodTypeAny, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }, {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    }>;
+                }, "strip", z.ZodTypeAny, {
+                    data: {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        numberOfPricing: number;
+                        limitNumberOfPricing: number;
+                        unitSize: number;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
+                }, {
+                    data: {
+                        code: string;
+                        id: string;
+                        name: string;
+                        dalilCode: string;
+                        nationalCode: string;
+                        price: number;
+                        unitSize: number;
+                        numberOfPricing?: number | undefined;
+                        limitNumberOfPricing?: number | undefined;
+                    }[];
+                    meta: {
+                        perPage: number;
+                        total: number;
+                        lastPage: number;
+                        currentPage: number;
+                        prev: number | null;
+                        next: number | null;
+                    };
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        getOne: {
+            pathParams: z.ZodObject<{
+                id: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                id: string;
+            }, {
+                id: string;
+            }>;
+            method: "GET";
+            path: "/api/med-services/:id";
+            responses: {
+                200: z.ZodObject<{
+                    id: z.ZodString;
+                    name: z.ZodString;
+                    code: z.ZodString;
+                    dalilCode: z.ZodString;
+                    nationalCode: z.ZodString;
+                    price: z.ZodNumber;
+                    numberOfPricing: z.ZodDefault<z.ZodNumber>;
+                    limitNumberOfPricing: z.ZodDefault<z.ZodNumber>;
+                    unitSize: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    code: string;
+                    id: string;
+                    name: string;
+                    dalilCode: string;
+                    nationalCode: string;
+                    price: number;
+                    numberOfPricing: number;
+                    limitNumberOfPricing: number;
+                    unitSize: number;
+                }, {
+                    code: string;
+                    id: string;
+                    name: string;
+                    dalilCode: string;
+                    nationalCode: string;
+                    price: number;
+                    unitSize: number;
+                    numberOfPricing?: number | undefined;
+                    limitNumberOfPricing?: number | undefined;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        remove: {
+            pathParams: z.ZodObject<{
+                id: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                id: string;
+            }, {
+                id: string;
+            }>;
+            method: "DELETE";
+            body: z.ZodAny;
+            path: "/api/med-services/:id";
+            responses: {
+                204: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        patchOne: {
+            pathParams: z.ZodObject<{
+                id: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                id: string;
+            }, {
+                id: string;
+            }>;
+            method: "PATCH";
+            body: z.ZodObject<{
+                price: z.ZodOptional<z.ZodNumber>;
+                unitSize: z.ZodOptional<z.ZodNumber>;
+            }, "strip", z.ZodTypeAny, {
+                price?: number | undefined;
+                unitSize?: number | undefined;
+            }, {
+                price?: number | undefined;
+                unitSize?: number | undefined;
+            }>;
+            path: "/api/med-services/:id";
+            responses: {
+                200: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
                 }>;
             };
             strictStatusCodes: true;
