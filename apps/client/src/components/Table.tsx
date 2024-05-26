@@ -96,6 +96,10 @@ export const Table = <T extends object>(props: Props<T>) => {
     if (props.onFilter) props.onFilter(columnFilters());
   };
 
+  const getIsFiltered = (columnId: string) => {
+    return columnFilters().find((item) => item.id === columnId) !== undefined;
+  };
+
   const onSelectRow = (row: Row<T>) => {
     row.toggleSelected();
     props.onSelect && props.onSelect(row.original);

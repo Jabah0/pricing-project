@@ -95,10 +95,12 @@ const Filter = (props: {
     <Popover.Root placement="bottom-end">
       <Popover.Trigger
         as={"button"}
-        class="flex items-center gap-2 w-full text-start hover:opacity-75 drop-shadow-lg px-2 group-hover:visible invisible"
+        class={`flex items-center gap-2 w-full text-start hover:opacity-75 drop-shadow-lg px-2 group-hover:visible ${props.filter ? "visible" : "invisible"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <FilterIcon class="text-gray-400" />
+        <FilterIcon
+          class={`${props.filter ? "text-primary" : "text-gray-400"}`}
+        />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
