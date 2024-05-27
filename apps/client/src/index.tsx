@@ -3,8 +3,8 @@ import { render } from "solid-js/web";
 import setupLocatorUI from "@locator/runtime";
 
 import "./index.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import App from "./App";
+import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { apiClient } from "./api/api-client";
 
 const queryClient = new QueryClient({
@@ -12,18 +12,18 @@ const queryClient = new QueryClient({
     queries: {
       onError: (error: any) => {
         if (error.status === 401) {
-          try {
-            apiClient.auth.refresh.query();
-          } catch (err) {
-            window.location.href = "/auth/login";
-          }
+          apiClient.auth.refresh.query().then((res: any) => {
+            if (res.status === 401) window.location.href = "/auth/login";
+          });
         }
       },
     },
     mutations: {
       onError: (error: any) => {
         if (error.status === 401) {
-          window.location.href = "/auth/login";
+          apiClient.auth.refresh.query().then((res: any) => {
+            if (res.status === 401) window.location.href = "/auth/login";
+          });
         }
       },
     },

@@ -6,7 +6,7 @@ export const ProfileLogoutButton = (props: { onClick?: () => void }) => {
   return (
     <button
       onClick={props.onClick}
-      class="text-white rounded-sm border border-gray-400 w-full h-[2.5rem] 
+      class="text-white rounded-sm border border-gray-700 w-full h-[2.5rem] 
       shadow-lg bg-backgroundSec hover:bg-opacity-40"
     >
       {locale.t("logout")}

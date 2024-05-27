@@ -9,6 +9,7 @@ async function main() {
   await prisma.user.deleteMany();
 
   for (let i = 1; i <= 75000; i++) {
+    console.log(i);
     await prisma.medService.create({
       data: {
         id: i.toString().padStart(5, '0'),
@@ -46,7 +47,7 @@ async function main() {
     });
   }
 
-  console.log(`Med services Created.`);
+  console.log(`Med services and Users Created.`);
 
   await prisma.$disconnect();
 }
