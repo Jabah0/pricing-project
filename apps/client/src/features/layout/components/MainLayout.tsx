@@ -25,39 +25,43 @@ export const MainLayout: ParentComponent = (props) => {
           <div class="flex justify-center">
             <LogoIcon class="drop-shadow-lg" />
           </div>
-          <div class="flex flex-col justify-center items-center gap-4 w-full">
-            <SidebarElement
-              path="/"
-              active={location.pathname === "/"}
-              title={locale.t("home")}
-              icon={HomeIcon}
-            />
-            <SidebarElement
-              active={location.pathname.includes("/services")}
-              path="/services"
-              title={locale.t("services")}
-              icon={MedicalServicesIcon}
-            />
-            <RoleGuard role={Roles.ADMIN}>
+          <div class="flex flex-col gap-4 h-full w-full justify-between">
+            <div class="flex flex-col justify-center items-center gap-4 w-full">
               <SidebarElement
-                active={location.pathname.includes("/users")}
-                path="/users"
-                title={locale.t("users")}
-                icon={UsersIcon}
+                path="/"
+                active={location.pathname === "/"}
+                title={locale.t("home")}
+                icon={HomeIcon}
               />
-            </RoleGuard>
-            <SidebarElement
-              active={location.pathname.includes("/profile")}
-              path="/profile"
-              title={locale.t("profile")}
-              icon={PersonFilledIcon}
-            />
-            <SidebarElement
-              active={location.pathname.includes("/settings")}
-              path="/settings"
-              title={locale.t("settings")}
-              icon={SettingsIcon}
-            />
+              <SidebarElement
+                active={location.pathname.includes("/services")}
+                path="/services"
+                title={locale.t("services")}
+                icon={MedicalServicesIcon}
+              />
+              <RoleGuard role={Roles.ADMIN}>
+                <SidebarElement
+                  active={location.pathname.includes("/users")}
+                  path="/users"
+                  title={locale.t("users")}
+                  icon={UsersIcon}
+                />
+              </RoleGuard>
+              <SidebarElement
+                active={location.pathname.includes("/profile")}
+                path="/profile"
+                title={locale.t("profile")}
+                icon={PersonFilledIcon}
+              />
+            </div>
+            <div class="flex flex-col justify-center items-center gap-4 w-full">
+              <SidebarElement
+                active={location.pathname.includes("/settings")}
+                path="/settings"
+                title={locale.t("settings")}
+                icon={SettingsIcon}
+              />
+            </div>
           </div>
         </div>
       </Sidebar>

@@ -24,11 +24,14 @@ export const MedServicesTable = () => {
     service.setServiceName(undefined);
     service.setServiceCode(undefined);
     service.setDalilCode(undefined);
+    service.setNationalCode(undefined);
     service.setServicePrice(undefined);
     filters.map((item) => {
       item.id === "name" && service.setServiceName(item.value as string);
       item.id === "code" && service.setServiceCode(item.value as string);
       item.id === "dalilCode" && service.setDalilCode(item.value as string);
+      item.id === "nationalCode" &&
+        service.setNationalCode(item.value as string);
       item.id === "price" &&
         service.setServicePrice(item.value as NumberFilter);
     });

@@ -30,9 +30,15 @@ function App() {
             <Route path="/" component={MainLayout}>
               <Route component={RouteGuard}>
                 <Route path="/" component={MedServiceList} />
+                <Route path="/services" component={MedServicesTable} />
               </Route>
-              <Route path="/users" component={UsersList} />
-              <Route path="/services" component={MedServicesTable} />
+              <Route
+                component={(props) => (
+                  <RouteGuard role="ADMIN">{props.children}</RouteGuard>
+                )}
+              >
+                <Route path="/users" component={UsersList} />
+              </Route>
             </Route>
             <Route path="/auth" component={AuthLayout}>
               <Route path="/login" component={Login} />

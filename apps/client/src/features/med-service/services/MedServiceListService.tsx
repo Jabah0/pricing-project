@@ -19,6 +19,7 @@ export const MedServiceListService = () => {
   const [serviceName, setServiceName] = createSignal<string>();
   const [serviceCode, setServiceCode] = createSignal<string>();
   const [dalilCode, setDalilCode] = createSignal<string>();
+  const [nationalCode, setNationalCode] = createSignal<string>();
   const [orderBy, setOrderBy] = createSignal<string>();
   const [orderDirection, setOrderDirection] = createSignal<"asc" | "desc">();
   const [servicePrice, setServicePrice] = createSignal<{
@@ -39,6 +40,7 @@ export const MedServiceListService = () => {
         serviceName(),
         serviceCode(),
         dalilCode(),
+        nationalCode(),
         servicePrice(),
         orderBy(),
         orderDirection(),
@@ -53,6 +55,9 @@ export const MedServiceListService = () => {
           },
           get dalilCode() {
             return dalilCode();
+          },
+          get nationalCode() {
+            return nationalCode();
           },
           get price() {
             return servicePrice();
@@ -87,6 +92,7 @@ export const MedServiceListService = () => {
             serviceName(),
             serviceCode(),
             dalilCode(),
+            nationalCode(),
             servicePrice(),
             orderBy(),
             orderDirection(),
@@ -98,6 +104,7 @@ export const MedServiceListService = () => {
           serviceName(),
           serviceCode(),
           dalilCode(),
+          nationalCode(),
           servicePrice(),
           orderBy(),
           orderDirection(),
@@ -109,6 +116,7 @@ export const MedServiceListService = () => {
             serviceName(),
             serviceCode(),
             dalilCode(),
+            nationalCode(),
             servicePrice(),
             orderBy(),
             orderDirection(),
@@ -143,6 +151,7 @@ export const MedServiceListService = () => {
             serviceName(),
             serviceCode(),
             dalilCode(),
+            nationalCode(),
             servicePrice(),
             orderBy(),
             orderDirection(),
@@ -184,6 +193,7 @@ export const MedServiceListService = () => {
             serviceName(),
             serviceCode(),
             dalilCode(),
+            nationalCode(),
             servicePrice(),
             orderBy(),
             orderDirection(),
@@ -211,6 +221,7 @@ export const MedServiceListService = () => {
           serviceName(),
           serviceCode(),
           dalilCode(),
+          nationalCode(),
           servicePrice(),
           orderBy(),
           orderDirection(),
@@ -220,6 +231,7 @@ export const MedServiceListService = () => {
           serviceName(),
           serviceCode(),
           dalilCode(),
+          nationalCode(),
           servicePrice(),
           orderBy(),
           orderDirection(),
@@ -247,6 +259,7 @@ export const MedServiceListService = () => {
       serviceName(),
       serviceCode(),
       dalilCode(),
+      nationalCode(),
       servicePrice(),
       orderBy(),
       orderDirection(),
@@ -261,6 +274,9 @@ export const MedServiceListService = () => {
         },
         get dalilCode() {
           return dalilCode();
+        },
+        get nationalCode() {
+          return nationalCode();
         },
         get price() {
           return servicePrice();
@@ -302,6 +318,7 @@ export const MedServiceListService = () => {
     serviceName,
     serviceCode,
     setDalilCode,
+    setNationalCode,
     setOrderBy,
     setOrderDirection,
     setIsMy,

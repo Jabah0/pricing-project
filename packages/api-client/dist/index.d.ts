@@ -539,6 +539,7 @@ export declare const contract: {
                 name: z.ZodOptional<z.ZodString>;
                 code: z.ZodOptional<z.ZodString>;
                 dalilCode: z.ZodOptional<z.ZodString>;
+                nationalCode: z.ZodOptional<z.ZodString>;
                 orderBy: z.ZodOptional<z.ZodString>;
                 orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodDefault<z.ZodNumber>;
@@ -570,6 +571,7 @@ export declare const contract: {
                 code?: string | undefined;
                 name?: string | undefined;
                 dalilCode?: string | undefined;
+                nationalCode?: string | undefined;
                 price?: {
                     equals?: number | undefined;
                     not?: number | undefined;
@@ -585,6 +587,7 @@ export declare const contract: {
                 code?: string | undefined;
                 name?: string | undefined;
                 dalilCode?: string | undefined;
+                nationalCode?: string | undefined;
                 price?: {
                     equals?: number | undefined;
                     not?: number | undefined;
@@ -704,6 +707,7 @@ export declare const contract: {
                 name: z.ZodOptional<z.ZodString>;
                 code: z.ZodOptional<z.ZodString>;
                 dalilCode: z.ZodOptional<z.ZodString>;
+                nationalCode: z.ZodOptional<z.ZodString>;
                 orderBy: z.ZodOptional<z.ZodString>;
                 orderDirection: z.ZodOptional<z.ZodString>;
                 page: z.ZodDefault<z.ZodNumber>;
@@ -735,6 +739,7 @@ export declare const contract: {
                 code?: string | undefined;
                 name?: string | undefined;
                 dalilCode?: string | undefined;
+                nationalCode?: string | undefined;
                 price?: {
                     equals?: number | undefined;
                     not?: number | undefined;
@@ -750,6 +755,7 @@ export declare const contract: {
                 code?: string | undefined;
                 name?: string | undefined;
                 dalilCode?: string | undefined;
+                nationalCode?: string | undefined;
                 price?: {
                     equals?: number | undefined;
                     not?: number | undefined;

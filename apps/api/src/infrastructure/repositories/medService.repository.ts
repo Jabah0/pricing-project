@@ -38,6 +38,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    nationalCode: string,
     orderBy: string,
     orderDirection: string,
     page: number,
@@ -64,6 +65,10 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
           },
           dalilCode: {
             contains: dalilCode,
+            mode: 'insensitive',
+          },
+          nationalCode: {
+            contains: nationalCode,
             mode: 'insensitive',
           },
           numberOfPricing: {
@@ -104,6 +109,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     name: string,
     code: string,
     dalilCode: string,
+    nationalCode: string,
     orderBy: string,
     orderDirection: string,
     page: number,
@@ -132,6 +138,10 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
             },
             dalilCode: {
               contains: dalilCode,
+              mode: 'insensitive',
+            },
+            nationalCode: {
+              contains: nationalCode,
               mode: 'insensitive',
             },
           },

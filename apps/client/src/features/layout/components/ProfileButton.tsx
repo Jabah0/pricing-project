@@ -37,7 +37,7 @@ export const ProfileButton = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           class="bg-backPrimary border border-gray-600 
-          rounded-lg my-6 w-[12rem] z-50"
+          rounded-sm my-6 w-[12rem] z-50"
         >
           <div class="flex flex-col gap-3 justify-center items-center my-6 mx-4">
             <div class="flex flex-col gap-3 justify-center items-center">
@@ -55,7 +55,7 @@ export const ProfileButton = () => {
               </div>
             </div>
             <button
-              class="text-white rounded-lg border border-gray-400 w-full h-[2.5rem] 
+              class="text-white rounded-sm border border-gray-400 w-full h-[2.5rem] 
               shadow-lg bg-backgroundSec hover:bg-opacity-40"
             >
               {locale.t("manageAccount")}

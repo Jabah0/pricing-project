@@ -20,7 +20,7 @@ export const SidebarElement = (props: Props) => {
           ${props.active ? "bg-backgroundSec drop-shadow-lg" : "bg-transparent"}`}
         >
           <props.icon
-            class={`w-6 h-6 group-hover:text-iconStroke
+            class={`w-7 h-7 group-hover:text-iconStroke
             ${props.active ? "text-iconStroke" : "text-white"}
           `}
           />

@@ -31,6 +31,13 @@ export const Columns: ColumnDef<MedService>[] = [
     size: 6 / 1,
   },
   {
+    id: "nationalCode",
+    accessorKey: "nationalCode",
+    header: "National Code",
+    meta: { title: "National Code", type: "string" },
+    size: 6 / 1,
+  },
+  {
     id: "price",
     accessorKey: "price",
     header: "Price",
