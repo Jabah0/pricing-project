@@ -17,10 +17,10 @@ export const UserSchema = z.object({
   fullName: z.string(),
   role: RolesSchema,
   password: z.string(),
-  createDate: z.date(),
-  updatedDate: z.date(),
-  lastLogin: z.date(),
-  hashRefreshToken: z.string(),
+  createDate: z.date().optional(),
+  updatedDate: z.date().optional(),
+  lastLogin: z.date().optional(),
+  hashRefreshToken: z.string().optional(),
 });
 
 const UserWithoutPasswordSchema = UserSchema.omit({ password: true });

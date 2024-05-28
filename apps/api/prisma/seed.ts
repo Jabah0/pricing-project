@@ -30,7 +30,6 @@ async function main() {
       fullName: 'Mohammad Jabah',
       username: `Jabah`,
       role: 'ADMIN',
-      hashRefreshToken: '',
       password: await bcrypt.hash('password', 10),
     },
   });
@@ -40,7 +39,6 @@ async function main() {
       data: {
         fullName: `User ${i.toString()}`,
         username: `user${i.toString()}`,
-        hashRefreshToken: '',
         password: await bcrypt.hash('password', 10),
         role: 'USER',
       },

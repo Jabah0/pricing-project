@@ -1,13 +1,12 @@
+import { createSignal } from "solid-js";
+import toast from "solid-toast";
+import { contract } from "api-contract";
 import { apiClient } from "@/api/api-client";
 import { useLocale } from "@/features/locale/locale.context";
 import { ErrorToast } from "@/toasts/ErrorToast";
 import { SuccessToast } from "@/toasts/SuccessToast";
-import { useQueryClient } from "@tanstack/solid-query";
+import { useQueryClient, InfiniteData } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
-import { contract } from "api-contract";
-import { createSignal } from "solid-js";
-import toast from "solid-toast";
-import { InfiniteData } from "@tanstack/solid-query";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
@@ -31,20 +30,32 @@ export const MedServiceListService = () => {
     lte?: number;
   }>();
 
+  const ServiceQueryKey = () => [
+    "services",
+    serviceName(),
+    serviceCode(),
+    dalilCode(),
+    nationalCode(),
+    servicePrice(),
+    orderBy(),
+    orderDirection(),
+  ];
+  const MyServiceQueryKey = () => [
+    "myServices",
+    serviceName(),
+    serviceCode(),
+    dalilCode(),
+    nationalCode(),
+    servicePrice(),
+    orderBy(),
+    orderDirection(),
+  ];
+
   const queryClient = useQueryClient();
 
   const myServicesQuery =
     apiClient.medServices.getAllByUser.createInfiniteQuery(
-      () => [
-        "myServices",
-        serviceName(),
-        serviceCode(),
-        dalilCode(),
-        nationalCode(),
-        servicePrice(),
-        orderBy(),
-        orderDirection(),
-      ],
+      MyServiceQueryKey,
       ({ pageParam = 1 }) => ({
         query: {
           get name() {
@@ -87,40 +98,14 @@ export const MedServiceListService = () => {
         newService
       ): Promise<{ previousData: MedServices | undefined }> => {
         await queryClient.cancelQueries({
-          queryKey: [
-            "services",
-            serviceName(),
-            serviceCode(),
-            dalilCode(),
-            nationalCode(),
-            servicePrice(),
-            orderBy(),
-            orderDirection(),
-          ],
+          queryKey: ServiceQueryKey(),
         });
 
-        const previousData = queryClient.getQueryData<MedServices>([
-          "services",
-          serviceName(),
-          serviceCode(),
-          dalilCode(),
-          nationalCode(),
-          servicePrice(),
-          orderBy(),
-          orderDirection(),
-        ]);
+        const previousData =
+          queryClient.getQueryData<MedServices>(ServiceQueryKey());
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
-          [
-            "services",
-            serviceName(),
-            serviceCode(),
-            dalilCode(),
-            nationalCode(),
-            servicePrice(),
-            orderBy(),
-            orderDirection(),
-          ],
+          ServiceQueryKey(),
           (old) => {
             if (!old) return undefined;
 
@@ -146,16 +131,7 @@ export const MedServiceListService = () => {
         );
 
         queryClient.setQueryData<InfiniteData<MedServices>>(
-          [
-            "services",
-            serviceName(),
-            serviceCode(),
-            dalilCode(),
-            nationalCode(),
-            servicePrice(),
-            orderBy(),
-            orderDirection(),
-          ],
+          ServiceQueryKey(),
           (old) => {
             if (!old) return undefined;
 
@@ -187,19 +163,7 @@ export const MedServiceListService = () => {
           previousData: MedServices | undefined;
         };
 
-        queryClient.setQueryData(
-          [
-            "services",
-            serviceName(),
-            serviceCode(),
-            dalilCode(),
-            nationalCode(),
-            servicePrice(),
-            orderBy(),
-            orderDirection(),
-          ],
-          typedContext.previousData
-        );
+        queryClient.setQueryData(ServiceQueryKey(), typedContext.previousData);
         toast.custom((t) => (
           <ErrorToast
             onDismiss={() => toast.dismiss(t.id)}
@@ -216,26 +180,8 @@ export const MedServiceListService = () => {
         ));
       },
       onSettled: () => {
-        queryClient.invalidateQueries([
-          "services",
-          serviceName(),
-          serviceCode(),
-          dalilCode(),
-          nationalCode(),
-          servicePrice(),
-          orderBy(),
-          orderDirection(),
-        ]);
-        queryClient.invalidateQueries([
-          "myServices",
-          serviceName(),
-          serviceCode(),
-          dalilCode(),
-          nationalCode(),
-          servicePrice(),
-          orderBy(),
-          orderDirection(),
-        ]);
+        queryClient.invalidateQueries(ServiceQueryKey());
+        queryClient.invalidateQueries(MyServiceQueryKey());
       },
     });
 
@@ -254,16 +200,7 @@ export const MedServiceListService = () => {
   };
 
   const allServicesQuery = apiClient.medServices.getAll.createInfiniteQuery(
-    () => [
-      "services",
-      serviceName(),
-      serviceCode(),
-      dalilCode(),
-      nationalCode(),
-      servicePrice(),
-      orderBy(),
-      orderDirection(),
-    ],
+    ServiceQueryKey,
     ({ pageParam = 1 }) => ({
       query: {
         get name() {

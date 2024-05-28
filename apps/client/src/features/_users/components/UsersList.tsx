@@ -31,8 +31,10 @@ export const UsersList = () => {
   const [username, setUsername] = createSignal<string>();
   const [fullName, setFullName] = createSignal<string>();
 
+  const QueryKey = () => ["users", role(), username(), fullName()];
+
   const usersQuery = apiClient.users.getAll.createInfiniteQuery(
-    () => ["users", role(), username(), fullName()],
+    QueryKey,
     ({ pageParam = 1 }) => ({
       query: {
         page: pageParam,
@@ -61,12 +63,12 @@ export const UsersList = () => {
   const addUserMutation = apiClient.users.create.createMutation({
     onMutate: async (newUser): Promise<{ previousData: Users | undefined }> => {
       await queryClient.cancelQueries({
-        queryKey: ["users"],
+        queryKey: QueryKey(),
       });
 
-      const previousData = queryClient.getQueryData<Users>(["users"]);
+      const previousData = queryClient.getQueryData<Users>(QueryKey());
 
-      queryClient.setQueryData<InfiniteData<Users>>(["users"], (old) => {
+      queryClient.setQueryData<InfiniteData<Users>>(QueryKey(), (old) => {
         if (!old) return undefined;
 
         old.pages[old.pages.length - 1].body.data.push({
@@ -74,10 +76,6 @@ export const UsersList = () => {
           username: newUser.body.username,
           fullName: newUser.body.fullName,
           role: newUser.body.role,
-          hashRefreshToken: "",
-          lastLogin: new Date(2024, 1, 1),
-          createDate: new Date(2024, 1, 1),
-          updatedDate: new Date(2024, 1, 1),
         });
 
         return {
@@ -92,7 +90,7 @@ export const UsersList = () => {
         previousData: Users | undefined;
       };
 
-      queryClient.setQueryData(["users"], typedContext.previousData);
+      queryClient.setQueryData(QueryKey(), typedContext.previousData);
 
       toast.custom(
         (t) => (

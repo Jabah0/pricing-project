@@ -12,10 +12,10 @@ exports.UserSchema = zod_1.z.object({
     fullName: zod_1.z.string(),
     role: exports.RolesSchema,
     password: zod_1.z.string(),
-    createDate: zod_1.z.date(),
-    updatedDate: zod_1.z.date(),
-    lastLogin: zod_1.z.date(),
-    hashRefreshToken: zod_1.z.string(),
+    createDate: zod_1.z.date().optional(),
+    updatedDate: zod_1.z.date().optional(),
+    lastLogin: zod_1.z.date().optional(),
+    hashRefreshToken: zod_1.z.string().optional(),
 });
 var UserWithoutPasswordSchema = exports.UserSchema.omit({ password: true });
 exports.MedServiceSchema = zod_1.z.object({

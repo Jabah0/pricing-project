@@ -27,7 +27,7 @@ model User {
   createDate        DateTime  @default(now())
   updatedDate       DateTime  @updatedAt
   lastLogin         DateTime?
-  hashRefreshToken  String
+  hashRefreshToken  String?
   medservcies       UserMedServices[]
 }
 
