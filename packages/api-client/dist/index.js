@@ -171,6 +171,16 @@ exports.contract = c.router({
                     lte: zod_1.z.coerce.number().optional(),
                 })
                     .optional(),
+                unitSize: zod_1.z
+                    .object({
+                    equals: zod_1.z.coerce.number().optional(),
+                    not: zod_1.z.coerce.number().optional(),
+                    gt: zod_1.z.coerce.number().optional(),
+                    gte: zod_1.z.coerce.number().optional(),
+                    lt: zod_1.z.coerce.number().optional(),
+                    lte: zod_1.z.coerce.number().optional(),
+                })
+                    .optional(),
             }),
             responses: {
                 200: zod_1.z.object({
@@ -199,6 +209,16 @@ exports.contract = c.router({
                 page: zod_1.z.coerce.number().default(1),
                 perPage: zod_1.z.coerce.number().optional(),
                 price: zod_1.z
+                    .object({
+                    equals: zod_1.z.coerce.number().optional(),
+                    not: zod_1.z.coerce.number().optional(),
+                    gt: zod_1.z.coerce.number().optional(),
+                    gte: zod_1.z.coerce.number().optional(),
+                    lt: zod_1.z.coerce.number().optional(),
+                    lte: zod_1.z.coerce.number().optional(),
+                })
+                    .optional(),
+                unitSize: zod_1.z
                     .object({
                     equals: zod_1.z.coerce.number().optional(),
                     not: zod_1.z.coerce.number().optional(),

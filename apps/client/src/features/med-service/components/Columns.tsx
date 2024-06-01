@@ -1,3 +1,4 @@
+import { EditableCell } from "@/components/Table";
 import { ColumnDef } from "@tanstack/solid-table";
 import { MedService } from "api-contract";
 
@@ -8,6 +9,7 @@ export const Columns: ColumnDef<MedService>[] = [
     header: "ID",
     meta: { title: "ID", type: "string" },
     size: 6 / 1,
+    enableColumnFilter: false,
   },
   {
     id: "name",
@@ -44,6 +46,12 @@ export const Columns: ColumnDef<MedService>[] = [
     meta: { title: "Price", type: "number" },
     size: 6 / 1,
     enableColumnFilter: true,
+    cell: ({ row, getValue }) => (
+      <EditableCell
+        row={row}
+        value={getValue() as number | string | string[]}
+      />
+    ),
   },
   {
     id: "unitSize",
@@ -51,5 +59,11 @@ export const Columns: ColumnDef<MedService>[] = [
     header: "Unit Size",
     meta: { title: "Unit Size", type: "number" },
     size: 6 / 1,
+    cell: ({ row, getValue }) => (
+      <EditableCell
+        row={row}
+        value={getValue() as number | string | string[]}
+      />
+    ),
   },
 ];

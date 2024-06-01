@@ -566,6 +566,28 @@ export declare const contract: {
                     lt?: number | undefined;
                     lte?: number | undefined;
                 }>>;
+                unitSize: z.ZodOptional<z.ZodObject<{
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
+                }, "strip", z.ZodTypeAny, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
@@ -573,6 +595,14 @@ export declare const contract: {
                 dalilCode?: string | undefined;
                 nationalCode?: string | undefined;
                 price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                unitSize?: {
                     equals?: number | undefined;
                     not?: number | undefined;
                     gt?: number | undefined;
@@ -589,6 +619,14 @@ export declare const contract: {
                 dalilCode?: string | undefined;
                 nationalCode?: string | undefined;
                 price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                unitSize?: {
                     equals?: number | undefined;
                     not?: number | undefined;
                     gt?: number | undefined;
@@ -734,6 +772,28 @@ export declare const contract: {
                     lt?: number | undefined;
                     lte?: number | undefined;
                 }>>;
+                unitSize: z.ZodOptional<z.ZodObject<{
+                    equals: z.ZodOptional<z.ZodNumber>;
+                    not: z.ZodOptional<z.ZodNumber>;
+                    gt: z.ZodOptional<z.ZodNumber>;
+                    gte: z.ZodOptional<z.ZodNumber>;
+                    lt: z.ZodOptional<z.ZodNumber>;
+                    lte: z.ZodOptional<z.ZodNumber>;
+                }, "strip", z.ZodTypeAny, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }, {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                }>>;
             }, "strip", z.ZodTypeAny, {
                 page: number;
                 code?: string | undefined;
@@ -741,6 +801,14 @@ export declare const contract: {
                 dalilCode?: string | undefined;
                 nationalCode?: string | undefined;
                 price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                unitSize?: {
                     equals?: number | undefined;
                     not?: number | undefined;
                     gt?: number | undefined;
@@ -757,6 +825,14 @@ export declare const contract: {
                 dalilCode?: string | undefined;
                 nationalCode?: string | undefined;
                 price?: {
+                    equals?: number | undefined;
+                    not?: number | undefined;
+                    gt?: number | undefined;
+                    gte?: number | undefined;
+                    lt?: number | undefined;
+                    lte?: number | undefined;
+                } | undefined;
+                unitSize?: {
                     equals?: number | undefined;
                     not?: number | undefined;
                     gt?: number | undefined;

@@ -17,6 +17,7 @@ const paginate: PaginateFunction = paginator({ perPage: 30 });
 type UserMedServiceResult = {
   medService: MedService;
   price: number;
+  unitSize: number;
 };
 
 @Injectable()
@@ -44,17 +45,20 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     page: number,
     perPage?: number,
     priceFilter?: PriceFilter,
+    unitSizeFilter?: PriceFilter,
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
 
     const price = priceFilter ? priceFilter : undefined;
+    const unitSize = unitSizeFilter ? unitSizeFilter : undefined;
 
     return paginate(
       this.prisma.medService,
       {
         where: {
           price,
+          unitSize,
           name: {
             contains: name,
             mode: 'insensitive',
@@ -115,11 +119,13 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     page: number,
     perPage?: number,
     priceFilter?: PriceFilter,
+    unitSizeFilter?: PriceFilter,
   ): Promise<PaginatedResult<MedService>> {
     const sortOrder = orderDirection === 'desc' ? 'desc' : 'asc';
     const sortBy = orderBy ? orderBy : 'price';
 
     const price = priceFilter ? priceFilter : undefined;
+    const unitSize = unitSizeFilter ? unitSizeFilter : undefined;
 
     const result: PaginatedResult<UserMedServiceResult> = await paginate(
       this.prisma.userMedServices,
@@ -127,6 +133,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         where: {
           userId,
           price: price,
+          unitSize: unitSize,
           medService: {
             name: {
               contains: name,
@@ -155,10 +162,10 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
               dalilCode: true,
               nationalCode: true,
               numberOfPricing: true,
-              unitSize: true,
             },
           },
           price: true,
+          unitSize: true,
         } as Prisma.UserMedServicesSelect,
         orderBy:
           sortBy === 'price' || sortBy === 'unitSize'
@@ -186,7 +193,7 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
             code: item.medService.code,
             nationalCode: item.medService.nationalCode,
             numberOfPricing: item.medService.numberOfPricing,
-            unitSize: item.medService.unitSize,
+            unitSize: item.unitSize,
             price: item.price,
           }) as MedService,
       ),
@@ -235,6 +242,11 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     serviceId: string,
     updateBody: Partial<MedService>,
   ): Promise<MedService> {
+    const { price, unitSize } = updateBody;
+    const service = await this.prisma.medService.findUnique({
+      where: { id: serviceId },
+    });
+
     const updatedService = await this.prisma.medService.update({
       where: { id: serviceId },
       data: {
@@ -242,13 +254,15 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
         users: {
           upsert: {
             create: {
-              price: updateBody.price,
+              price: price ? price : service.price,
+              unitSize: unitSize ? unitSize : service.unitSize,
               user: {
                 connect: { id: userId },
               },
             },
             update: {
-              price: updateBody.price,
+              price,
+              unitSize,
             },
             where: {
               medServiceId_userId: {

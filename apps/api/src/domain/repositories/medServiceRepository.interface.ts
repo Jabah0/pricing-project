@@ -24,6 +24,7 @@ export interface MedServiceRepository {
     page: number,
     perPage?: number,
     priceFilter?: PriceFilter,
+    unitSize?: PriceFilter,
   ): Promise<PaginatedResult<MedService>>;
 
   findByUser(
@@ -37,6 +38,7 @@ export interface MedServiceRepository {
     page: number,
     perPage?: number,
     price?: PriceFilter,
+    unitSize?: PriceFilter,
   ): Promise<PaginatedResult<MedService>>;
 
   findById(id: string): Promise<MedService>;

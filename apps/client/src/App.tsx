@@ -2,7 +2,6 @@ import "./App.css";
 
 import { Route, Router } from "@solidjs/router";
 import { MainLayout } from "./features/layout/components/MainLayout";
-import { MedServiceList } from "./features/med-service/components/MedServiceList";
 import { Match, Switch, createSignal, onMount } from "solid-js";
 import { locale } from "./features/locale/locale.config";
 import { LocaleProvider } from "./features/locale/LocaleProvider";
@@ -12,7 +11,8 @@ import { Login } from "./features/auth/pages/Login";
 import { UsersList } from "./features/_users/components/UsersList";
 import { RouteGuard } from "./features/auth/components/RouteGuard";
 import { DotsRotateIcon } from "./assets/icons/DotsRotateIcon";
-import { MedServicesTable } from "./features/med-service/components/MedServicesTable";
+import { MedServicesList } from "./features/med-service/components/MedServicesList";
+import { Home } from "./features/home/components/Home";
 
 function App() {
   const [loaded, setLoaded] = createSignal(false);
@@ -29,8 +29,8 @@ function App() {
           <Router>
             <Route path="/" component={MainLayout}>
               <Route component={RouteGuard}>
-                <Route path="/" component={MedServiceList} />
-                <Route path="/services" component={MedServicesTable} />
+                <Route path="/" component={Home} />
+                <Route path="/services" component={MedServicesList} />
               </Route>
               <Route
                 component={(props) => (

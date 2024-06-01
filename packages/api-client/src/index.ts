@@ -165,7 +165,6 @@ export const contract = c.router(
           201: MedServiceSchema,
         },
       },
-
       getAll: {
         method: "GET",
         path: "/med-services",
@@ -179,6 +178,16 @@ export const contract = c.router(
           page: z.coerce.number().default(1),
           perPage: z.coerce.number().optional(),
           price: z
+            .object({
+              equals: z.coerce.number().optional(),
+              not: z.coerce.number().optional(),
+              gt: z.coerce.number().optional(),
+              gte: z.coerce.number().optional(),
+              lt: z.coerce.number().optional(),
+              lte: z.coerce.number().optional(),
+            })
+            .optional(),
+          unitSize: z
             .object({
               equals: z.coerce.number().optional(),
               not: z.coerce.number().optional(),
@@ -217,6 +226,16 @@ export const contract = c.router(
           page: z.coerce.number().default(1),
           perPage: z.coerce.number().optional(),
           price: z
+            .object({
+              equals: z.coerce.number().optional(),
+              not: z.coerce.number().optional(),
+              gt: z.coerce.number().optional(),
+              gte: z.coerce.number().optional(),
+              lt: z.coerce.number().optional(),
+              lte: z.coerce.number().optional(),
+            })
+            .optional(),
+          unitSize: z
             .object({
               equals: z.coerce.number().optional(),
               not: z.coerce.number().optional(),

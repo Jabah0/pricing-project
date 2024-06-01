@@ -7,6 +7,7 @@ import { ErrorToast } from "@/toasts/ErrorToast";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient, InfiniteData } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
+import { NumberFilter } from "@/components/Table";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
@@ -21,14 +22,8 @@ export const MedServiceListService = () => {
   const [nationalCode, setNationalCode] = createSignal<string>();
   const [orderBy, setOrderBy] = createSignal<string>();
   const [orderDirection, setOrderDirection] = createSignal<"asc" | "desc">();
-  const [servicePrice, setServicePrice] = createSignal<{
-    equal?: number;
-    not?: number;
-    gt?: number;
-    gte?: number;
-    lt?: number;
-    lte?: number;
-  }>();
+  const [servicePrice, setServicePrice] = createSignal<NumberFilter>();
+  const [serviceUnitSize, setServiceUnitSize] = createSignal<NumberFilter>();
 
   const ServiceQueryKey = () => [
     "services",
@@ -37,6 +32,7 @@ export const MedServiceListService = () => {
     dalilCode(),
     nationalCode(),
     servicePrice(),
+    serviceUnitSize(),
     orderBy(),
     orderDirection(),
   ];
@@ -47,6 +43,7 @@ export const MedServiceListService = () => {
     dalilCode(),
     nationalCode(),
     servicePrice(),
+    serviceUnitSize(),
     orderBy(),
     orderDirection(),
   ];
@@ -72,6 +69,9 @@ export const MedServiceListService = () => {
           },
           get price() {
             return servicePrice();
+          },
+          get unitSize() {
+            return serviceUnitSize();
           },
           get orderBy() {
             return orderBy();
@@ -192,6 +192,16 @@ export const MedServiceListService = () => {
     });
   };
 
+  const onUpdateService = (
+    id: string,
+    body?: Partial<{ price: number; unitSize: number }>
+  ) => {
+    updateMedServiceMutation.mutate({
+      params: { id },
+      body: { ...body },
+    });
+  };
+
   const onUpdateServiceUnit = (id: string, unitSize: number) => {
     updateMedServiceMutation.mutate({
       params: { id },
@@ -217,6 +227,9 @@ export const MedServiceListService = () => {
         },
         get price() {
           return servicePrice();
+        },
+        get unitSize() {
+          return serviceUnitSize();
         },
         get orderBy() {
           return orderBy();
@@ -248,6 +261,7 @@ export const MedServiceListService = () => {
   const servicesQuery = () => (isMy() ? myServicesQuery : allServicesQuery);
 
   return {
+    onUpdateService,
     onUpdateServicePrice,
     onUpdateServiceUnit,
     setServiceName,
@@ -262,6 +276,8 @@ export const MedServiceListService = () => {
     isMy,
     servicePrice,
     setServicePrice,
+    serviceUnitSize,
+    setServiceUnitSize,
     servicesQuery,
     servicesData,
   };

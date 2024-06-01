@@ -43,6 +43,7 @@ export class MedServiceController {
           page,
           perPage,
           price,
+          unitSize,
         },
       }) => {
         const users = await this.getMedServicesUseCaseProxy
@@ -58,6 +59,7 @@ export class MedServiceController {
             page,
             perPage,
             price,
+            unitSize,
           );
         return {
           status: 200,
@@ -83,6 +85,7 @@ export class MedServiceController {
           page,
           perPage,
           price,
+          unitSize,
         },
       }) => {
         const users = await this.getUserMedServicesUseCaseProxy
@@ -98,6 +101,7 @@ export class MedServiceController {
             page,
             perPage,
             price,
+            unitSize,
           );
         return {
           status: 200,

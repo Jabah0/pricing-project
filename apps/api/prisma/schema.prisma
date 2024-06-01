@@ -51,7 +51,7 @@ model UserMedServices {
   user              User        @relation(fields: [userId], references: [id])
   createDate        DateTime    @default(now())
   updatedDate       DateTime    @updatedAt
-  price             Int
+  price             Int         
   unitSize          Int         @default(0)
 
   @@id([medServiceId, userId])

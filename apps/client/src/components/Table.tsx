@@ -28,15 +28,12 @@ import { ColumnsIcon } from "@/assets/icons/ColumnsIcon";
 import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
 import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
 import { FilterIcon } from "@/assets/icons/FilterIcon";
-
-type Meta = {
-  title: string;
-  type: string;
-  options?: { value: string; label: string }[];
-};
+import { EditIcon } from "@/assets/icons/EditIcon";
+import { EditFeature, type EditState } from "./solid-table";
+import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 
 type Props<T> = {
-  columns: Array<ColumnDef<T, Meta>>;
+  columns: Array<ColumnDef<T>>;
   data: Array<T>;
   isFetching?: boolean;
   isFetchingNextPage?: boolean;
@@ -45,6 +42,8 @@ type Props<T> = {
   onSort?: (sortBy?: string, sortDirection?: "asc" | "desc") => void;
   onFilter?: (filters: ColumnFiltersState) => void;
   onSelect?: (row: T) => void;
+  onUpdate?: (values: EditState<T>) => void;
+  getRowId?: (row: T) => string;
 };
 
 export type NumberFilter = {
@@ -61,10 +60,69 @@ type ColumnsFilter = {
   value: string | number | NumberFilter | undefined;
 };
 
+const EditCell = <TData extends object>(props: {
+  row: Row<TData>;
+  onUpdate: ((data: EditState<TData>) => void) | undefined;
+}) => (
+  <div class="flex gap-2 items-center justify-center">
+    {!props.row.getIsEditing() ? (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          props.row.toggleEdit();
+        }}
+        class="flex items-center justify-center bg-backgroundSec 
+        drop-shadow-lg h-6 w-6 border border-gray-700"
+      >
+        <EditIcon class="text-yellow-600" />
+      </button>
+    ) : (
+      <>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            const editValues = props.row.getEditValues();
+            props.onUpdate && editValues && props.onUpdate(editValues);
+            props.row.toggleEdit();
+          }}
+          class="flex items-center justify-center bg-backgroundSec 
+          drop-shadow-lg h-6 w-6 border border-gray-700"
+        >
+          <ConfirmIcon class="text-green-700" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            props.row.toggleEdit();
+          }}
+          class="flex items-center justify-center bg-backgroundSec 
+          drop-shadow-lg h-6 w-6 border border-gray-700"
+        >
+          <CancelIcon class="text-red-700" />
+        </button>
+      </>
+    )}
+  </div>
+);
+
 export const Table = <T extends object>(props: Props<T>) => {
   const [sorting, setSorting] = createSignal<SortingState>([]);
   const [columnFilters, setColumnFilters] = createSignal<ColumnsFilter[]>([]);
   const [rowSelection, setRowSelection] = createSignal<RowSelectionState>({});
+  const [rowEdit, setRowEdit] = createSignal<EditState<T>[]>([]);
+
+  const editColumn: ColumnDef<T> = {
+    id: "action",
+    header: "",
+    enableColumnFilter: false,
+    enableSorting: false,
+    cell: ({ row }) => <EditCell onUpdate={props.onUpdate} row={row} />,
+    meta: {
+      title: "Action",
+      type: "string",
+    },
+    size: 6 / 1,
+  };
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
@@ -81,6 +139,8 @@ export const Table = <T extends object>(props: Props<T>) => {
 
   const handleFiltering = (newFilter: ColumnsFilter) => {
     setColumnFilters((pre) => {
+      if (!newFilter.value || Number.isNaN(newFilter.value))
+        return pre.filter((item) => item.id !== newFilter.id);
       if (!pre.find((item) => item.id === newFilter.id))
         return [...pre, newFilter];
       return pre.map((item) => {
@@ -96,21 +156,18 @@ export const Table = <T extends object>(props: Props<T>) => {
     if (props.onFilter) props.onFilter(columnFilters());
   };
 
-  const getIsFiltered = (columnId: string) => {
-    return columnFilters().find((item) => item.id === columnId) !== undefined;
-  };
-
   const onSelectRow = (row: Row<T>) => {
     row.toggleSelected();
     props.onSelect && props.onSelect(row.original);
   };
 
   const table = createSolidTable({
+    _features: [EditFeature],
     get data() {
       return props.data;
     },
     get columns() {
-      return props.columns;
+      return props.onUpdate ? [...props.columns, editColumn] : props.columns;
     },
     state: {
       get sorting() {
@@ -119,7 +176,12 @@ export const Table = <T extends object>(props: Props<T>) => {
       get rowSelection() {
         return rowSelection();
       },
+      get edit() {
+        return rowEdit();
+      },
     },
+    getRowId: props.getRowId,
+    onEditChange: setRowEdit,
     onSortingChange: (newSorting) => handleSorting(newSorting),
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
@@ -178,6 +240,7 @@ export const Table = <T extends object>(props: Props<T>) => {
                               header.column.columnDef.header,
                               header.getContext()
                             )}
+                            isSortable={header.column.getCanSort()}
                             toggleSort={() => header.column.toggleSorting()}
                             setFilter={(val) => {
                               handleFiltering({
@@ -194,6 +257,7 @@ export const Table = <T extends object>(props: Props<T>) => {
                             filterOptions={
                               header.column.columnDef.meta?.options
                             }
+                            isFilterable={header.column.getCanFilter()}
                           />
                         </th>
                       );
@@ -209,8 +273,8 @@ export const Table = <T extends object>(props: Props<T>) => {
                 <tr
                   class={`h-10 border-y border-y-background
                   hover:bg-backgroundSec
-                  ${row.getIsSelected() ? "bg-opacity-75" : ""}
-                  ${props.onSelect ? "cursor-pointer" : ""}
+                  ${row.getIsSelected() && "bg-opacity-75"}
+                  ${props.onSelect && "cursor-pointer"}
                   `}
                   onClick={() => onSelectRow(row)}
                 >
@@ -235,7 +299,7 @@ export const Table = <T extends object>(props: Props<T>) => {
           </div>
         </Show>
         <Show when={props.isFetchingNextPage}>
-          <div class="flex justify-center h-full w-full">
+          <div class="flex justify-center w-full">
             <DotsRotateIcon class="text-primary w-12 h-12" />
           </div>
         </Show>
@@ -342,3 +406,23 @@ const TableContext = (props: {
     </div>
   );
 };
+
+export const EditableCell = (props: {
+  row: Row<any>;
+  value: string | number | string[];
+}) => (
+  <div class="w-full">
+    {props.row.getIsEditing() ? (
+      <input
+        class="flex bg-backgroundSec border border-gray-600 px-2 w-20 drop-shadow-lg"
+        type="number"
+        value={props.value}
+        onInput={(e) => {
+          props.row.changeEdit({ price: parseInt(e.target.value) });
+        }}
+      />
+    ) : (
+      <p>{props.value}</p>
+    )}
+  </div>
+);

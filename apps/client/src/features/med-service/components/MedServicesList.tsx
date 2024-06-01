@@ -3,8 +3,10 @@ import { Columns } from "./Columns";
 import { MedServiceListService } from "../services/MedServiceListService";
 import { useLocale } from "@/features/locale/locale.context";
 import { ColumnFiltersState } from "@tanstack/solid-table";
+import { EditState } from "@/components/solid-table";
+import { MedService } from "api-contract";
 
-export const MedServicesTable = () => {
+export const MedServicesList = () => {
   const locale = useLocale();
 
   const service = MedServiceListService();
@@ -26,6 +28,7 @@ export const MedServicesTable = () => {
     service.setDalilCode(undefined);
     service.setNationalCode(undefined);
     service.setServicePrice(undefined);
+    service.setServiceUnitSize(undefined);
     filters.map((item) => {
       item.id === "name" && service.setServiceName(item.value as string);
       item.id === "code" && service.setServiceCode(item.value as string);
@@ -34,7 +37,13 @@ export const MedServicesTable = () => {
         service.setNationalCode(item.value as string);
       item.id === "price" &&
         service.setServicePrice(item.value as NumberFilter);
+      item.id === "unitSize" &&
+        service.setServiceUnitSize(item.value as NumberFilter);
     });
+  };
+
+  const onUpdateService = (updateData: EditState<MedService>) => {
+    service.onUpdateService(updateData.rowId, updateData.values);
   };
 
   return (
@@ -78,8 +87,11 @@ export const MedServicesTable = () => {
           onFetchNextData={fetchNextData}
           onSort={onOrderChange}
           onFilter={onFilter}
+          onUpdate={onUpdateService}
+          isFetching={service.servicesQuery().isFetching}
           isFetchingNextPage={service.servicesQuery().isFetchingNextPage}
           isFetchSuccess={service.servicesQuery().isSuccess}
+          getRowId={(row: MedService) => row.id}
         />
       </div>
     </div>

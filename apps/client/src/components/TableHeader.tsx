@@ -29,9 +29,11 @@ type FilterWay =
 type Props = {
   title: JSX.Element;
   isSorted: Sort;
+  isSortable: boolean;
   toggleSort?: () => void;
   hide: () => void;
   setFilter: (value: string | number | NumberFilterType | undefined) => void;
+  isFilterable: boolean;
   filter: number | string | NumberFilterType | undefined;
   filterType?: FilterType;
   filterOptions?: FilterOptions;
@@ -47,8 +49,9 @@ export const TableHeader = (propsWithoutDefault: Props) => {
   return (
     <div class="flex flex-col gap-2 py-2 px-1 group">
       <div
-        class="flex items-center justify-between gap-4 w-full hover:cursor-pointer"
-        onClick={props.toggleSort}
+        class="flex items-center justify-between gap-4 w-full"
+        classList={{ "hover:cursor-pointer": props.isSortable }}
+        onClick={props.isSortable ? props.toggleSort : undefined}
       >
         <div class="flex gap-2">
           <p>{props.title}</p>
@@ -62,14 +65,16 @@ export const TableHeader = (propsWithoutDefault: Props) => {
               <SortDescendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
             ),
           }[props.isSorted as string] ?? null}
-          <Filter
-            filter={props.filter}
-            setFilter={props.setFilter}
-            filterType={props.filterType}
-            filterWay={filterWay()}
-            setFilterWay={(way) => setFilterWay(way)}
-            filterOptions={props.filterOptions}
-          />
+          <Show when={props.isFilterable}>
+            <Filter
+              filter={props.filter}
+              setFilter={props.setFilter}
+              filterType={props.filterType}
+              filterWay={filterWay()}
+              setFilterWay={(way) => setFilterWay(way)}
+              filterOptions={props.filterOptions}
+            />
+          </Show>
           <MoreOptions hide={props.hide} />
         </div>
       </div>
