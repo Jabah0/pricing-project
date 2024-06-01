@@ -2,56 +2,36 @@ import "./App.css";
 
 import { Route, Router } from "@solidjs/router";
 import { MainLayout } from "./features/layout/components/MainLayout";
-import { Match, Switch, createSignal, onMount } from "solid-js";
-import { locale } from "./features/locale/locale.config";
-import { LocaleProvider } from "./features/locale/LocaleProvider";
-import i18next from "i18next";
 import { AuthLayout } from "./features/layout/components/AuthLayout";
 import { Login } from "./features/auth/pages/Login";
 import { UsersList } from "./features/_users/components/UsersList";
 import { RouteGuard } from "./features/auth/components/RouteGuard";
-import { DotsRotateIcon } from "./assets/icons/DotsRotateIcon";
 import { MedServicesList } from "./features/med-service/components/MedServicesList";
 import { Home } from "./features/home/components/Home";
+import { LocaleProvider } from "./features/locale/LocaleProvider";
 
 function App() {
-  const [loaded, setLoaded] = createSignal(false);
-
-  onMount(async () => {
-    await locale;
-    setLoaded(true);
-  });
-
   return (
-    <Switch>
-      <Match when={loaded()}>
-        <LocaleProvider i18n={i18next}>
-          <Router>
-            <Route path="/" component={MainLayout}>
-              <Route component={RouteGuard}>
-                <Route path="/" component={Home} />
-                <Route path="/services" component={MedServicesList} />
-              </Route>
-              <Route
-                component={(props) => (
-                  <RouteGuard role="ADMIN">{props.children}</RouteGuard>
-                )}
-              >
-                <Route path="/users" component={UsersList} />
-              </Route>
-            </Route>
-            <Route path="/auth" component={AuthLayout}>
-              <Route path="/login" component={Login} />
-            </Route>
-          </Router>
-        </LocaleProvider>
-      </Match>
-      <Match when={!loaded()}>
-        <div class="flex justify-center items-center h-screen w-screen">
-          <DotsRotateIcon class="text-primary h-[10rem] w-[10rem]" />
-        </div>
-      </Match>
-    </Switch>
+    <LocaleProvider>
+      <Router>
+        <Route path="/" component={MainLayout}>
+          <Route component={RouteGuard}>
+            <Route path="/" component={Home} info={{ label: "Home" }} />
+            <Route path="/services" component={MedServicesList} />
+          </Route>
+          <Route
+            component={(props) => (
+              <RouteGuard role="ADMIN">{props.children}</RouteGuard>
+            )}
+          >
+            <Route path="/users" component={UsersList} />
+          </Route>
+        </Route>
+        <Route path="/auth" component={AuthLayout}>
+          <Route path="/login" component={Login} />
+        </Route>
+      </Router>
+    </LocaleProvider>
   );
 }
 

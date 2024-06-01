@@ -1,10 +1,10 @@
 import { NumberFilter, Table } from "@/components/Table";
 import { Columns } from "./Columns";
 import { MedServiceListService } from "../services/MedServiceListService";
-import { useLocale } from "@/features/locale/locale.context";
 import { ColumnFiltersState } from "@tanstack/solid-table";
 import { EditState } from "@/components/solid-table";
 import { MedService } from "api-contract";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const MedServicesList = () => {
   const locale = useLocale();

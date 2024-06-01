@@ -1,12 +1,10 @@
 import { WatchIcon } from "@/assets/icons/WatchIcon";
 import { WatchOffIcon } from "@/assets/icons/WatchOffIcon";
-import { useLocale } from "@/features/locale/locale.context";
 import { JSX, Match, Switch, createSignal } from "solid-js";
 
 export const PasswordInput = (
   props: JSX.InputHTMLAttributes<HTMLInputElement>
 ) => {
-  const locale = useLocale();
   const [isWatch, setIsWatch] = createSignal(false);
 
   const onSwitchVisible = () => {
@@ -29,7 +27,7 @@ export const PasswordInput = (
         {...props}
         autocomplete="off"
         class="bg-transparent w-full text-white"
-        placeholder={locale.t("enterPassword")}
+        placeholder={"enterPassword"}
         type={isWatch() ? "text" : "password"}
       />
     </div>

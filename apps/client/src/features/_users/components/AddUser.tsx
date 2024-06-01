@@ -1,7 +1,7 @@
-import { useLocale } from "@/features/locale/locale.context";
 import { Drawer } from "corvu/drawer";
 import { UserDrawer } from "./UserDrawer";
 import { AddUserType } from "./UsersList";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 type Props = {
   onAdd: (user: AddUserType) => void;
@@ -21,7 +21,7 @@ export const AddUser = (props: Props) => {
         <>
           <Drawer.Trigger
             as="button"
-            class="bg-primary rounded-sm shadow-lg min-h-[2.5rem] min-w-[6rem] text-white hover:opacity-75"
+            class="bg-primary rounded-sm shadow-lg min-h-[2.5rem] min-w-[8rem] text-white hover:opacity-75"
           >
             {locale.t("addUser")}
           </Drawer.Trigger>

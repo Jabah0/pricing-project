@@ -8,7 +8,12 @@ export const PasswordInput = (
   const [isWatch, setIsWatch] = createSignal(false);
 
   return (
-    <div class="flex items-center gap-2 bg-backPrimary shadow-lg rounded-md border border-gray-400 p-1">
+    <div class="flex items-center gap-2 bg-backPrimary shadow-lg rounded-md border border-gray-400 py-1 px-2">
+      <input
+        {...props}
+        class="bg-transparent text-white w-full"
+        type={isWatch() ? "text" : "password"}
+      />
       <Show
         when={isWatch()}
         fallback={
@@ -21,11 +26,6 @@ export const PasswordInput = (
           <WatchOffIcon class="text-white h-6 w-6" />
         </button>
       </Show>
-      <input
-        {...props}
-        class="bg-transparent text-white w-full"
-        type={isWatch() ? "text" : "password"}
-      />
     </div>
   );
 };

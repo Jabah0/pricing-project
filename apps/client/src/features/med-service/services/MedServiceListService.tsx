@@ -2,7 +2,6 @@ import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { contract } from "api-contract";
 import { apiClient } from "@/api/api-client";
-import { useLocale } from "@/features/locale/locale.context";
 import { ErrorToast } from "@/toasts/ErrorToast";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient, InfiniteData } from "@tanstack/solid-query";
@@ -12,8 +11,6 @@ import { NumberFilter } from "@/components/Table";
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
 export const MedServiceListService = () => {
-  const locale = useLocale();
-
   const [isMy, setIsMy] = createSignal(false);
 
   const [serviceName, setServiceName] = createSignal<string>();
@@ -167,7 +164,7 @@ export const MedServiceListService = () => {
         toast.custom((t) => (
           <ErrorToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("servicePriceUpdatedUnSuccessfully")}
+            message={"servicePriceUpdatedUnSuccessfully"}
           />
         ));
       },
@@ -175,7 +172,7 @@ export const MedServiceListService = () => {
         toast.custom((t) => (
           <SuccessToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("servicePriceUpdatedSuccessfully")}
+            message={"servicePriceUpdatedSuccessfully"}
           />
         ));
       },

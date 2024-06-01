@@ -1,11 +1,11 @@
 import { AccountIcon } from "@/assets/icons/AccountIcon";
-import { useLocale } from "@/features/locale/locale.context";
 import { Roles, User } from "api-contract";
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 import { TextInput } from "./TextInput";
 import { PasswordInput } from "./PasswordInput";
-import RolesCombobox from "./RolesCombobox";
+import { RolesCombobox } from "./RolesCombobox";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 type Props = {
   user?: User;

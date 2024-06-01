@@ -1,16 +1,60 @@
-import { JSX } from "solid-js";
-import { LocaleContext } from "./locale.context";
-import { i18n } from "i18next";
+import {
+  Accessor,
+  ParentComponent,
+  createContext,
+  createResource,
+  createSignal,
+  useContext,
+} from "solid-js";
+import { type LocaleType, fetchDictionary, RawDictionary } from ".";
+import * as i18n from "@solid-primitives/i18n";
 
-type Props = {
-  children: JSX.Element;
-  i18n: i18n;
-};
+interface LocaleContextType {
+  locale: Accessor<LocaleType>;
+  switchLocale: (locale: LocaleType) => void;
+  t: i18n.NullableTranslator<RawDictionary, string>;
+}
 
-export function LocaleProvider(props: Props) {
+export const languages: LocaleType[] = [
+  {
+    title: "Arabic",
+    short: "Ar",
+    value: "ar",
+    dir: "rtl",
+  },
+  {
+    title: "English",
+    short: "En",
+    value: "en",
+    dir: "ltr",
+  },
+];
+
+const LocaleContext = createContext<LocaleContextType>();
+
+export const LocaleProvider: ParentComponent = (props) => {
+  const [locale, setLocale] = createSignal<LocaleType>(languages[1]);
+
+  const [dict] = createResource(locale, fetchDictionary);
+
+  function switchLocale(locale: LocaleType) {
+    document.dir = locale.dir;
+    setLocale(locale);
+    setLocale(locale);
+  }
+
+  const t = i18n.translator(dict, i18n.resolveTemplate);
+
   return (
-    <LocaleContext.Provider value={props.i18n}>
+    <LocaleContext.Provider value={{ locale, switchLocale, t }}>
       {props.children}
     </LocaleContext.Provider>
   );
+};
+
+export function useLocale() {
+  const context = useContext(LocaleContext);
+  if (!context) throw new ReferenceError("I18nContext");
+
+  return context;
 }

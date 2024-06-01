@@ -1,5 +1,6 @@
 import { ChevronDownIcon } from "@/assets/icons/ChevronDownIcon";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
+import { useLocale } from "@/features/locale/LocaleProvider";
 import { Combobox } from "@kobalte/core";
 import { Roles } from "api-contract";
 
@@ -18,7 +19,9 @@ type Props = {
   onSelect?: (value: Roles) => void;
 };
 
-const RolesCombobox = (props: Props) => {
+export const RolesCombobox = (props: Props) => {
+  const locale = useLocale();
+
   const roleIndex = ALL_OPTIONS.findIndex((item) => item.value === props.role);
 
   return (
@@ -28,7 +31,7 @@ const RolesCombobox = (props: Props) => {
       optionTextValue="name"
       optionLabel="name"
       defaultValue={ALL_OPTIONS[roleIndex]}
-      placeholder="Search a Role"
+      placeholder={locale.t("selectRole")}
       onChange={(e) => props.onSelect && props.onSelect(e.value)}
       itemComponent={(props) => (
         <Combobox.Item
@@ -66,5 +69,3 @@ const RolesCombobox = (props: Props) => {
     </Combobox.Root>
   );
 };
-
-export default RolesCombobox;

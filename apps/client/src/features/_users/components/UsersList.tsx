@@ -3,7 +3,6 @@ import toast from "solid-toast";
 import { Roles, User, contract } from "api-contract";
 import { InfiniteData, useQueryClient } from "@tanstack/solid-query";
 import { apiClient } from "@/api/api-client";
-import { useLocale } from "@/features/locale/locale.context";
 import { ClientInferResponses } from "@ts-rest/core";
 import { SuccessToast } from "@/toasts/SuccessToast";
 import { ErrorToast } from "@/toasts/ErrorToast";
@@ -23,8 +22,6 @@ export type AddUserType = {
 type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
-  const locale = useLocale();
-
   const queryClient = useQueryClient();
 
   const [role, setRole] = createSignal<Roles>();
@@ -96,7 +93,7 @@ export const UsersList = () => {
         (t) => (
           <ErrorToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserFailed")}
+            message={"addUserFailed"}
           />
         ),
         {
@@ -110,7 +107,7 @@ export const UsersList = () => {
         (t) => (
           <SuccessToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserSuccess")}
+            message={"addUserSuccess"}
           />
         ),
         {

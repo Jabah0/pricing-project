@@ -31,6 +31,7 @@ import { FilterIcon } from "@/assets/icons/FilterIcon";
 import { EditIcon } from "@/assets/icons/EditIcon";
 import { EditFeature, type EditState } from "./solid-table";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
@@ -331,6 +332,8 @@ const ColumnsChooser = <T extends object>(props: {
   columns: Column<T, unknown>[];
   close: () => void;
 }) => {
+  const locale = useLocale();
+
   return (
     <div
       class="fixed bottom-7 end-5 h-[20rem] w-[15rem] bg-elementBack border 
@@ -343,7 +346,9 @@ const ColumnsChooser = <T extends object>(props: {
         <Switch>
           <Match when={props.columns.length === 0}>
             <div class="flex flex-col justify-center items-center h-full">
-              <p class="text-lg font-bold text-center">{"noHiddenColumns"}</p>
+              <p class="text-lg font-bold text-center">
+                {locale.t("noHiddenColumns")}
+              </p>
             </div>
           </Match>
           <Match when={props.columns.length > 0}>
@@ -371,6 +376,8 @@ const TableContext = (props: {
   clearFiltering: () => void;
   isFiltering: boolean;
 }) => {
+  const locale = useLocale();
+
   return (
     <div
       class="flex flex-col gap-2 h-fit w-fit border border-gray-600 bg-backPrimary px-2 py-4 
@@ -382,7 +389,7 @@ const TableContext = (props: {
         onClick={() => props.showChooser()}
       >
         <ColumnsIcon class="text-blue-700" />
-        <p>{"columnsChooser"}</p>
+        <p>{locale.t("columnsChooser")}</p>
       </button>
       <button
         class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
@@ -390,7 +397,7 @@ const TableContext = (props: {
         onClick={() => props.exportExcel()}
       >
         <ExcelIcon class="text-green-700" />
-        <p>{"exportExcel"}</p>
+        <p>{locale.t("exportExcel")}</p>
       </button>
 
       <Show when={props.isFiltering}>
@@ -400,7 +407,7 @@ const TableContext = (props: {
           onClick={() => props.clearFiltering()}
         >
           <FilterIcon class="text-blue-700" />
-          <p>{"disableFiltering"}</p>
+          <p>{locale.t("disableFiltering")}</p>
         </button>
       </Show>
     </div>

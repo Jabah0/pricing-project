@@ -1,4 +1,3 @@
-import { useLocale } from "@/features/locale/locale.context";
 import { MedService } from "api-contract";
 import { Match, Switch, createSignal } from "solid-js";
 import { EditPriceButton } from "./EditPriceButton";
@@ -10,8 +9,6 @@ type Props = {
 };
 
 export const MedServiceItem = (props: Props) => {
-  const locale = useLocale();
-
   const [isEdit, setIsEdit] = createSignal(false);
 
   let priceInputRef: HTMLInputElement | undefined;
@@ -41,15 +38,15 @@ export const MedServiceItem = (props: Props) => {
       <div class="flex gap-8">
         <div class="flex flex-col justify-center items-center">
           <p class="text-white font-bold">{props.medService.name}</p>
-          <p class="text-gray-400 font-bold">{locale.t("name")}</p>
+          <p class="text-gray-400 font-bold">{"name"}</p>
         </div>
         <div class="flex flex-col justify-center items-center">
           <p class="text-white font-bold">{props.medService.code}</p>
-          <p class="text-gray-400 font-bold">{locale.t("code")}</p>
+          <p class="text-gray-400 font-bold">{"code"}</p>
         </div>
         <div class="flex flex-col justify-center items-center">
           <p class="text-white font-bold">{props.medService.nationalCode}</p>
-          <p class="text-gray-400 font-bold">{locale.t("nationalCode")}</p>
+          <p class="text-gray-400 font-bold">{"nationalCode"}</p>
         </div>
       </div>
       <div class="flex justify-center items-center gap-4">
@@ -59,14 +56,14 @@ export const MedServiceItem = (props: Props) => {
               <p class="text-white font-bold w-16 text-center">
                 {props.medService.price}
               </p>
-              <p class="text-gray-400 font-bold">{locale.t("price")}</p>
+              <p class="text-gray-400 font-bold">{"price"}</p>
             </div>
             <div class="w-[0.05rem] h-10 bg-gray-300" />
             <div class="flex flex-col justify-center items-center">
               <p class="text-white font-bold w-16 text-center">
                 {props.medService.unitSize}
               </p>
-              <p class="text-gray-400 font-bold">{locale.t("unitSize")}</p>
+              <p class="text-gray-400 font-bold">{"unitSize"}</p>
             </div>
           </Match>
           <Match when={isEdit()}>
@@ -78,7 +75,7 @@ export const MedServiceItem = (props: Props) => {
                 value={props.medService.price}
                 type="number"
               />
-              <p class="text-gray-400 font-bold">{locale.t("price")}</p>
+              <p class="text-gray-400 font-bold">{"price"}</p>
             </div>
             <div class="w-[0.05rem] h-10 bg-gray-300" />
             <div class="flex flex-col justify-center items-center">
@@ -88,7 +85,7 @@ export const MedServiceItem = (props: Props) => {
                 value={props.medService.unitSize}
                 type="number"
               />
-              <p class="text-gray-400 font-bold">{locale.t("unitSize")}</p>
+              <p class="text-gray-400 font-bold">{"unitSize"}</p>
             </div>
           </Match>
         </Switch>

@@ -10,6 +10,7 @@ import { JSX, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
 import { NumberFilter as NumberFilterType } from "./Table";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 import { CancelIcon } from "@/assets/icons/CancelIcon";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 type Sort = SortDirection | false;
 
@@ -147,23 +148,29 @@ const Filter = (props: {
 
 const StringFilter = (
   props: Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type">
-) => (
-  <input
-    {...props}
-    type="text"
-    class="px-2 w-full rounded-sm bg-backgroundSec drop-shadow-lg"
-    placeholder={"textSearch..."}
-  />
-);
+) => {
+  const locale = useLocale();
+
+  return (
+    <input
+      {...props}
+      type="text"
+      class="px-2 w-full rounded-sm bg-backgroundSec drop-shadow-lg"
+      placeholder={locale.t("textSearch")}
+    />
+  );
+};
 
 const BetweenNumberFilter = (props: {
   filter: NumberFilterType;
   onChange: (value: NumberFilterType | undefined) => void;
 }) => {
+  const locale = useLocale();
+
   return (
-    <>
+    <div class="flex w-full max-w-[20rem] gap-2">
       <NumberInput
-        placeholder={"From"}
+        placeholder={locale.t("from")}
         value={props.filter?.gt}
         onInput={(e) => {
           if (e.target.value === undefined && !props.filter.lt)
@@ -177,9 +184,9 @@ const BetweenNumberFilter = (props: {
           });
         }}
       />
-      <p>{"Between"}</p>
+      <p>{":"}</p>
       <NumberInput
-        placeholder="To"
+        placeholder={locale.t("to")}
         value={props.filter?.lt}
         onInput={(e) => {
           if (e.target.value === undefined && !props.filter.gt)
@@ -193,7 +200,7 @@ const BetweenNumberFilter = (props: {
           });
         }}
       />
-    </>
+    </div>
   );
 };
 
@@ -203,6 +210,8 @@ const NumberFilter = (props: {
   filterWay?: FilterWay;
   setFilterWay?: (way: FilterWay) => void;
 }) => {
+  const locale = useLocale();
+
   const onChange = (value: NumberFilterType | undefined) => {
     props.setFilter(value);
   };
@@ -223,7 +232,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "equals"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.equals}
               onInput={(e) => {
                 if (e.target.value)
@@ -234,7 +243,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "notEqual"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.equals}
               onInput={(e) => {
                 if (e.target.value)
@@ -245,7 +254,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "greaterThan"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.gt}
               onInput={(e) => {
                 if (e.target.value)
@@ -256,7 +265,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "greaterThanOrEqual"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.gte}
               onInput={(e) => {
                 if (e.target.value)
@@ -267,7 +276,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "lessThan"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.lt}
               onInput={(e) => {
                 if (e.target.value)
@@ -278,7 +287,7 @@ const NumberFilter = (props: {
           </Match>
           <Match when={props.filterWay === "lessThanOrEqual"}>
             <NumberInput
-              placeholder="Value"
+              placeholder={locale.t("value")}
               value={props.filter?.lte}
               onInput={(e) => {
                 if (e.target.value)
@@ -302,7 +311,7 @@ const NumberInput = (
         {...props}
         type="number"
         min={0}
-        class="bg-backgroundSec shadow-lg rounded-sm border border-background w-[5rem] px-2"
+        class="bg-backgroundSec shadow-lg rounded-sm border border-background px-2 w-full"
       />
     </div>
   );
@@ -315,6 +324,7 @@ const FilterWaySelection = (props: {
   const onWayChange = (val: FilterWay) => {
     if (props.setFilterWay) props.setFilterWay(val);
   };
+  const locale = useLocale();
 
   return (
     <DropdownMenu.Root placement="bottom-end">
@@ -323,7 +333,7 @@ const FilterWaySelection = (props: {
           class="flex items-center justify-between gap-2 w-full text-start hover:opacity-75 shadow-lg 
           bg-backgroundSec px-2 border border-background"
         >
-          <p>{props.filterWay}</p>
+          <p>{locale.t(props.filterWay || "undefined")}</p>
           <ChevronDownIcon class="text-background scale-150" />
         </div>
       </DropdownMenu.Trigger>
@@ -338,17 +348,9 @@ const FilterWaySelection = (props: {
             as={"button"}
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
-            onSelect={() => onWayChange("between")}
-          >
-            <p>{"Between"}</p>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            as={"button"}
-            class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
-            bg-backgroundSec px-2"
             onSelect={() => onWayChange("equals")}
           >
-            <p>{"Equal"}</p>
+            <p>{locale.t("equals")}</p>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
@@ -356,7 +358,7 @@ const FilterWaySelection = (props: {
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("notEqual")}
           >
-            <p>{"Not Equal"}</p>
+            <p>{locale.t("notEqual")}</p>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
@@ -364,7 +366,7 @@ const FilterWaySelection = (props: {
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("lessThan")}
           >
-            <p>{"Less Than"}</p>
+            <p>{locale.t("lessThan")}</p>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
@@ -372,7 +374,7 @@ const FilterWaySelection = (props: {
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("lessThanOrEqual")}
           >
-            <p>{"Less Than Or Equal"}</p>
+            <p>{locale.t("lessThanOrEqual")}</p>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
@@ -380,7 +382,7 @@ const FilterWaySelection = (props: {
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("greaterThan")}
           >
-            <p>{"Greater Than"}</p>
+            <p>{locale.t("greaterThan")}</p>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             as={"button"}
@@ -388,7 +390,15 @@ const FilterWaySelection = (props: {
             bg-backgroundSec px-2"
             onSelect={() => onWayChange("greaterThanOrEqual")}
           >
-            <p>{"Greater Than Or Equal"}</p>
+            <p>{locale.t("greaterThanOrEqual")}</p>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            as={"button"}
+            class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
+            bg-backgroundSec px-2"
+            onSelect={() => onWayChange("between")}
+          >
+            <p>{locale.t("between")}</p>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
@@ -396,39 +406,45 @@ const FilterWaySelection = (props: {
   );
 };
 
-const MoreOptions = (props: { hide: () => void }) => (
-  <DropdownMenu.Root placement="bottom-end">
-    <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
-      <MenuIcon />
-    </DropdownMenu.Trigger>
-    <DropdownMenu.Portal>
-      <DropdownMenu.Content
-        as={"div"}
-        class="flex flex-col gap-2 bg-backPrimary border border-gray-600 my-4 p-2 w-[12rem] 
+const MoreOptions = (props: { hide: () => void }) => {
+  const locale = useLocale();
+
+  return (
+    <DropdownMenu.Root placement="bottom-end">
+      <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
+        <MenuIcon />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          as={"div"}
+          class="flex flex-col gap-2 bg-backPrimary border border-gray-600 my-4 p-2 w-[12rem] 
         text-white z-50"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            props.hide();
-          }}
-          class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
-            bg-backgroundSec px-2"
+          onClick={(e) => e.stopPropagation()}
         >
-          <EyeOffIcon class="text-gray-400" />
-          <p>{"hide"}</p>
-        </button>
-      </DropdownMenu.Content>
-    </DropdownMenu.Portal>
-  </DropdownMenu.Root>
-);
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              props.hide();
+            }}
+            class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
+            bg-backgroundSec px-2"
+          >
+            <EyeOffIcon class="text-gray-400" />
+            <p>{locale.t("hide")}</p>
+          </button>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+  );
+};
 
 const SelectFilter = (props: {
   filterOptions: FilterOptions;
   filter: string | undefined;
   setFilter: (value: string | undefined) => void;
 }) => {
+  const locale = useLocale();
+
   const roleIndex = () =>
     props.filterOptions.findIndex((item) => item.value === props.filter);
 
@@ -438,7 +454,7 @@ const SelectFilter = (props: {
       optionValue="value"
       optionTextValue="label"
       optionLabel="label"
-      placeholder="Select"
+      placeholder={locale.t("select")}
       defaultValue={props.filterOptions[roleIndex()]}
       onChange={(e) => props.setFilter && props.setFilter(e.value)}
       itemComponent={(itemProps) => (

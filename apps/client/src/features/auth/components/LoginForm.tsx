@@ -1,4 +1,3 @@
-import { useLocale } from "@/features/locale/locale.context";
 import { PasswordInput } from "./PasswordInput";
 import { UsernameInput } from "./UsernameInput";
 import { apiClient } from "@/api/api-client";
@@ -10,8 +9,6 @@ import { SuccessToast } from "@/toasts/SuccessToast";
 
 export const LoginForm = () => {
   const navigator = useNavigate();
-
-  const locale = useLocale();
 
   const [password, setPassword] = createSignal("");
   const [username, setUsername] = createSignal("");
@@ -28,12 +25,12 @@ export const LoginForm = () => {
 
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
-      toast.error(locale.t("loginFailed"));
+      toast.error("loginFailed");
     },
     onSuccess: async () => {
       toast.custom((t) => (
         <SuccessToast
-          message={locale.t("loginSuccess")}
+          message={"loginSuccess"}
           onDismiss={() => toast.dismiss(t.id)}
         />
       ));
@@ -57,13 +54,13 @@ export const LoginForm = () => {
     <div>
       <div class="flex flex-col gap-10">
         <div>
-          <p class="text-white text-6xl">{locale.t("welcome")}</p>
-          <p class="text-gray-400">{locale.t("welcomeSubtext")}</p>
+          <p class="text-white text-6xl">{"welcome"}</p>
+          <p class="text-gray-400">{"welcomeSubtext"}</p>
         </div>
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
             <label for="usernameInput" class="text-gray-400">
-              {locale.t("username")}
+              {"username"}
             </label>
             <UsernameInput
               id="usernameInput"
@@ -73,7 +70,7 @@ export const LoginForm = () => {
           </div>
           <div class="flex flex-col gap-1">
             <label for="passwordInput" class="text-gray-400">
-              {locale.t("password")}
+              {"password"}
             </label>
             <PasswordInput
               id="passwordInput"
@@ -88,7 +85,7 @@ export const LoginForm = () => {
               text-lg font-bold shadow-lg ${isEnabled() ? "hover:opacity-70" : "hover:cursor-not-allowed"}`}
               disabled={!isEnabled()}
             >
-              {locale.t("login")}
+              {"login"}
             </button>
           </div>
         </div>

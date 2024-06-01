@@ -1,4 +1,4 @@
-import { useLocale } from "@/features/locale/locale.context";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const ProfileLogoutButton = (props: { onClick?: () => void }) => {
   const locale = useLocale();
