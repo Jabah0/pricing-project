@@ -29,7 +29,7 @@ export const RolesCombobox = (props: Props) => {
       options={ALL_OPTIONS}
       optionValue="value"
       optionTextValue="name"
-      optionLabel="name"
+      optionLabel={(item) => locale.t(item.value) || ""}
       defaultValue={ALL_OPTIONS[roleIndex]}
       placeholder={locale.t("selectRole")}
       onChange={(e) => props.onSelect && props.onSelect(e.value)}
@@ -39,7 +39,9 @@ export const RolesCombobox = (props: Props) => {
           hover:opacity-50 border-gray-400 last:border-none hover:cursor-pointer"
           item={props.item}
         >
-          <Combobox.ItemLabel>{props.item.rawValue.name}</Combobox.ItemLabel>
+          <Combobox.ItemLabel>
+            {locale.t(props.item.rawValue.value)}
+          </Combobox.ItemLabel>
           <Combobox.ItemIndicator>
             <ConfirmIcon />
           </Combobox.ItemIndicator>

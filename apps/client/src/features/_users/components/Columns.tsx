@@ -1,3 +1,4 @@
+import { useLocale } from "@/features/locale/LocaleProvider";
 import { ColumnDef } from "@tanstack/solid-table";
 import { User } from "api-contract";
 
@@ -5,28 +6,40 @@ export const Columns: ColumnDef<User>[] = [
   {
     id: "id",
     accessorKey: "id",
-    header: "ID",
+    header: () => {
+      const locale = useLocale();
+      return locale.t("id");
+    },
     meta: { title: "ID", type: "string" },
     size: 6 / 1,
   },
   {
     id: "username",
     accessorKey: "username",
-    header: "Username",
+    header: () => {
+      const locale = useLocale();
+      return locale.t("username");
+    },
     meta: { title: "Username", type: "string" },
     size: 6 / 1,
   },
   {
     id: "fullName",
     accessorKey: "fullName",
-    header: "Full Name",
+    header: () => {
+      const locale = useLocale();
+      return locale.t("fullName");
+    },
     meta: { title: "Full Name", type: "string" },
     size: 6 / 1,
   },
   {
     id: "role",
     accessorKey: "role",
-    header: "Role",
+    header: () => {
+      const locale = useLocale();
+      return locale.t("role");
+    },
     meta: {
       title: "Role",
       type: "select",

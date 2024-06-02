@@ -36,4 +36,13 @@ export const dict = {
   save: "Save",
   cancel: "Cancel",
   noHiddenColumns: "No Hidden Columns",
+  ADMIN: "Admin",
+  USER: "User",
+  id: "ID",
+  service: "Service",
+  serviceCode: "Code",
+  dalilCode: "Dalil Code",
+  nationalCode: "National Code",
+  price: "Price",
+  unitSize: "Unit Size",
 };

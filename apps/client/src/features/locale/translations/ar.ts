@@ -38,4 +38,13 @@ export const dict: RawDictionary = {
   save: "حفظ",
   cancel: "إلغاء",
   noHiddenColumns: "لا يوجد حقول مخفية",
+  ADMIN: "مسؤول",
+  USER: "مستخدم",
+  id: "ر.م",
+  service: "الخدمة",
+  serviceCode: "رمز الخدمة",
+  dalilCode: "رمز الدليل",
+  nationalCode: "الرمز الدولي",
+  price: "السعر",
+  unitSize: "عدد الوحدات",
 };

@@ -1,12 +1,19 @@
 import { EditableCell } from "@/components/Table";
+import { RawDictionary } from "@/features/locale";
+import { useLocale } from "@/features/locale/LocaleProvider";
 import { ColumnDef } from "@tanstack/solid-table";
 import { MedService } from "api-contract";
+
+const Header = ({ title }: { title: keyof RawDictionary }) => {
+  const locale = useLocale();
+  return locale.t(title);
+};
 
 export const Columns: ColumnDef<MedService>[] = [
   {
     id: "id",
     accessorKey: "id",
-    header: "ID",
+    header: () => <Header title="id" />,
     meta: { title: "ID", type: "string" },
     size: 6 / 1,
     enableColumnFilter: false,
@@ -14,35 +21,35 @@ export const Columns: ColumnDef<MedService>[] = [
   {
     id: "name",
     accessorKey: "name",
-    header: "Name",
-    meta: { title: "Name", type: "string" },
+    header: () => <Header title="service" />,
+    meta: { title: "service", type: "string" },
     size: 6 / 1,
   },
   {
     id: "code",
     accessorKey: "code",
-    header: "Code",
-    meta: { title: "Code", type: "string" },
+    header: () => <Header title="serviceCode" />,
+    meta: { title: "serviceCode", type: "string" },
     size: 6 / 1,
   },
   {
     id: "dalilCode",
     accessorKey: "dalilCode",
-    header: "Dalil Code",
-    meta: { title: "Dalil Name", type: "string" },
+    header: () => <Header title="dalilCode" />,
+    meta: { title: "dalilCode", type: "string" },
     size: 6 / 1,
   },
   {
     id: "nationalCode",
     accessorKey: "nationalCode",
-    header: "National Code",
+    header: () => <Header title="nationalCode" />,
     meta: { title: "National Code", type: "string" },
     size: 6 / 1,
   },
   {
     id: "price",
     accessorKey: "price",
-    header: "Price",
+    header: () => <Header title="price" />,
     meta: { title: "Price", type: "number" },
     size: 6 / 1,
     enableColumnFilter: true,
@@ -56,7 +63,7 @@ export const Columns: ColumnDef<MedService>[] = [
   {
     id: "unitSize",
     accessorKey: "unitSize",
-    header: "Unit Size",
+    header: () => <Header title="unitSize" />,
     meta: { title: "Unit Size", type: "number" },
     size: 6 / 1,
     cell: ({ row, getValue }) => (
