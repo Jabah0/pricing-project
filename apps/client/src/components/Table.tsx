@@ -272,7 +272,7 @@ export const Table = <T extends object>(props: Props<T>) => {
             <For each={table.getRowModel().rows}>
               {(row) => (
                 <tr
-                  class={`h-10 border-y border-y-background
+                  class={`h-10 border-y border-y-background text-text
                   hover:bg-backgroundSec
                   ${row.getIsSelected() && "bg-opacity-75"}
                   ${props.onSelect && "cursor-pointer"}

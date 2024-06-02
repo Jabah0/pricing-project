@@ -30,7 +30,8 @@
     "solid-js": "^1.8.15",
     "solid-toast": "^0.5.0",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tw-colors": "^3.3.1"
   },
   "devDependencies": {
     "@locator/babel-jsx": "^0.4.3",

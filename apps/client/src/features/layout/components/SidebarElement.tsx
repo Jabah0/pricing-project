@@ -21,7 +21,7 @@ export const SidebarElement = (props: Props) => {
         >
           <props.icon
             class={`w-7 h-7 group-hover:text-iconStroke
-            ${props.active ? "text-iconStroke" : "text-white"}
+            ${props.active ? "text-iconStroke" : "text-text"}
           `}
           />
         </A>

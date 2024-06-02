@@ -48,7 +48,7 @@ export const TableHeader = (propsWithoutDefault: Props) => {
   const [filterWay, setFilterWay] = createSignal<FilterWay>("equals");
 
   return (
-    <div class="flex flex-col gap-2 py-2 px-1 group">
+    <div class="flex flex-col gap-2 py-2 px-1 group text-text">
       <div
         class="flex items-center justify-between gap-4 w-full"
         classList={{ "hover:cursor-pointer": props.isSortable }}

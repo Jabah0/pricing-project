@@ -1,4 +1,5 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const { createThemes } = require("tw-colors");
 
 /**@type {import("tailwindcss").Config} */
 module.exports = {
@@ -20,67 +21,18 @@ module.exports = {
           track: "var(--primary)",
         },
       },
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        info: {
-          DEFAULT: "hsl(var(--info))",
-          foreground: "hsl(var(--info-foreground))",
-        },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
-        },
-        warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "hsl(var(--warning-foreground))",
-        },
-        error: {
-          DEFAULT: "hsl(var(--error))",
-          foreground: "hsl(var(--error-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        primary: "#8B5CF6",
-        secondary: "#4C1D95",
-        backPrimary: "#1E293B",
-        elementBack: "#1E293B",
-        background: "#0F172A",
-        backgroundSec: "#292E4E",
-        iconStroke: "#8B5CF6",
-        moon: "#FACC15",
-        sun: "#FACC15",
-        buttonBack: "#334155",
-      },
+      // colors: {
+      //   primary: "#8B5CF6",
+      //   secondary: "#4C1D95",
+      //   backPrimary: "#1E293B",
+      //   elementBack: "#1E293B",
+      //   background: "#0F172A",
+      //   backgroundSec: "#292E4E",
+      //   iconStroke: "#8B5CF6",
+      //   moon: "#FACC15",
+      //   sun: "#FACC15",
+      //   buttonBack: "#334155",
+      // },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
@@ -116,5 +68,36 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@corvu/tailwind")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@corvu/tailwind"),
+    createThemes({
+      light: {
+        primary: "#8B5CF6",
+        secondary: "#4C1D95",
+        backPrimary: "#ffffff",
+        elementBack: "#ffffff",
+        background: "#e6e6e6",
+        backgroundSec: "#ffffff",
+        iconStroke: "#8B5CF6",
+        moon: "#FACC15",
+        sun: "#FACC15",
+        buttonBack: "#334155",
+        text: "#000000",
+      },
+      dark: {
+        primary: "#8B5CF6",
+        secondary: "#4C1D95",
+        backPrimary: "#1E293B",
+        elementBack: "#1E293B",
+        background: "#0F172A",
+        backgroundSec: "#292E4E",
+        iconStroke: "#8B5CF6",
+        moon: "#FACC15",
+        sun: "#FACC15",
+        buttonBack: "#334155",
+        text: "#ffffff",
+      },
+    }),
+  ],
 };
