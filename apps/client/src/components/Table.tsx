@@ -32,6 +32,7 @@ import { EditIcon } from "@/assets/icons/EditIcon";
 import { EditFeature, type EditState } from "./solid-table";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 import { useLocale } from "@/features/locale/LocaleProvider";
+import { RawDictionary } from "@/features/locale";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
@@ -119,7 +120,7 @@ export const Table = <T extends object>(props: Props<T>) => {
     enableSorting: false,
     cell: ({ row }) => <EditCell onUpdate={props.onUpdate} row={row} />,
     meta: {
-      title: "Action",
+      title: "action",
       type: "string",
     },
     size: 6 / 1,
@@ -355,11 +356,15 @@ const ColumnsChooser = <T extends object>(props: {
             <For each={props.columns}>
               {(column) => (
                 <button
-                  class="flex items-center justify-start w-full px-2 rounded-sm bg-backgroundSec 
+                  class="flex items-center justify-start w-full px-2 rounded-sm bg-buttonBack 
                   shadow-lg hover:bg-opacity-50"
                   onClick={() => column.toggleVisibility()}
                 >
-                  <p>{column.columnDef.meta?.title as string}</p>
+                  <p>
+                    {locale.t(
+                      column.columnDef.meta?.title as keyof RawDictionary
+                    ) || ""}
+                  </p>
                 </button>
               )}
             </For>
@@ -381,7 +386,7 @@ const TableContext = (props: {
   return (
     <div
       class="flex flex-col gap-2 h-fit w-fit border border-gray-600 bg-backPrimary px-2 py-4 
-      text-white"
+      text-text"
     >
       <button
         class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 

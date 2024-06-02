@@ -9,6 +9,8 @@ import {
   makeStateUpdater,
 } from "@tanstack/solid-table";
 
+import { RawDictionary } from "@/features/locale";
+
 declare module "@tanstack/solid-table" {
   interface Table<TData extends RowData> extends EditInstance<TData> {}
   interface TableState extends EditTableState {}
@@ -17,7 +19,7 @@ declare module "@tanstack/solid-table" {
   interface Row<TData extends RowData> extends EditRow<TData> {}
 
   interface ColumnMeta<TData extends unknown, TValue> {
-    title: string;
+    title: keyof RawDictionary;
     type: "string" | "number" | "select";
     options?: { value: string; label: string }[];
   }

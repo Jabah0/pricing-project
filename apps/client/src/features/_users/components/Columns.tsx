@@ -10,7 +10,7 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("id");
     },
-    meta: { title: "ID", type: "string" },
+    meta: { title: "id", type: "string" },
     size: 6 / 1,
   },
   {
@@ -20,7 +20,7 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("username");
     },
-    meta: { title: "Username", type: "string" },
+    meta: { title: "username", type: "string" },
     size: 6 / 1,
   },
   {
@@ -30,7 +30,7 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("fullName");
     },
-    meta: { title: "Full Name", type: "string" },
+    meta: { title: "fullName", type: "string" },
     size: 6 / 1,
   },
   {
@@ -40,8 +40,12 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("role");
     },
+    cell: ({ row }) => {
+      const locale = useLocale();
+      return <p>{locale.t(row.original.role)}</p>;
+    },
     meta: {
-      title: "Role",
+      title: "role",
       type: "select",
       options: [
         { value: "ADMIN", label: "Admin" },

@@ -45,4 +45,5 @@ export const dict = {
   nationalCode: "National Code",
   price: "Price",
   unitSize: "Unit Size",
+  action: "Action",
 };

@@ -47,4 +47,5 @@ export const dict: RawDictionary = {
   nationalCode: "الرمز الدولي",
   price: "السعر",
   unitSize: "عدد الوحدات",
+  action: "الإجراءات",
 };

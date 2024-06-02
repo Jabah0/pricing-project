@@ -11,19 +11,19 @@ export const PasswordInput = (
     <div class="flex items-center gap-2 bg-backPrimary shadow-lg rounded-md border border-gray-400 py-1 px-2">
       <input
         {...props}
-        class="bg-transparent text-white w-full"
+        class="bg-transparent text-text w-full"
         type={isWatch() ? "text" : "password"}
       />
       <Show
         when={isWatch()}
         fallback={
           <button onClick={() => setIsWatch((pre) => !pre)}>
-            <WatchIcon class="text-white h-6 w-6" />
+            <WatchIcon class="text-text h-6 w-6" />
           </button>
         }
       >
         <button onClick={() => setIsWatch((pre) => !pre)}>
-          <WatchOffIcon class="text-white h-6 w-6" />
+          <WatchOffIcon class="text-text h-6 w-6" />
         </button>
       </Show>
     </div>

@@ -56,7 +56,7 @@ export const MedServicesList = () => {
               class={`flex justify-center items-center h-[2rem] rounded-sm
               ${
                 !service.isMy()
-                  ? "bg-backgroundSec text-white shadow-lg"
+                  ? "bg-backgroundSec text-text shadow-lg"
                   : "bg-transparent text-gray-400"
               } 
               p-2 text-center`}
@@ -69,7 +69,7 @@ export const MedServicesList = () => {
               class={`flex justify-center items-center h-[2rem] rounded-sm
               ${
                 service.isMy()
-                  ? "bg-backgroundSec text-white shadow-lg"
+                  ? "bg-backgroundSec text-text shadow-lg"
                   : "bg-transparent text-gray-400"
               } 
               p-2 text-center`}

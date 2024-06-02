@@ -1,4 +1,4 @@
-import { Match, Switch, createSignal } from "solid-js";
+import { Match, Switch } from "solid-js";
 import ClearDayFill from "@/assets/icons/ClearDayFill";
 import ClearNightFill from "@/assets/icons/ClearNightFill";
 import { DarkModService } from "../services/DarkModService";

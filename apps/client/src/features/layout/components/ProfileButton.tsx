@@ -32,7 +32,7 @@ export const ProfileButton = () => {
           class="h-9 w-9 border border-white bg-backgroundSec rounded-full shadow-lg 
           flex justify-center items-center"
         >
-          <AccountIcon class="text-white" />
+          <AccountIcon class="text-text" />
         </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -46,17 +46,17 @@ export const ProfileButton = () => {
                 class="h-16 w-16 border border-white bg-elementBack rounded-full shadow-lg 
                 flex justify-center items-center p-4"
               >
-                <AccountIcon class="text-white h-16 w-16" />
+                <AccountIcon class="text-text h-16 w-16" />
               </div>
               <div class="flex flex-col justify-center items-center">
-                <p class="text-white text-lg text-ellipsis">
+                <p class="text-text text-lg text-ellipsis">
                   {user()?.fullName}
                 </p>
                 <p class="text-gray-400 text-ellipsis">{user()?.username}</p>
               </div>
             </div>
             <button
-              class="text-white rounded-sm border border-gray-700 w-full h-[2.5rem] 
+              class="text-text rounded-sm border border-gray-700 w-full h-[2.5rem] 
               shadow-lg bg-backgroundSec hover:bg-opacity-40"
             >
               {locale.t("manageAccount")}
