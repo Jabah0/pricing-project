@@ -6,8 +6,10 @@ import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import { useUser } from "../stores/UserStore";
 import { SuccessToast } from "@/toasts/SuccessToast";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const LoginForm = () => {
+  const locale = useLocale();
   const navigator = useNavigate();
 
   const [password, setPassword] = createSignal("");
@@ -53,14 +55,16 @@ export const LoginForm = () => {
   return (
     <div>
       <div class="flex flex-col gap-10">
-        <div>
-          <p class="text-white text-6xl">{"welcome"}</p>
-          <p class="text-gray-400">{"welcomeSubtext"}</p>
+        <div class="flex flex-col gap-2">
+          <p class="text-text text-6xl">{locale.t("welcomeMessage")}</p>
+          <p class="text-textSecondary text-xl">
+            {locale.t("welcomeSubtextMessage")}
+          </p>
         </div>
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
-            <label for="usernameInput" class="text-gray-400">
-              {"username"}
+            <label for="usernameInput" class="text-textSecondary">
+              {locale.t("username")}
             </label>
             <UsernameInput
               id="usernameInput"
@@ -69,8 +73,8 @@ export const LoginForm = () => {
             />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="passwordInput" class="text-gray-400">
-              {"password"}
+            <label for="passwordInput" class="text-textSecondary">
+              {locale.t("password")}
             </label>
             <PasswordInput
               id="passwordInput"
@@ -85,7 +89,7 @@ export const LoginForm = () => {
               text-lg font-bold shadow-lg ${isEnabled() ? "hover:opacity-70" : "hover:cursor-not-allowed"}`}
               disabled={!isEnabled()}
             >
-              {"login"}
+              {locale.t("login")}
             </button>
           </div>
         </div>

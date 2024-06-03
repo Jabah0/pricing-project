@@ -193,6 +193,7 @@ export const MedServiceListService = () => {
     id: string,
     body?: Partial<{ price: number; unitSize: number }>
   ) => {
+    console.log("body", body);
     updateMedServiceMutation.mutate({
       params: { id },
       body: { ...body },

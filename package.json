@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "start": "node apps/api/dist/src/main"
   },
   "dependencies": {
     "@nestjs/config": "^3.2.1",

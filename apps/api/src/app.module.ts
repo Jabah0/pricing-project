@@ -11,9 +11,14 @@ import { EnvironmentConfigModule } from './infrastructure/config/environment-con
 import { LocalStrategy } from './infrastructure/common/strategies/local.strategy';
 import { JwtStrategy } from './infrastructure/common/strategies/jwt.strategy';
 import { JwtRefreshTokenStrategy } from './infrastructure/common/strategies/jwtRefresh.strategy';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../..', 'client', 'dist'),
+    }),
     PassportModule,
     JwtModule.register({
       secret: process.env.secret,

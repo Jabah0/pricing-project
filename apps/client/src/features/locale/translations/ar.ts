@@ -48,4 +48,9 @@ export const dict: RawDictionary = {
   price: "السعر",
   unitSize: "عدد الوحدات",
   action: "الإجراءات",
+  login: "تسجيل الدخول",
+  enterPassword: "أدخل كلمة السر",
+  enterUsername: "أدخل اسم المستخدم",
+  welcomeMessage: "مرحبا بكم",
+  welcomeSubtextMessage: "لنظام تسعير الخدمات",
 };

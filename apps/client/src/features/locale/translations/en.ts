@@ -46,4 +46,9 @@ export const dict = {
   price: "Price",
   unitSize: "Unit Size",
   action: "Action",
+  login: "Login",
+  enterPassword: "Enter Password",
+  enterUsername: "Enter Username",
+  welcomeMessage: "Welcome",
+  welcomeSubtextMessage: "to Pricing System",
 };

@@ -56,6 +56,7 @@ export const Columns: ColumnDef<MedService>[] = [
     cell: ({ row, getValue }) => (
       <EditableCell
         row={row}
+        column="price"
         value={getValue() as number | string | string[]}
       />
     ),
@@ -69,6 +70,7 @@ export const Columns: ColumnDef<MedService>[] = [
     cell: ({ row, getValue }) => (
       <EditableCell
         row={row}
+        column="unitSize"
         value={getValue() as number | string | string[]}
       />
     ),

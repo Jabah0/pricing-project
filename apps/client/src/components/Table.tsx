@@ -422,6 +422,7 @@ const TableContext = (props: {
 export const EditableCell = (props: {
   row: Row<any>;
   value: string | number | string[];
+  column: string;
 }) => (
   <div class="w-full">
     {props.row.getIsEditing() ? (
@@ -430,7 +431,7 @@ export const EditableCell = (props: {
         type="number"
         value={props.value}
         onInput={(e) => {
-          props.row.changeEdit({ price: parseInt(e.target.value) });
+          props.row.changeEdit({ [props.column]: parseInt(e.target.value) });
         }}
       />
     ) : (
