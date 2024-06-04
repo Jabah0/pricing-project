@@ -24,7 +24,7 @@ export const UserDrawer = (props: Props) => {
 
   const onSave = async () => {
     if (password() !== confirmPassword()) {
-      toast.error("passwordDoNotMatch");
+      toast.error(locale.t("passwordDoNotMatch"));
       return;
     }
     try {

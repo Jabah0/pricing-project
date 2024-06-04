@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Route, Router } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
 import { MainLayout } from "./features/layout/components/MainLayout";
 import { AuthLayout } from "./features/layout/components/AuthLayout";
 import { Login } from "./features/auth/pages/Login";
@@ -30,6 +30,7 @@ function App() {
         <Route path="/auth" component={AuthLayout}>
           <Route path="/login" component={Login} />
         </Route>
+        <Route path="*paramName" component={() => <Navigate href="/" />} />
       </Router>
     </LocaleProvider>
   );

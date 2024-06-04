@@ -334,7 +334,7 @@ const FilterWaySelection = (props: {
           bg-backgroundSec px-2 border border-background"
         >
           <p>{locale.t(props.filterWay || "undefined")}</p>
-          <ChevronDownIcon class="text-background scale-150" />
+          <ChevronDownIcon class="text-text scale-150" />
         </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -474,7 +474,7 @@ const SelectFilter = (props: {
     >
       <Combobox.Control
         class="flex justify-center items-center bg-backgroundSec shadow-lg 
-        h-[2rem] px-2 text-white"
+        h-[2rem] px-2 text-text"
       >
         <Combobox.Input class="bg-transparent" />
         <Show when={props.filter}>
@@ -490,7 +490,7 @@ const SelectFilter = (props: {
       </Combobox.Control>
       <Combobox.Portal>
         <Combobox.Content
-          class="bg-backPrimary shadow-lg z-50 text-white border 
+          class="bg-backPrimary shadow-lg z-50 text-text border 
           border-gray-600 p-2"
         >
           <Combobox.Listbox class="flex flex-col gap-2" />

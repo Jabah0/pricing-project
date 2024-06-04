@@ -4,10 +4,12 @@ import {
   createContext,
   createResource,
   createSignal,
+  onMount,
   useContext,
 } from "solid-js";
 import { type LocaleType, fetchDictionary, RawDictionary } from ".";
 import * as i18n from "@solid-primitives/i18n";
+import { makePersisted } from "@solid-primitives/storage";
 
 interface LocaleContextType {
   locale: Accessor<LocaleType>;
@@ -33,7 +35,14 @@ export const languages: LocaleType[] = [
 const LocaleContext = createContext<LocaleContextType>();
 
 export const LocaleProvider: ParentComponent = (props) => {
-  const [locale, setLocale] = createSignal<LocaleType>(languages[1]);
+  const [locale, setLocale] = makePersisted(
+    createSignal<LocaleType>(languages[1]),
+    { storage: localStorage }
+  );
+
+  onMount(() => {
+    document.dir = locale().dir;
+  });
 
   const [dict] = createResource(locale, fetchDictionary);
 

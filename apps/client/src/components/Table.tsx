@@ -220,7 +220,7 @@ export const Table = <T extends object>(props: Props<T>) => {
     <ContextMenu.Root>
       <ContextMenu.Trigger
         as="div"
-        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm shadow-lg 
+        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-lg
         text-gray-400"
       >
         <table class="w-full relative">
@@ -337,7 +337,7 @@ const ColumnsChooser = <T extends object>(props: {
 
   return (
     <div
-      class="fixed bottom-7 end-5 h-[20rem] w-[15rem] bg-elementBack border 
+      class="fixed bottom-1 end-0 h-[20rem] w-[15rem] bg-elementBack border 
       border-gray-600 shadow-lg z-50"
     >
       <div class="flex flex-col gap-2 h-full w-full px-2 py-2">

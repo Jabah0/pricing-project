@@ -11,6 +11,7 @@ import { Columns } from "./Columns";
 import { AddUser } from "./AddUser";
 import { UpdateUser } from "./UpdateUser";
 import { ColumnFiltersState } from "@tanstack/solid-table";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 export type AddUserType = {
   fullName: string;
@@ -22,6 +23,7 @@ export type AddUserType = {
 type Users = ClientInferResponses<typeof contract.users.getAll>;
 
 export const UsersList = () => {
+  const locale = useLocale();
   const queryClient = useQueryClient();
 
   const [role, setRole] = createSignal<Roles>();
@@ -93,7 +95,7 @@ export const UsersList = () => {
         (t) => (
           <ErrorToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={"addUserFailed"}
+            message={locale.t("addUserFailed") || ""}
           />
         ),
         {
@@ -107,7 +109,7 @@ export const UsersList = () => {
         (t) => (
           <SuccessToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={"addUserSuccess"}
+            message={locale.t("addUserSuccess") || ""}
           />
         ),
         {

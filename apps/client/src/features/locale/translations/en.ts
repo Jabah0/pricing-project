@@ -51,4 +51,9 @@ export const dict = {
   enterUsername: "Enter Username",
   welcomeMessage: "Welcome",
   welcomeSubtextMessage: "to Pricing System",
+  loginSuccess: "Login Success",
+  loginFailed: "Login Failed",
+  addUserFailed: "Add User Failed",
+  addUserSuccess: "Add User Success",
+  passwordDoNotMatch: "Password Do Not Match",
 };

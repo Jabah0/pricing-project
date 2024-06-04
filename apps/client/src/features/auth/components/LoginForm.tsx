@@ -27,12 +27,12 @@ export const LoginForm = () => {
 
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
-      toast.error("loginFailed");
+      toast.error(locale.t("loginFailed"));
     },
     onSuccess: async () => {
       toast.custom((t) => (
         <SuccessToast
-          message={"loginSuccess"}
+          message={locale.t("loginSuccess") || ""}
           onDismiss={() => toast.dismiss(t.id)}
         />
       ));
