@@ -3,7 +3,6 @@ import { DarkModeSwitcher } from "./DarkModeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { FloatMenu } from "./FloatMenu";
 import { ProfileButton } from "./ProfileButton";
-import { useLocation } from "@solidjs/router";
 
 export const Navbar = () => {
   const [isVisible, setIsVisible] = createSignal(false);
@@ -25,9 +24,6 @@ export const Navbar = () => {
 
     return () => observer.disconnect();
   });
-
-  const location = useLocation();
-  console.log(location);
 
   return (
     <div ref={navbarRef} class="flex items-center justify-between h-fit">

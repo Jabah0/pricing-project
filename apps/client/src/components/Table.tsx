@@ -20,19 +20,21 @@ import {
   Show,
   Switch,
 } from "solid-js";
+import { EditFeature, type EditState } from "./solid-table";
 import { TableHeader } from "./TableHeader";
 import { ContextMenu } from "@kobalte/core";
-import { CancelIcon } from "@/assets/icons/CancelIcon";
-import { ExcelIcon } from "@/assets/icons/ExcelIcon";
-import { ColumnsIcon } from "@/assets/icons/ColumnsIcon";
-import { SpinnersBlocksShuffleIcon } from "@/assets/icons/SpinnersBlocksIcon";
-import { DotsRotateIcon } from "@/assets/icons/DotsRotateIcon";
-import { FilterIcon } from "@/assets/icons/FilterIcon";
-import { EditIcon } from "@/assets/icons/EditIcon";
-import { EditFeature, type EditState } from "./solid-table";
-import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
+
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { RawDictionary } from "@/features/locale";
+import {
+  EditIcon,
+  SpinnersBlocksShuffleIcon,
+  ConfirmIcon,
+  CancelIcon,
+  ColumnsIcon,
+  DotsRotateIcon,
+  FilterIcon,
+} from "@/assets/icons";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
@@ -395,14 +397,6 @@ const TableContext = (props: {
       >
         <ColumnsIcon class="text-blue-700" />
         <p>{locale.t("columnsChooser")}</p>
-      </button>
-      <button
-        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
-        shadow-lg"
-        onClick={() => props.exportExcel()}
-      >
-        <ExcelIcon class="text-green-700" />
-        <p>{locale.t("exportExcel")}</p>
       </button>
 
       <Show when={props.isFiltering}>
