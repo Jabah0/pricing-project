@@ -20,13 +20,13 @@ interface LocaleContextType {
 export const languages: LocaleType[] = [
   {
     title: "Arabic",
-    short: "Ar",
+    short: "AR",
     value: "ar",
     dir: "rtl",
   },
   {
     title: "English",
-    short: "En",
+    short: "EN",
     value: "en",
     dir: "ltr",
   },

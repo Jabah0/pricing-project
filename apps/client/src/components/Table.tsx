@@ -340,7 +340,7 @@ const ColumnsChooser = <T extends object>(props: {
   return (
     <div
       class="fixed bottom-1 end-0 h-[20rem] w-[15rem] bg-elementBack border 
-      border-gray-600 shadow-lg z-50"
+      border-gray-600 drop-shadow-lg z-50"
     >
       <div class="flex flex-col gap-2 h-full w-full px-2 py-2">
         <button onClick={props.close}>
