@@ -91,7 +91,7 @@ export const UserDrawer = (props: Props) => {
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-textSecondary">{locale.t("confirmPassword")}</p>
             <PasswordInput
-              class="bg-transparent text-white"
+              class="bg-transparent text-text"
               onInput={(e) => setConfirmPassword(e.target.value)}
             />
           </div>

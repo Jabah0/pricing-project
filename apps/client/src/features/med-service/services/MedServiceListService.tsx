@@ -98,6 +98,10 @@ export const MedServiceListService = () => {
           queryKey: ServiceQueryKey(),
         });
 
+        await queryClient.cancelQueries({
+          queryKey: MyServiceQueryKey(),
+        });
+
         const previousData =
           queryClient.getQueryData<MedServices>(ServiceQueryKey());
 
@@ -145,7 +149,13 @@ export const MedServiceListService = () => {
             if (targetService) {
               targetService.price =
                 newService.body?.price || targetService.price;
+
+              targetService.unitSize =
+                newService.body?.unitSize || targetService.unitSize;
             }
+
+            console.log("newService", newService);
+            console.log("old", old);
 
             return {
               ...old,

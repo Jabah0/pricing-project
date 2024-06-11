@@ -53,11 +53,11 @@ export const Columns: ColumnDef<MedService>[] = [
     meta: { title: "price", type: "number" },
     size: 6 / 1,
     enableColumnFilter: true,
-    cell: ({ row, getValue }) => (
+    cell: ({ row }) => (
       <EditableCell
         row={row}
         column="price"
-        value={getValue() as number | string | string[]}
+        value={row.original.price as number | string | string[]}
       />
     ),
   },
@@ -67,11 +67,11 @@ export const Columns: ColumnDef<MedService>[] = [
     header: () => <Header title="unitSize" />,
     meta: { title: "unitSize", type: "number" },
     size: 6 / 1,
-    cell: ({ row, getValue }) => (
+    cell: ({ row }) => (
       <EditableCell
         row={row}
         column="unitSize"
-        value={getValue() as number | string | string[]}
+        value={row.original.unitSize as number | string | string[]}
       />
     ),
   },
