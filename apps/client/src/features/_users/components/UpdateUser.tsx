@@ -1,12 +1,12 @@
 import { User } from "api-contract";
 import { Drawer } from "corvu/drawer";
-import { UserDrawer } from "./UserDrawer";
+import { AddUserType, UserDrawer } from "./UserDrawer";
 
 type Props = {
-  user: User | undefined;
+  user: User;
   isOpen: boolean;
   onClose: () => void;
-  onSave?: () => void;
+  onSave: (user: Partial<AddUserType>, userId: number) => void;
 };
 
 export const UpdateUser = (props: Props) => {
@@ -33,12 +33,19 @@ export const UpdateUser = (props: Props) => {
               md:select-none"
             >
               <UserDrawer
+                type="update"
                 user={props.user}
                 onClose={() => {
                   drawerProps.setOpen(false);
                   props.onClose();
                 }}
-                onSave={props.onSave}
+                onSave={({
+                  user,
+                  userId,
+                }: {
+                  user: Partial<AddUserType>;
+                  userId: number;
+                }) => props.onSave(user, userId)}
               />
             </Drawer.Content>
           </Drawer.Portal>

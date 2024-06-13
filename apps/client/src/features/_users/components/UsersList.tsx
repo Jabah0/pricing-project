@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import toast from "solid-toast";
 import { Roles, User, contract } from "api-contract";
 import { InfiniteData, useQueryClient } from "@tanstack/solid-query";
@@ -12,13 +12,7 @@ import { AddUser } from "./AddUser";
 import { UpdateUser } from "./UpdateUser";
 import { ColumnFiltersState } from "@tanstack/solid-table";
 import { useLocale } from "@/features/locale/LocaleProvider";
-
-export type AddUserType = {
-  fullName: string;
-  username: string;
-  role: Roles;
-  password: string;
-};
+import { AddUserType } from "./UserDrawer";
 
 type Users = ClientInferResponses<typeof contract.users.getAll>;
 
@@ -124,6 +118,76 @@ export const UsersList = () => {
     addUserMutation.mutate({ body: { ...user } });
   };
 
+  const updateUserMutation = apiClient.users.patch.createMutation({
+    onMutate: async (
+      updatedUser
+    ): Promise<{ previousData: Users | undefined }> => {
+      await queryClient.cancelQueries({
+        queryKey: QueryKey(),
+      });
+
+      const previousData = queryClient.getQueryData<Users>(QueryKey());
+
+      queryClient.setQueryData<InfiniteData<Users>>(QueryKey(), (old) => {
+        if (!old) return undefined;
+
+        const targetUser = old.pages
+          .flatMap((item) => item.body.data.flatMap((i) => i))
+          .find((item) => item.id === updatedUser.params.id);
+
+        if (targetUser) {
+          targetUser.fullName =
+            updatedUser.body?.fullName || targetUser.fullName;
+          targetUser.role = updatedUser.body?.role || targetUser.role;
+        }
+
+        console.log("old", old);
+
+        return old;
+      });
+
+      return { previousData };
+    },
+    onError: (_err, __, context) => {
+      const typedContext = context as {
+        previousData: Users | undefined;
+      };
+
+      queryClient.setQueryData(QueryKey(), typedContext.previousData);
+
+      toast.custom(
+        (t) => (
+          <ErrorToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("addUserFailed") || ""}
+          />
+        ),
+        {
+          duration: 6000,
+          unmountDelay: 0,
+        }
+      );
+    },
+    onSuccess: () => {
+      toast.custom(
+        (t) => (
+          <SuccessToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={locale.t("updateUserSuccess") || ""}
+          />
+        ),
+        {
+          duration: 6000,
+          unmountDelay: 0,
+        }
+      );
+    },
+  });
+
+  const onUpdateUser = (user: Partial<AddUserType>, userId: number) => {
+    updateUserMutation.mutate({ body: { ...user }, params: { id: userId } });
+  };
+
   const [currentUser, setCurrentUser] = createSignal<User>();
 
   const [isOpen, setIsOpen] = createSignal(false);
@@ -162,14 +226,16 @@ export const UsersList = () => {
           onFilter={(filters) => onFilter(filters)}
         />
       </div>
-      <UpdateUser
-        onClose={() => {
-          setIsOpen(false);
-          setCurrentUser(undefined);
-        }}
-        user={currentUser()}
-        isOpen={isOpen()}
-      />
+      <Show when={currentUser() !== undefined}>
+        <UpdateUser
+          onClose={() => {
+            setIsOpen(false);
+          }}
+          onSave={(user, userId) => onUpdateUser(user, userId)}
+          user={currentUser()!}
+          isOpen={isOpen()}
+        />
+      </Show>
     </div>
   );
 };

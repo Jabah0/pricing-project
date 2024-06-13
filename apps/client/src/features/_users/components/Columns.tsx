@@ -20,6 +20,7 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("username");
     },
+    cell: (param) => <p>{param.row.original.username}</p>,
     meta: { title: "username", type: "string" },
     size: 6 / 1,
   },
@@ -30,6 +31,7 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("fullName");
     },
+    cell: (param) => <p>{param.row.original.fullName}</p>,
     meta: { title: "fullName", type: "string" },
     size: 6 / 1,
   },
@@ -40,9 +42,9 @@ export const Columns: ColumnDef<User>[] = [
       const locale = useLocale();
       return locale.t("role");
     },
-    cell: ({ row }) => {
+    cell: (param) => {
       const locale = useLocale();
-      return <p>{locale.t(row.original.role)}</p>;
+      return <p>{locale.t(param.row.original.role)}</p>;
     },
     meta: {
       title: "role",

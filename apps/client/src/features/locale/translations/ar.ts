@@ -57,5 +57,7 @@ export const dict: RawDictionary = {
   loginFailed: "فشلت عملية تسجيل الدخول",
   addUserFailed: "فشلت عملية إضافة المستخدم",
   addUserSuccess: " تمت إضافة المستخدم بنجاح",
+  updateUserSuccess: "تم تحديث بيانات المستخدم بنجاح",
   passwordDoNotMatch: "كلمة السر غير متطابقة",
+  fillAllRequiredFormData: "املأ كل الحقول المطلوبة",
 };

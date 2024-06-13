@@ -55,5 +55,7 @@ export const dict = {
   loginFailed: "Login Failed",
   addUserFailed: "Add User Failed",
   addUserSuccess: "Add User Success",
+  updateUserSuccess: "Update User Success",
+  fillAllRequiredFormData: "Fill All Required Data",
   passwordDoNotMatch: "Password Do Not Match",
 };

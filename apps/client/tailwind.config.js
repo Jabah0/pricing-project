@@ -66,7 +66,7 @@ module.exports = {
         backPrimary: "#ffffff",
         elementBack: "#ffffff",
         background: "#e6e6e6",
-        backgroundSec: "#ffffff",
+        backgroundSec: "#e6e6e6",
         iconStroke: "#6365f1",
         moon: "#FACC15",
         sun: "#FACC15",

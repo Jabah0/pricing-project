@@ -49,7 +49,7 @@ export const RolesCombobox = (props: Props) => {
       )}
     >
       <Combobox.Control
-        class="flex justify-center items-center bg-backPrimary border border-gray-400 shadow-lg 
+        class="flex justify-center items-center bg-backgroundSec border border-gray-400 shadow-lg 
         rounded-md h-[2rem] text-text"
         aria-label="Role"
       >

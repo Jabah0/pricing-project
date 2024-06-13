@@ -7,11 +7,25 @@ import { PasswordInput } from "./PasswordInput";
 import { RolesCombobox } from "./RolesCombobox";
 import { useLocale } from "@/features/locale/LocaleProvider";
 
-type Props = {
-  user?: User;
-  onClose: () => void;
-  onSave: (param?: any) => void;
+export type AddUserType = {
+  fullName: string;
+  username: string;
+  role: Roles;
+  password: string;
 };
+
+type Props =
+  | {
+      type: "insert";
+      onClose: () => void;
+      onSave: (param: AddUserType) => void;
+    }
+  | {
+      user: User;
+      type: "update";
+      onClose: () => void;
+      onSave: (param: { user: Partial<AddUserType>; userId: number }) => void;
+    };
 
 export const UserDrawer = (props: Props) => {
   const locale = useLocale();
@@ -28,12 +42,34 @@ export const UserDrawer = (props: Props) => {
       return;
     }
     try {
-      await props.onSave({
-        username: username(),
-        fullName: fullName(),
-        password: password(),
-        role: role(),
-      });
+      if (props.type === "insert") {
+        if (
+          role() === undefined ||
+          username() === "" ||
+          fullName() === "" ||
+          password() === ""
+        ) {
+          toast.error(locale.t("fillAllRequiredFormData") || "");
+          return;
+        }
+        props.onSave({
+          username: username(),
+          fullName: fullName(),
+          password: password(),
+          role: role()!,
+        });
+      }
+
+      if (props.type === "update") {
+        props.onSave({
+          userId: props.user.id,
+          user: {
+            fullName: fullName() === "" ? undefined : fullName(),
+            password: password() === "" ? undefined : password(),
+            role: role() ? role() : undefined,
+          },
+        });
+      }
       props.onClose();
     } catch (err) {
       console.log(err);
@@ -41,7 +77,7 @@ export const UserDrawer = (props: Props) => {
   };
 
   return (
-    <div class="flex flex-col justify-between items-center h-full w-full py-10 px-[3rem] bg-backgroundSec">
+    <div class="flex flex-col justify-between items-center h-full w-full py-10 px-[3rem] bg-backPrimary">
       <div class="flex flex-col gap-6 justify-center items-center">
         <div
           class="flex justify-center items-center text-text h-16 w-16 
@@ -54,8 +90,8 @@ export const UserDrawer = (props: Props) => {
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-textSecondary">{locale.t("fullName")}</p>
             <TextInput
-              class="bg-transparent text-text"
-              value={props.user?.fullName || ""}
+              class="bg-backgroundSec text-text"
+              value={props.type === "update" ? props.user.fullName : ""}
               onInput={(e) => setFullName(e.target.value)}
             />
           </div>
@@ -66,14 +102,14 @@ export const UserDrawer = (props: Props) => {
               onInput={(e) => {
                 setUsername(e.target.value);
               }}
-              value={props.user?.username || ""}
+              value={props.type === "update" ? props.user.username : ""}
             />
           </div>
 
           <div class="flex flex-col gap-3 justify-center ">
             <p class="text-textSecondary">{locale.t("role")}</p>
             <RolesCombobox
-              role={props.user?.role}
+              role={props.type === "update" ? props.user.role : undefined}
               onSelect={(val) => {
                 setRole(val);
               }}

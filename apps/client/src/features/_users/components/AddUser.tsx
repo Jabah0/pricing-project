@@ -1,6 +1,5 @@
 import { Drawer } from "corvu/drawer";
-import { UserDrawer } from "./UserDrawer";
-import { AddUserType } from "./UsersList";
+import { AddUserType, UserDrawer } from "./UserDrawer";
 import { useLocale } from "@/features/locale/LocaleProvider";
 
 type Props = {
@@ -38,6 +37,7 @@ export const AddUser = (props: Props) => {
               md:select-none"
             >
               <UserDrawer
+                type="insert"
                 onSave={props.onAdd}
                 onClose={() => drawerProps.setOpen(false)}
               />
