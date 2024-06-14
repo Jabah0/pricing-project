@@ -11,20 +11,20 @@ export const DarkModeSwitcher = () => {
       <Switch>
         <Match when={service.isDarkMode()}>
           <button
-            class="h-9 w-9 border border-white bg-elementBack rounded-full shadow-lg flex 
-              justify-center items-center"
+            class="h-9 w-9 border border-textSecondary bg-elementBack rounded-full drop-shadow-lg 
+            flex justify-center items-center"
             onClick={service.toggleDarkMode}
           >
-            <ClearNightFill />
+            <ClearNightFill class="object-cover" />
           </button>
         </Match>
         <Match when={!service.isDarkMode()}>
           <button
-            class="h-9 w-9 border border-white bg-white rounded-full shadow-lg flex 
-            justify-center items-center"
+            class="h-9 w-9 border border-textSecondary bg-elementBack rounded-full drop-shadow-lg 
+            flex justify-center items-center"
             onClick={service.toggleDarkMode}
           >
-            <ClearDayFill />
+            <ClearDayFill class="object-cover" />
           </button>
         </Match>
       </Switch>

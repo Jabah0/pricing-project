@@ -29,7 +29,7 @@ export const ProfileButton = () => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <div
-          class="h-9 w-9 border border-white bg-backgroundSec rounded-full shadow-lg 
+          class="h-9 w-9 border border-textSecondary bg-elementBack rounded-full shadow-lg 
           flex justify-center items-center"
         >
           <AccountIcon class="text-text" />
@@ -43,7 +43,7 @@ export const ProfileButton = () => {
           <div class="flex flex-col gap-3 justify-center items-center my-6 mx-4">
             <div class="flex flex-col gap-3 justify-center items-center">
               <div
-                class="h-16 w-16 border border-white bg-elementBack rounded-full shadow-lg 
+                class="h-16 w-16 border border-textSecondary bg-backgroundSec rounded-full shadow-lg 
                 flex justify-center items-center p-4"
               >
                 <AccountIcon class="text-text h-16 w-16" />
