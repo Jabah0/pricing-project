@@ -155,7 +155,7 @@ const StringFilter = (
     <input
       {...props}
       type="text"
-      class="px-2 w-full rounded-sm bg-backgroundSec drop-shadow-lg"
+      class="px-2 w-full text-text rounded-sm bg-backgroundSec drop-shadow-lg"
       placeholder={locale.t("textSearch")}
     />
   );
@@ -311,7 +311,7 @@ const NumberInput = (
         {...props}
         type="number"
         min={0}
-        class="bg-backgroundSec shadow-lg rounded-sm border border-background px-2 w-full"
+        class="bg-backgroundSec text-text shadow-lg rounded-sm border border-background px-2 w-full"
       />
     </div>
   );
@@ -330,7 +330,7 @@ const FilterWaySelection = (props: {
     <DropdownMenu.Root placement="bottom-end">
       <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
         <div
-          class="flex items-center justify-between gap-2 w-full text-start hover:opacity-75 shadow-lg 
+          class="flex items-center justify-between gap-2 w-full text-text text-start hover:opacity-75 shadow-lg 
           bg-backgroundSec px-2 border border-background"
         >
           <p>{locale.t(props.filterWay || "undefined")}</p>
@@ -341,7 +341,7 @@ const FilterWaySelection = (props: {
         <DropdownMenu.Content
           as={"div"}
           class="flex flex-col gap-2 bg-backPrimary border border-gray-600 my-4 p-2 w-[12rem] 
-        text-white z-50"
+          text-text z-50"
           onClick={(e) => e.stopPropagation()}
         >
           <DropdownMenu.Item
