@@ -32,7 +32,7 @@ export const ProfileButton = () => {
           class="h-9 w-9 border border-textSecondary bg-elementBack rounded-full shadow-lg 
           flex justify-center items-center"
         >
-          <AccountIcon class="text-text" />
+          <AccountIcon class="text-text object-cover" />
         </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
