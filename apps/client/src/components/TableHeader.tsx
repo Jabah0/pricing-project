@@ -1,3 +1,4 @@
+import { JSX, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
 import { ChevronDownIcon } from "@/assets/icons/ChevronDownIcon";
 import { EyeOffIcon } from "@/assets/icons/EyeOffIcon";
 import { FilterIcon } from "@/assets/icons/FilterIcon";
@@ -6,7 +7,6 @@ import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
 import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
 import { Combobox, DropdownMenu, Popover } from "@kobalte/core";
 import { SortDirection } from "@tanstack/solid-table";
-import { JSX, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
 import { NumberFilter as NumberFilterType } from "./Table";
 import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
 import { CancelIcon } from "@/assets/icons/CancelIcon";
@@ -418,7 +418,7 @@ const MoreOptions = (props: { hide: () => void }) => {
         <DropdownMenu.Content
           as={"div"}
           class="flex flex-col gap-2 bg-backPrimary border border-gray-600 my-4 p-2 w-[12rem] 
-        text-white z-50"
+          text-text z-50"
           onClick={(e) => e.stopPropagation()}
         >
           <button
@@ -429,7 +429,7 @@ const MoreOptions = (props: { hide: () => void }) => {
             class="flex items-center gap-2 w-full text-start hover:opacity-75 shadow-lg 
             bg-backgroundSec px-2"
           >
-            <EyeOffIcon class="text-gray-400" />
+            <EyeOffIcon class="text-textSecondary" />
             <p>{locale.t("hide")}</p>
           </button>
         </DropdownMenu.Content>
