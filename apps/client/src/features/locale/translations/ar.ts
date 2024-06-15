@@ -52,7 +52,7 @@ export const dict: RawDictionary = {
   enterPassword: "أدخل كلمة السر",
   enterUsername: "أدخل اسم المستخدم",
   welcomeMessage: "مرحبا بكم",
-  welcomeSubtextMessage: "لنظام تسعير الخدمات",
+  welcomeSubtextMessage: "في نظام تسعير الخدمات",
   loginSuccess: "تم تسجيل الدخوبل بنجاح",
   loginFailed: "فشلت عملية تسجيل الدخول",
   addUserFailed: "فشلت عملية إضافة المستخدم",
