@@ -8,7 +8,7 @@ export const PasswordInput = (
   const [isWatch, setIsWatch] = createSignal(false);
 
   return (
-    <div class="flex items-center gap-2 bg-backgroundSec shadow-lg rounded-md border border-gray-400 py-1 px-2">
+    <div class="flex items-center gap-2 bg-inputForm shadow-lg rounded-md border border-gray-400 py-1 px-2">
       <input
         {...props}
         class="bg-transparent text-text w-full"
