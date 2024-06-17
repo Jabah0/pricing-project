@@ -1,239 +1,40 @@
-import { Show, createSignal } from "solid-js";
-import toast from "solid-toast";
-import { Roles, User, contract } from "api-contract";
-import { InfiniteData, useQueryClient } from "@tanstack/solid-query";
-import { apiClient } from "@/api/api-client";
-import { ClientInferResponses } from "@ts-rest/core";
-import { SuccessToast } from "@/toasts/SuccessToast";
-import { ErrorToast } from "@/toasts/ErrorToast";
+import { Show, createEffect } from "solid-js";
+import { User } from "api-contract";
 import { Table } from "@/components/Table";
 import { Columns } from "./Columns";
 import { AddUser } from "./AddUser";
 import { UpdateUser } from "./UpdateUser";
-import { ColumnFiltersState } from "@tanstack/solid-table";
-import { useLocale } from "@/features/locale/LocaleProvider";
-import { AddUserType } from "./UserDrawer";
-
-type Users = ClientInferResponses<typeof contract.users.getAll>;
+import { UsersListService } from "../services/UsersListService";
 
 export const UsersList = () => {
-  const locale = useLocale();
-  const queryClient = useQueryClient();
-
-  const [role, setRole] = createSignal<Roles>();
-  const [username, setUsername] = createSignal<string>();
-  const [fullName, setFullName] = createSignal<string>();
-
-  const QueryKey = () => ["users", role(), username(), fullName()];
-
-  const usersQuery = apiClient.users.getAll.createInfiniteQuery(
-    QueryKey,
-    ({ pageParam = 1 }) => ({
-      query: {
-        page: pageParam,
-        get role() {
-          return role();
-        },
-        get username() {
-          return username();
-        },
-        get fullName() {
-          return fullName();
-        },
-      },
-    }),
-    {
-      getNextPageParam: (lastPage, _pages) => {
-        if (lastPage.body.meta.next === null) return undefined;
-        else return lastPage.body.meta.next;
-      },
-    }
-  );
-
-  const users = () =>
-    usersQuery.data?.pages.flatMap((page) => page.body.data) ?? [];
-
-  const addUserMutation = apiClient.users.create.createMutation({
-    onMutate: async (newUser): Promise<{ previousData: Users | undefined }> => {
-      await queryClient.cancelQueries({
-        queryKey: QueryKey(),
-      });
-
-      const previousData = queryClient.getQueryData<Users>(QueryKey());
-
-      queryClient.setQueryData<InfiniteData<Users>>(QueryKey(), (old) => {
-        if (!old) return undefined;
-
-        old.pages[old.pages.length - 1].body.data.push({
-          id: 1000,
-          username: newUser.body.username,
-          fullName: newUser.body.fullName,
-          role: newUser.body.role,
-        });
-
-        return {
-          ...old,
-        };
-      });
-
-      return { previousData };
-    },
-    onError: (_err, __, context) => {
-      const typedContext = context as {
-        previousData: Users | undefined;
-      };
-
-      queryClient.setQueryData(QueryKey(), typedContext.previousData);
-
-      toast.custom(
-        (t) => (
-          <ErrorToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserFailed") || ""}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-    onSuccess: () => {
-      toast.custom(
-        (t) => (
-          <SuccessToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserSuccess") || ""}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-  });
-
-  const onAddUser = (user: AddUserType) => {
-    addUserMutation.mutate({ body: { ...user } });
-  };
-
-  const updateUserMutation = apiClient.users.patch.createMutation({
-    onMutate: async (
-      updatedUser
-    ): Promise<{ previousData: Users | undefined }> => {
-      await queryClient.cancelQueries({
-        queryKey: QueryKey(),
-      });
-
-      const previousData = queryClient.getQueryData<Users>(QueryKey());
-
-      queryClient.setQueryData<InfiniteData<Users>>(QueryKey(), (old) => {
-        if (!old) return undefined;
-
-        const targetUser = old.pages
-          .flatMap((item) => item.body.data.flatMap((i) => i))
-          .find((item) => item.id === updatedUser.params.id);
-
-        if (targetUser) {
-          targetUser.fullName =
-            updatedUser.body?.fullName || targetUser.fullName;
-          targetUser.role = updatedUser.body?.role || targetUser.role;
-        }
-
-        console.log("old", old);
-
-        return old;
-      });
-
-      return { previousData };
-    },
-    onError: (_err, __, context) => {
-      const typedContext = context as {
-        previousData: Users | undefined;
-      };
-
-      queryClient.setQueryData(QueryKey(), typedContext.previousData);
-
-      toast.custom(
-        (t) => (
-          <ErrorToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("addUserFailed") || ""}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-    onSuccess: () => {
-      toast.custom(
-        (t) => (
-          <SuccessToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={locale.t("updateUserSuccess") || ""}
-          />
-        ),
-        {
-          duration: 6000,
-          unmountDelay: 0,
-        }
-      );
-    },
-  });
-
-  const onUpdateUser = (user: Partial<AddUserType>, userId: number) => {
-    updateUserMutation.mutate({ body: { ...user }, params: { id: userId } });
-  };
-
-  const [currentUser, setCurrentUser] = createSignal<User>();
-
-  const [isOpen, setIsOpen] = createSignal(false);
-
-  const onSelectUser = (props: { user: User }) => {
-    setCurrentUser(props.user);
-    setIsOpen(true);
-  };
-
-  const onFilter = (filters: ColumnFiltersState) => {
-    setRole(undefined);
-    setUsername(undefined);
-    setFullName(undefined);
-    filters.map((item) => {
-      item.id === "role" && setRole(item.value as Roles);
-      item.id === "username" && setUsername(item.value as string);
-      item.id === "fullName" && setFullName(item.value as string);
-    });
-  };
+  const service = UsersListService();
 
   return (
     <div class="flex flex-col gap-4 h-full">
       <div class="flex">
-        <AddUser onAdd={onAddUser} />
+        <AddUser onAdd={service.onAddUser} />
       </div>
 
       <div id="tableContainer" class="flex-grow overflow-auto">
         <Table
           columns={Columns}
-          data={users()}
-          isFetching={usersQuery.isFetching}
-          onFetchNextData={usersQuery.fetchNextPage}
-          isFetchingNextPage={usersQuery.isFetchingNextPage}
-          isFetchSuccess={usersQuery.isSuccess}
-          onSelect={(user: User) => onSelectUser({ user })}
-          onFilter={(filters) => onFilter(filters)}
+          data={service.users()}
+          isFetching={service.usersQuery.isFetching}
+          onFetchNextData={service.usersQuery.fetchNextPage}
+          isFetchingNextPage={service.usersQuery.isFetchingNextPage}
+          isFetchSuccess={service.usersQuery.isSuccess}
+          onSelect={(user: User) => service.onSelectUser({ user })}
+          onFilter={(filters) => service.onFilter(filters)}
         />
       </div>
-      <Show when={currentUser() !== undefined}>
+      <Show when={service.currentUser() !== undefined}>
         <UpdateUser
           onClose={() => {
-            setIsOpen(false);
+            service.setIsOpen(false);
           }}
-          onSave={(user, userId) => onUpdateUser(user, userId)}
-          user={currentUser()!}
-          isOpen={isOpen()}
+          onSave={(user, userId) => service.onUpdateUser(user, userId)}
+          user={service.currentUser()!}
+          isOpen={service.isOpen()}
         />
       </Show>
     </div>
