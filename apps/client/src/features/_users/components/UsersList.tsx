@@ -1,4 +1,4 @@
-import { Show, createEffect } from "solid-js";
+import { Show } from "solid-js";
 import { User } from "api-contract";
 import { Table } from "@/components/Table";
 import { Columns } from "./Columns";
