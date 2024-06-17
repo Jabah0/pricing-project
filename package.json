@@ -13,18 +13,7 @@
     "start": "node apps/api/dist/src/main"
   },
   "dependencies": {
-    "@nestjs/config": "^3.2.1",
-    "@nestjs/jwt": "^10.2.0",
-    "@nestjs/passport": "^10.0.3",
-    "@nestjs/swagger": "^7.3.0",
-    "@ts-rest/open-api": "^3.38.0",
     "bcrypt": "^5.1.1",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
-    "cookie-parser": "^1.4.6",
-    "date-fns": "^3.6.0",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "date-fns": "^3.6.0"
   }
 }
