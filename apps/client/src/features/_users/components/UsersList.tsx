@@ -11,9 +11,9 @@ export const UsersList = () => {
 
   return (
     <div class="flex flex-col gap-4 h-full">
-      {/* <div class="flex">
+      <div class="flex">
         <AddUser onAdd={service.onAddUser} />
-      </div> */}
+      </div>
 
       <div id="tableContainer" class="flex-grow overflow-auto">
         <Table
