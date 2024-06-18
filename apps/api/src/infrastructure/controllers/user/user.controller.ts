@@ -1,6 +1,6 @@
 import { contract } from 'api-contract';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { Body, Controller, Inject, UseGuards } from '@nestjs/common';
+import { Body, Controller, Inject, Req, UseGuards } from '@nestjs/common';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { AddNewUserUseCases } from '../../../usecases/user/addNewUser.usecase';
@@ -12,6 +12,7 @@ import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
 import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
+import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
 
 @Controller()
 export class UserController {
@@ -24,6 +25,8 @@ export class UserController {
     private readonly getUserUsecaseProxy: UseCaseProxy<GetUserUseCase>,
     @Inject(UsecasesProxyModule.UPDATE_USER_USECASES_PROXY)
     private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCases>,
+    @Inject(UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY)
+    private readonly getUserServicesStatusProxy: UseCaseProxy<GetUserServicesStatusUseCase>,
   ) {}
 
   //@UseGuards(JwtAuthGuard)
@@ -50,6 +53,18 @@ export class UserController {
         return { status: 200, body: users };
       },
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.users.servicesStatus)
+  async userServicesStatus(@Req() request: any) {
+    return tsRestHandler(contract.users.servicesStatus, async () => {
+      console.log('request.user.id ', request.user.id);
+      const result = await this.getUserServicesStatusProxy
+        .getInstance()
+        .execute(request.user.id);
+      return { status: 200, body: result };
+    });
   }
 
   @UseGuards(JwtAuthGuard)

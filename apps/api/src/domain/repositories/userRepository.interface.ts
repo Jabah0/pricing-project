@@ -25,4 +25,7 @@ export interface UserRepository {
   getMe(
     id: number,
   ): Promise<{ fullName: string; username: string; role: string }>;
+  userStatus(
+    id: number,
+  ): Promise<{ pricedServices: number; totalServices: number }>;
 }

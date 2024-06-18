@@ -154,6 +154,16 @@ export const contract = c.router(
           200: UserSchema.omit({ password: true }),
         },
       },
+      servicesStatus: {
+        method: "GET",
+        path: "/users/status",
+        responses: {
+          200: z.object({
+            pricedServices: z.number(),
+            totalServices: z.number(),
+          }),
+        },
+      },
     },
 
     medServices: {

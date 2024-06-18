@@ -164,6 +164,21 @@ export class DatabaseUserRepository implements UserRepository {
       },
     });
   }
+  async userStatus(
+    id: number,
+  ): Promise<{ pricedServices: number; totalServices: number }> {
+    const totalServices = await this.prisma.medService.count();
+    const pricedServices = await this.prisma.userMedServices.count({
+      where: {
+        userId: id,
+      },
+    });
+
+    console.log('pricedServices', pricedServices);
+    console.log('totalServices', totalServices);
+
+    return { pricedServices, totalServices };
+  }
 
   private toUser(adminUserEntity: User): UserM {
     const adminUser: UserM = new UserM();

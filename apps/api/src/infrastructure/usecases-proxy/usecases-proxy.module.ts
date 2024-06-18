@@ -31,6 +31,7 @@ import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedSer
 import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
 import { AccessControlModule } from '../services/role/access-control.module';
+import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
 
 @Module({
   imports: [
@@ -54,6 +55,8 @@ export class UsecasesProxyModule {
   static GET_USERS_USECASES_PROXY = 'getUsersUsecasesProxy';
   static GET_USER_USECASES_PROXY = 'getUserUsecasesProxy';
   static UPDATE_USER_USECASES_PROXY = 'updateUserUsecasesProxy';
+  static GET_USER_SERVICES_STATUS_USECASES_PROXY =
+    'getUserServicesStatusUseCasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
@@ -92,6 +95,17 @@ export class UsecasesProxyModule {
           ) =>
             new UseCaseProxy(
               new UpdateUserUseCases(logger, userRepository, bcryptService),
+            ),
+        },
+        {
+          inject: [LoggerService, DatabaseUserRepository],
+          provide: UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            userRepository: DatabaseUserRepository,
+          ) =>
+            new UseCaseProxy(
+              new GetUserServicesStatusUseCase(logger, userRepository),
             ),
         },
         {
@@ -218,6 +232,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
+        UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY,
       ],
     };
   }

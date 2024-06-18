@@ -463,6 +463,23 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        servicesStatus: {
+            method: "GET";
+            path: "/api/users/status";
+            responses: {
+                200: z.ZodObject<{
+                    pricedServices: z.ZodNumber;
+                    totalServices: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    pricedServices: number;
+                    totalServices: number;
+                }, {
+                    pricedServices: number;
+                    totalServices: number;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
     };
     medServices: {
         create: {

@@ -139,6 +139,16 @@ exports.contract = c.router({
                 200: exports.UserSchema.omit({ password: true }),
             },
         },
+        servicesStatus: {
+            method: "GET",
+            path: "/users/status",
+            responses: {
+                200: zod_1.z.object({
+                    pricedServices: zod_1.z.number(),
+                    totalServices: zod_1.z.number(),
+                }),
+            },
+        },
     },
     medServices: {
         create: {

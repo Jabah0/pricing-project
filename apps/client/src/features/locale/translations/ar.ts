@@ -60,4 +60,8 @@ export const dict: RawDictionary = {
   updateUserSuccess: "تم تحديث بيانات المستخدم بنجاح",
   passwordDoNotMatch: "كلمة السر غير متطابقة",
   fillAllRequiredFormData: "املأ كل الحقول المطلوبة",
+  priced: "مسعر",
+  notPriced: "غير مسعر",
+  pricedServices: "الخدمات المسعرة",
+  notPricedServices: "الخدمات غير المسعرة",
 };

@@ -58,4 +58,8 @@ export const dict = {
   updateUserSuccess: "Update User Success",
   fillAllRequiredFormData: "Fill All Required Data",
   passwordDoNotMatch: "Password Do Not Match",
+  priced: "Priced",
+  notPriced: "Not Priced",
+  pricedServices: "Priced Services",
+  notPricedServices: "Not Priced Services",
 };
