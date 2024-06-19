@@ -77,7 +77,7 @@ export const UserDrawer = (props: Props) => {
   };
 
   return (
-    <div class="flex flex-col justify-between items-center h-full w-full py-10 px-[3rem] bg-backgroundForm">
+    <div class="flex flex-col gap-2 justify-between items-center h-full w-full py-5 px-[3rem] bg-backgroundForm overflow-auto">
       <div class="flex flex-col gap-6 justify-center items-center">
         <div
           class="flex justify-center items-center text-text h-16 w-16 

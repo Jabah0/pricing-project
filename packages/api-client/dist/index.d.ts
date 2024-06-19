@@ -465,7 +465,7 @@ export declare const contract: {
         };
         servicesStatus: {
             method: "GET";
-            path: "/api/users/status";
+            path: "/api/user-status";
             responses: {
                 200: z.ZodObject<{
                     pricedServices: z.ZodNumber;

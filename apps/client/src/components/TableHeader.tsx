@@ -1,22 +1,28 @@
-import { JSX, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
-import { ChevronDownIcon } from "@/assets/icons/ChevronDownIcon";
-import { EyeOffIcon } from "@/assets/icons/EyeOffIcon";
-import { FilterIcon } from "@/assets/icons/FilterIcon";
-import { MenuIcon } from "@/assets/icons/MenuIcon";
-import { SortAscendingIcon } from "@/assets/icons/SortAscendingIcon";
-import { SortDescendingIcon } from "@/assets/icons/SortDescendingIcon";
+import { JSX, Match, Show, Switch, createSignal } from "solid-js";
+import {
+  ChevronDownIcon,
+  EyeOffIcon,
+  FilterIcon,
+  MenuIcon,
+  SortAscendingIcon,
+  SortDescendingIcon,
+  ConfirmIcon,
+  CancelIcon,
+} from "@/assets/icons";
 import { Combobox, DropdownMenu, Popover } from "@kobalte/core";
 import { SortDirection } from "@tanstack/solid-table";
 import { NumberFilter as NumberFilterType } from "./Table";
-import { ConfirmIcon } from "@/assets/icons/ConfirmIcon";
-import { CancelIcon } from "@/assets/icons/CancelIcon";
 import { useLocale } from "@/features/locale/LocaleProvider";
+import { RawDictionary } from "@/features/locale";
 
 type Sort = SortDirection | false;
 
 type FilterType = "number" | "string" | "select";
 
-export type FilterOptions = Array<{ label: string; value: string }>;
+export type FilterOptions = Array<{
+  label: keyof RawDictionary;
+  value: string;
+}>;
 
 type FilterWay =
   | "equals"
@@ -40,11 +46,7 @@ type Props = {
   filterOptions?: FilterOptions;
 };
 
-export const TableHeader = (propsWithoutDefault: Props) => {
-  const props = mergeProps(
-    { filterType: "string" as FilterType },
-    propsWithoutDefault
-  );
+export const TableHeader = (props: Props) => {
   const [filterWay, setFilterWay] = createSignal<FilterWay>("equals");
 
   return (
@@ -70,7 +72,7 @@ export const TableHeader = (propsWithoutDefault: Props) => {
             <Filter
               filter={props.filter}
               setFilter={props.setFilter}
-              filterType={props.filterType}
+              filterType={props.filterType || "string"}
               filterWay={filterWay()}
               setFilterWay={(way) => setFilterWay(way)}
               filterOptions={props.filterOptions}
@@ -452,8 +454,8 @@ const SelectFilter = (props: {
     <Combobox.Root
       options={props.filterOptions}
       optionValue="value"
-      optionTextValue="label"
-      optionLabel="label"
+      optionTextValue={(item) => locale.t(item.label) || item.label}
+      optionLabel={(item) => locale.t(item.label) || item.label}
       placeholder={locale.t("select")}
       defaultValue={props.filterOptions[roleIndex()]}
       onChange={(e) => props.setFilter && props.setFilter(e.value)}
@@ -464,7 +466,7 @@ const SelectFilter = (props: {
           item={itemProps.item}
         >
           <Combobox.ItemLabel>
-            {itemProps.item.rawValue.label}
+            {locale.t(itemProps.item.rawValue.label)}
           </Combobox.ItemLabel>
           <Combobox.ItemIndicator>
             <ConfirmIcon />

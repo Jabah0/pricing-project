@@ -29,7 +29,8 @@ export class UserController {
     private readonly getUserServicesStatusProxy: UseCaseProxy<GetUserServicesStatusUseCase>,
   ) {}
 
-  //@UseGuards(JwtAuthGuard)
+  @Roles(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @TsRestHandler(contract.users.create)
   async addNewUser(@Body() user: AddUserDto) {
     return tsRestHandler(contract.users.create, async () => {

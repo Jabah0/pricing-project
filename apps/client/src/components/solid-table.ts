@@ -21,7 +21,7 @@ declare module "@tanstack/solid-table" {
   interface ColumnMeta<TData extends unknown, TValue> {
     title: keyof RawDictionary;
     type: "string" | "number" | "select";
-    options?: { value: string; label: string }[];
+    options?: { value: string; label: keyof RawDictionary }[];
   }
 }
 
@@ -63,7 +63,6 @@ export const EditFeature: TableFeature<any> = {
     };
   },
 
-  // define the new feature's default options
   getDefaultOptions: <TData extends RowData>(
     table: Table<TData>
   ): EditOptions => {
@@ -73,7 +72,6 @@ export const EditFeature: TableFeature<any> = {
     };
   },
 
-  // define the new feature's table instance methods
   createTable: <TData extends RowData>(table: Table<TData>): void => {
     table.setEdit = (updater) => {
       const safeUpdater: Updater<EditState<TData>[]> = (old) => {

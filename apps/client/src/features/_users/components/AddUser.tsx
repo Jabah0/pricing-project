@@ -9,11 +9,13 @@ type Props = {
 export const AddUser = (props: Props) => {
   const locale = useLocale();
 
+  const direct = () => (locale.locale().dir === "rtl" ? "right" : "left");
+
   return (
     <Drawer
       breakPoints={[0.5]}
       velocityFunction={() => 1}
-      side="right"
+      side={direct()}
       closeOnOutsidePointer={false}
     >
       {(drawerProps) => (
@@ -30,11 +32,11 @@ export const AddUser = (props: Props) => {
               corvu-transitioning:duration-500 "
             />
             <Drawer.Content
-              class="fixed bottom-0 right-0 z-50 flex flex-col justify-center items-center 
+              class={`fixed bottom-0 ${direct()}-0 z-50 flex flex-col justify-center items-center 
               h-full w-fit after:absolute border-s border-gray-600
               after:top-full after:h-1/2 after:bg-inherit bg-transparent
               corvu-transitioning:transition-transform corvu-transitioning:duration-500 
-              md:select-none"
+              overflow-auto`}
             >
               <UserDrawer
                 type="insert"

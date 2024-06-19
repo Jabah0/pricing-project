@@ -156,7 +156,7 @@ export const contract = c.router(
       },
       servicesStatus: {
         method: "GET",
-        path: "/users/status",
+        path: "/user-status",
         responses: {
           200: z.object({
             pricedServices: z.number(),

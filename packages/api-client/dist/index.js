@@ -141,7 +141,7 @@ exports.contract = c.router({
         },
         servicesStatus: {
             method: "GET",
-            path: "/users/status",
+            path: "/user-status",
             responses: {
                 200: zod_1.z.object({
                     pricedServices: zod_1.z.number(),

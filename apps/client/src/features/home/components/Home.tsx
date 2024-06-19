@@ -16,7 +16,7 @@ export const Home = () => {
   const totalServices = () => userStatus.data?.body.totalServices || 0;
   const notPricedServices = () => totalServices() - pricedServices();
 
-  const [series] = createSignal([pricedServices(), notPricedServices()]);
+  const series = () => [pricedServices(), notPricedServices()];
   const [options] = createSignal<ApexOptions>({
     labels: [locale.t("priced") || "", locale.t("notPriced") || ""],
     colors: ["#6365f1", "#3b3d91"],
@@ -46,22 +46,40 @@ export const Home = () => {
       <div class="flex flex-wrap gap-20">
         <div class="bg-backgroundForm drop-shadow-lg rounded-md">
           <SolidApexCharts
-            width={400}
+            width={350}
             type="donut"
             options={options()}
             series={series()}
           />
         </div>
-        <div class="flex flex-col gap-14 bg-backgroundForm drop-shadow rounded-md p-6">
-          <div class="bg-secondary rounded-md p-6">
-            <p class="text-white drop-shadow-lg">
-              {locale.t("pricedServices")}: {pricedServices()}
-            </p>
+        <div class="flex flex-col justify-between gap-4">
+          <div class="flex justify-between items-center gap-3 bg-backgroundForm drop-shadow rounded-md p-3">
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3">
+              <p class="text-white drop-shadow-lg">{locale.t("allServices")}</p>
+            </div>
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3 min-w-[4rem]">
+              <p class="text-white drop-shadow-lg">{totalServices()}</p>
+            </div>
           </div>
-          <div class="flex flex-col gap-20 bg-secondary rounded-md p-6">
-            <p class="text-white drop-shadow-lg">
-              {locale.t("notPricedServices")}: {notPricedServices()}
-            </p>
+          <div class="flex justify-between items-center bg-backgroundForm drop-shadow rounded-md p-3">
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3">
+              <p class="text-white drop-shadow-lg">
+                {locale.t("pricedServices")}
+              </p>
+            </div>
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3 min-w-[4rem]">
+              <p class="text-white drop-shadow-lg">{pricedServices()}</p>
+            </div>
+          </div>
+          <div class="flex justify-between items-center gap-3 bg-backgroundForm drop-shadow rounded-md p-3">
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3">
+              <p class="text-white drop-shadow-lg">
+                {locale.t("notPricedServices")}
+              </p>
+            </div>
+            <div class="flex items-center justify-center border-2 border-textSecondary bg-secondary rounded-md p-3 min-w-[4rem]">
+              <p class="text-white drop-shadow-lg">{notPricedServices()}</p>
+            </div>
           </div>
         </div>
       </div>

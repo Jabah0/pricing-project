@@ -65,7 +65,7 @@ export const MainLayout: ParentComponent = (props) => {
           </div>
         </div>
       </Sidebar>
-      <div class="flex flex-col items-center h-full w-full py-4 2xl:px-15 sm:px-2 overflow-auto">
+      <div class="flex flex-col items-center h-full w-full py-2 2xl:px-15 sm:px-2 overflow-auto">
         <div class="flex flex-col gap-6 w-full h-full">
           <Navbar />
           <div class="flex-1 py-2 overflow-auto">{props.children}</div>

@@ -6,6 +6,7 @@ import "./index.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { apiClient } from "./api/api-client";
+import { LocaleProvider } from "./features/locale/LocaleProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +40,9 @@ if (process.env.NODE_ENV === "development") {
 render(
   () => (
     <QueryClientProvider client={queryClient}>
-      <App />
+      <LocaleProvider>
+        <App />
+      </LocaleProvider>
     </QueryClientProvider>
   ),
 

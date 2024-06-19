@@ -50,8 +50,8 @@ export const Columns: ColumnDef<User>[] = [
       title: "role",
       type: "select",
       options: [
-        { value: "ADMIN", label: "Admin" },
-        { value: "USER", label: "User" },
+        { value: "ADMIN", label: "ADMIN" },
+        { value: "USER", label: "USER" },
       ],
     },
     size: 6 / 1,

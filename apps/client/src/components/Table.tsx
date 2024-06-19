@@ -218,14 +218,16 @@ export const Table = <T extends object>(props: Props<T>) => {
     return () => observer.disconnect();
   });
 
+  const locale = useLocale();
+
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger
         as="div"
         class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-lg
-        text-gray-400"
+        text-gray-400 relative"
       >
-        <table class="w-full relative">
+        <table class="w-full">
           <thead class="sticky top-0 bg-backPrimary z-40">
             <For each={table.getHeaderGroups()}>
               {(headerGroup) => (
@@ -240,9 +242,8 @@ export const Table = <T extends object>(props: Props<T>) => {
                           <TableHeader
                             isSorted={header.column.getIsSorted()}
                             hide={() => header.column.toggleVisibility()}
-                            title={flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
+                            title={locale.t(
+                              header.column.columnDef.meta?.title || "undefined"
                             )}
                             isSortable={header.column.getCanSort()}
                             toggleSort={() => header.column.toggleSorting()}
