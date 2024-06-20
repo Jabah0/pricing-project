@@ -243,7 +243,7 @@ export const Table = <T extends object>(props: Props<T>) => {
                             isSorted={header.column.getIsSorted()}
                             hide={() => header.column.toggleVisibility()}
                             title={locale.t(
-                              header.column.columnDef.meta?.title || "undefined"
+                              header.column.columnDef.meta?.title || ""
                             )}
                             isSortable={header.column.getCanSort()}
                             toggleSort={() => header.column.toggleSorting()}
@@ -340,13 +340,15 @@ const ColumnsChooser = <T extends object>(props: {
 
   return (
     <div
-      class="fixed bottom-1 end-0 h-[20rem] w-[15rem] bg-elementBack border 
+      class="sticky bottom-0 end-0 h-[20rem] w-[15rem] bg-elementBack border 
       border-gray-600 drop-shadow-lg z-50"
     >
       <div class="flex flex-col gap-2 h-full w-full px-2 py-2">
-        <button onClick={props.close}>
-          <CancelIcon class="h-4 w-4 text-red-700" />
-        </button>
+        <div class="flex items-center justify-start">
+          <button onClick={props.close}>
+            <CancelIcon class="h-4 w-4 text-red-700" />
+          </button>
+        </div>
         <Switch>
           <Match when={props.columns.length === 0}>
             <div class="flex flex-col justify-center items-center h-full">

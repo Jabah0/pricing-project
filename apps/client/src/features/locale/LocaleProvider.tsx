@@ -15,7 +15,6 @@ interface LocaleContextType {
   locale: Accessor<LocaleType>;
   switchLocale: (locale: LocaleType) => void;
   t: i18n.NullableTranslator<RawDictionary, string>;
-  loading: boolean;
 }
 
 export const languages: LocaleType[] = [
@@ -54,14 +53,8 @@ export const LocaleProvider: ParentComponent = (props) => {
 
   const t = i18n.translator(dict, i18n.resolveTemplate);
 
-  const isLoading = () => {
-    return dict.loading;
-  };
-
   return (
-    <LocaleContext.Provider
-      value={{ locale, switchLocale, t, loading: isLoading() }}
-    >
+    <LocaleContext.Provider value={{ locale, switchLocale, t }}>
       {props.children}
     </LocaleContext.Provider>
   );

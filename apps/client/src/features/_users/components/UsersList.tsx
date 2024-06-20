@@ -17,7 +17,7 @@ export const UsersList = () => {
 
       <div id="tableContainer" class="flex-grow overflow-auto">
         <Table
-          columns={Columns}
+          columns={Columns()}
           data={service.users()}
           isFetching={service.usersQuery.isFetching}
           onFetchNextData={service.usersQuery.fetchNextPage}

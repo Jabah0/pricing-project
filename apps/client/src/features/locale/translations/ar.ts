@@ -64,4 +64,5 @@ export const dict: RawDictionary = {
   notPriced: "غير مسعر",
   pricedServices: "الخدمات المسعرة",
   notPricedServices: "الخدمات غير المسعرة",
+  "": "",
 };

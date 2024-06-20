@@ -174,9 +174,6 @@ export class DatabaseUserRepository implements UserRepository {
       },
     });
 
-    console.log('pricedServices', pricedServices);
-    console.log('totalServices', totalServices);
-
     return { pricedServices, totalServices };
   }
 

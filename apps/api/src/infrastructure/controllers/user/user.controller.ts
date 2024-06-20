@@ -60,7 +60,6 @@ export class UserController {
   @TsRestHandler(contract.users.servicesStatus)
   async userServicesStatus(@Req() request: any) {
     return tsRestHandler(contract.users.servicesStatus, async () => {
-      console.log('request.user.id ', request.user.id);
       const result = await this.getUserServicesStatusProxy
         .getInstance()
         .execute(request.user.id);
