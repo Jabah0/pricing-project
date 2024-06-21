@@ -123,6 +123,7 @@ export const Table = <T extends object>(props: Props<T>) => {
     cell: ({ row }) => <EditCell onUpdate={props.onUpdate} row={row} />,
     meta: {
       title: "action",
+      headerTitle: "",
       type: "string",
     },
     size: 6 / 1,
@@ -243,7 +244,7 @@ export const Table = <T extends object>(props: Props<T>) => {
                             isSorted={header.column.getIsSorted()}
                             hide={() => header.column.toggleVisibility()}
                             title={locale.t(
-                              header.column.columnDef.meta?.title || ""
+                              header.column.columnDef.meta?.headerTitle || ""
                             )}
                             isSortable={header.column.getCanSort()}
                             toggleSort={() => header.column.toggleSorting()}
@@ -304,7 +305,7 @@ export const Table = <T extends object>(props: Props<T>) => {
           </div>
         </Show>
         <Show when={props.isFetchingNextPage}>
-          <div class="flex justify-center w-full">
+          <div class="flex justify-center w-full h-fit">
             <DotsRotateIcon class="text-primary w-12 h-12" />
           </div>
         </Show>

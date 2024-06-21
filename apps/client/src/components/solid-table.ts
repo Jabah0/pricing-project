@@ -20,6 +20,7 @@ declare module "@tanstack/solid-table" {
 
   interface ColumnMeta<TData extends unknown, TValue> {
     title: keyof RawDictionary;
+    headerTitle: keyof RawDictionary;
     type: "string" | "number" | "select";
     options?: { value: string; label: keyof RawDictionary }[];
   }
