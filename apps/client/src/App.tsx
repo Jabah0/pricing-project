@@ -8,6 +8,7 @@ import { UsersList } from "./features/_users/components/UsersList";
 import { RouteGuard } from "./features/auth/components/RouteGuard";
 import { MedServicesList } from "./features/med-service/components/MedServicesList";
 import { Home } from "./features/home/components/Home";
+import { Settings } from "./features/settings/components/settings";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           )}
         >
           <Route path="/users" component={UsersList} />
+          <Route path="/settings" component={Settings} />
         </Route>
       </Route>
       <Route path="/auth" component={AuthLayout}>

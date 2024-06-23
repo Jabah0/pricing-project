@@ -62,5 +62,6 @@ export const dict = {
   notPriced: "Not Priced",
   pricedServices: "Priced Services",
   notPricedServices: "Not Priced Services",
+  numberOfPricing: "Number of Services Pricing",
   "": "",
 };
