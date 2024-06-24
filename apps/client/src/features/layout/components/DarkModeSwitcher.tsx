@@ -1,10 +1,10 @@
 import { Match, Switch } from "solid-js";
 import ClearDayFill from "@/assets/icons/ClearDayFill";
 import ClearNightFill from "@/assets/icons/ClearNightFill";
-import { DarkModService } from "../services/DarkModService";
+import { useDarkMode } from "../services/DarkModService";
 
 export const DarkModeSwitcher = () => {
-  const service = DarkModService();
+  const service = useDarkMode();
 
   return (
     <div>

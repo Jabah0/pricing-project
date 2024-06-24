@@ -1,7 +1,21 @@
-import { createSignal, onMount } from "solid-js";
+import {
+  ParentComponent,
+  createContext,
+  createSignal,
+  onMount,
+  useContext,
+} from "solid-js";
 import { makePersisted } from "@solid-primitives/storage";
+import { Accessor } from "solid-js";
 
-export const DarkModService = () => {
+interface DarkModeContextType {
+  isDarkMode: Accessor<boolean>;
+  toggleDarkMode: () => void;
+}
+
+const DarkModeContext = createContext<DarkModeContextType>();
+
+export const DarkModProvider: ParentComponent = (props) => {
   const [isDarkMode, setIsDarkMode] = makePersisted(createSignal(false), {
     storage: localStorage,
     name: "services_pricing-darkMode",
@@ -28,5 +42,16 @@ export const DarkModService = () => {
     setIsDarkMode((pre) => !pre);
   };
 
-  return { toggleDarkMode, isDarkMode };
+  return (
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+      {props.children}
+    </DarkModeContext.Provider>
+  );
 };
+
+export function useDarkMode() {
+  const context = useContext(DarkModeContext);
+  if (!context) throw new ReferenceError("DarkMode Context");
+
+  return context;
+}

@@ -63,5 +63,6 @@ export const dict = {
   pricedServices: "Priced Services",
   notPricedServices: "Not Priced Services",
   numberOfPricing: "Number of Services Pricing",
+  darkMode: "Dark Mode",
   "": "",
 };

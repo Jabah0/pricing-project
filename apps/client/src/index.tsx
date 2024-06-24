@@ -7,6 +7,7 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { apiClient } from "./api/api-client";
 import { LocaleProvider } from "./features/locale/LocaleProvider";
+import { DarkModProvider } from "./features/layout/services/DarkModService";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,7 +42,9 @@ render(
   () => (
     <QueryClientProvider client={queryClient}>
       <LocaleProvider>
-        <App />
+        <DarkModProvider>
+          <App />
+        </DarkModProvider>
       </LocaleProvider>
     </QueryClientProvider>
   ),
