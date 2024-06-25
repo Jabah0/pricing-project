@@ -52,4 +52,6 @@ export interface MedServiceRepository {
   ): Promise<MedService>;
 
   numberOfPricing(): Promise<number>;
+
+  updateNumberOfPricing(limit: number): Promise<void>;
 }

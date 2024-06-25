@@ -8,11 +8,17 @@ import { useLocale } from "@/features/locale/LocaleProvider";
 import { CardWrapper } from "./CardWrapper";
 import { Match, Switch, createSignal } from "solid-js";
 import { apiClient } from "@/api/api-client";
+import toast from "solid-toast";
+import { useQueryClient } from "@tanstack/solid-query";
 
 export const ServicesSetting = () => {
   const locale = useLocale();
 
   const [isEditing, setIsEditing] = createSignal(false);
+
+  const [value, setValue] = createSignal<number>();
+
+  const queryClient = useQueryClient();
 
   const numberOfPricingQuery =
     apiClient.medServices.numberOfPricing.createQuery(
@@ -20,11 +26,31 @@ export const ServicesSetting = () => {
       {}
     );
 
-  let InputElement: HTMLInputElement;
+  const numberOfPricingMutation =
+    apiClient.medServices.updateNumberOfPricing.createMutation({
+      onError: () => {
+        toast.error("something wrong!");
+      },
+      onSuccess: () => {
+        toast.success("updated successfully!");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["numberOfPricing"]);
+      },
+    });
+
+  const [inputRef, setInputRef] = createSignal<HTMLElement | null>(null);
 
   const onClickEdit = () => {
+    setValue(numberOfPricingQuery.data?.body);
     setIsEditing(true);
-    InputElement?.focus();
+    inputRef()?.focus();
+  };
+
+  const onSaveEdit = () => {
+    if (Number.isNaN(value()) && !value()) return;
+    numberOfPricingMutation.mutate({ body: { limit: value()! } });
+    setIsEditing(false);
   };
 
   return (
@@ -46,9 +72,10 @@ export const ServicesSetting = () => {
             <Match when={isEditing()}>
               <input
                 value={numberOfPricingQuery.data?.body}
+                onInput={(e) => setValue(parseInt(e.target.value))}
                 type="number"
                 class="text-2xl text-text text-center bg-transparent flex justify-center items-center"
-                ref={InputElement}
+                ref={setInputRef}
               />
             </Match>
           </Switch>
@@ -64,7 +91,10 @@ export const ServicesSetting = () => {
               </button>
             </Match>
             <Match when={isEditing()}>
-              <button class="flex justify-center items-center text-3xl w-full text-text bg-backgroundSec drop-shadow-xl py-1 rounded-md">
+              <button
+                class="flex justify-center items-center text-3xl w-full text-text bg-backgroundSec drop-shadow-xl py-1 rounded-md"
+                onClick={onSaveEdit}
+              >
                 <ConfirmIcon class="text-green-700" />
               </button>
               <button

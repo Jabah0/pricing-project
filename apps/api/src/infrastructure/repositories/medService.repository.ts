@@ -289,4 +289,12 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
 
     return pricing.limitNumberOfPricing;
   }
+
+  async updateNumberOfPricing(limit: number): Promise<void> {
+    await this.prisma.medService.updateMany({
+      data: {
+        limitNumberOfPricing: limit,
+      },
+    });
+  }
 }

@@ -14,6 +14,7 @@ import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
 import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
 import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
+import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
 @Controller()
 export class MedServiceController {
   constructor(
@@ -32,7 +33,11 @@ export class MedServiceController {
     @Inject(
       UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
     )
-    private readonly getServicesNumberOfPricingProxy: UseCaseProxy<GetServicesNumberOfPricingUseCase>,
+    private readonly getServicesNumberOfPricingUseCaseProxy: UseCaseProxy<GetServicesNumberOfPricingUseCase>,
+    @Inject(
+      UsecasesProxyModule.UPDATE_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
+    )
+    private readonly updateServicesNumberOfPricingUseCaseProxy: UseCaseProxy<UpdateNumberOfPricingUseCase>,
   ) {}
 
   @Roles(RolesEnum.ADMIN)
@@ -43,7 +48,7 @@ export class MedServiceController {
       contract.medServices.numberOfPricing,
 
       async ({}) => {
-        const result = await this.getServicesNumberOfPricingProxy
+        const result = await this.getServicesNumberOfPricingUseCaseProxy
           .getInstance()
           .execute();
 
@@ -215,6 +220,25 @@ export class MedServiceController {
         return {
           status: 200,
           body: { message: 'The service updated successfully' },
+        };
+      },
+    );
+  }
+
+  @Roles(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @TsRestHandler(contract.medServices.updateNumberOfPricing)
+  async updateNumberOfPricing() {
+    return tsRestHandler(
+      contract.medServices.updateNumberOfPricing,
+      async ({ body: { limit } }) => {
+        await this.updateServicesNumberOfPricingUseCaseProxy
+          .getInstance()
+          .execute(limit);
+
+        return {
+          status: 200,
+          body: { message: 'The number of pricing updated successfully' },
         };
       },
     );

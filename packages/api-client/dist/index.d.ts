@@ -1090,6 +1090,27 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        updateNumberOfPricing: {
+            method: "PATCH";
+            body: z.ZodObject<{
+                limit: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                limit: number;
+            }, {
+                limit: number;
+            }>;
+            path: "/api/med-services-update-number-of-pricing";
+            responses: {
+                200: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
     };
 };
 export {};

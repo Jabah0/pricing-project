@@ -328,6 +328,13 @@ export const contract = c.router(
           200: z.number(),
         },
       },
+
+      updateNumberOfPricing: {
+        method: "PATCH",
+        path: "/med-services-update-number-of-pricing",
+        body: z.object({ limit: z.number() }),
+        responses: { 200: z.object({ message: z.string() }) },
+      },
     },
   },
 

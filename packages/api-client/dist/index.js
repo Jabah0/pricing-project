@@ -308,5 +308,11 @@ exports.contract = c.router({
                 200: zod_1.z.number(),
             },
         },
+        updateNumberOfPricing: {
+            method: "PATCH",
+            path: "/med-services-update-number-of-pricing",
+            body: zod_1.z.object({ limit: zod_1.z.number() }),
+            responses: { 200: zod_1.z.object({ message: zod_1.z.string() }) },
+        },
     },
 }, { pathPrefix: "/api", strictStatusCodes: true });
