@@ -279,4 +279,14 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
 
     return updatedService;
   }
+
+  async numberOfPricing(): Promise<number> {
+    const pricing = await this.prisma.medService.findFirst({
+      select: {
+        limitNumberOfPricing: true,
+      },
+    });
+
+    return pricing.limitNumberOfPricing;
+  }
 }

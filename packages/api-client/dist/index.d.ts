@@ -1082,6 +1082,14 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        numberOfPricing: {
+            method: "GET";
+            path: "/api/med-services/number-of-pricing";
+            responses: {
+                200: z.ZodNumber;
+            };
+            strictStatusCodes: true;
+        };
     };
 };
 export {};

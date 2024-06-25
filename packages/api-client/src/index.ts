@@ -321,6 +321,13 @@ export const contract = c.router(
           }),
         },
       },
+      numberOfPricing: {
+        method: "GET",
+        path: "/med-services/number-of-pricing",
+        responses: {
+          200: z.number(),
+        },
+      },
     },
   },
 

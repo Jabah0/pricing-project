@@ -50,4 +50,6 @@ export interface MedServiceRepository {
     serviceId: string,
     updateBody: Partial<MedService>,
   ): Promise<MedService>;
+
+  numberOfPricing(): Promise<number>;
 }

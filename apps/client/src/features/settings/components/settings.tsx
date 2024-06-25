@@ -5,7 +5,7 @@ import { ServicesSetting } from "./ServicesSetting";
 export const Settings = () => {
   return (
     <div
-      class="flex flex-1 sm:flex-nowrap flex-wrap px-2 py-2 items-center justify-center overflow-auto gap-4 
+      class="flex flex-wrap gap-4 items-center justify-center py-2 px-2 overflow-auto
       h-full bg-backPrimary drop-shadow-xl rounded-sm"
     >
       <ServicesSetting />

@@ -10,6 +10,10 @@ import { DeleteMedServiceUseCase } from 'src/usecases/medService/deleteMedServic
 import { UpdateMedServiceUseCase } from 'src/usecases/medService/updateMedService.usecase';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwtAuth.guard';
 import { GetUserMedServicesUseCase } from 'src/usecases/medService/getUserMedServices.usecase';
+import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
+import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
+import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
+import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 @Controller()
 export class MedServiceController {
   constructor(
@@ -25,7 +29,28 @@ export class MedServiceController {
     private readonly updateMedServiceUseCaseProxy: UseCaseProxy<UpdateMedServiceUseCase>,
     @Inject(UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY)
     private readonly getUserMedServicesUseCaseProxy: UseCaseProxy<GetUserMedServicesUseCase>,
+    @Inject(
+      UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
+    )
+    private readonly getServicesNumberOfPricingProxy: UseCaseProxy<GetServicesNumberOfPricingUseCase>,
   ) {}
+
+  @Roles(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @TsRestHandler(contract.medServices.numberOfPricing)
+  async getNumberOfPricing() {
+    return tsRestHandler(
+      contract.medServices.numberOfPricing,
+
+      async ({}) => {
+        const result = await this.getServicesNumberOfPricingProxy
+          .getInstance()
+          .execute();
+
+        return { status: 200, body: result };
+      },
+    );
+  }
 
   @UseGuards(JwtAuthGuard)
   @TsRestHandler(contract.medServices.getAll)

@@ -20,7 +20,7 @@ async function main() {
         price: Math.floor(Math.random() * 850) + 1,
         unitSize: Math.floor(Math.random() * 10) + 1,
         numberOfPricing: 0,
-        limitNumberOfPricing: Math.floor(Math.random() * 7) + 1,
+        limitNumberOfPricing: 5,
       },
     });
   }

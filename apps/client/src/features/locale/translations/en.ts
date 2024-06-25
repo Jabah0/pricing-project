@@ -65,5 +65,6 @@ export const dict = {
   numberOfPricing: "Number of Services Pricing",
   darkMode: "Dark Mode",
   language: "Language",
+  selectLanguage: "Select Language",
   "": "",
 };

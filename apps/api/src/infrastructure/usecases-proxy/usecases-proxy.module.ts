@@ -32,6 +32,7 @@ import { UpdateUserUseCases } from 'src/usecases/user/updateUser.usecase';
 import { GetUserInformationUseCase } from 'src/usecases/user/getUserInformation';
 import { AccessControlModule } from '../services/role/access-control.module';
 import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
+import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 
 @Module({
   imports: [
@@ -57,6 +58,8 @@ export class UsecasesProxyModule {
   static UPDATE_USER_USECASES_PROXY = 'updateUserUsecasesProxy';
   static GET_USER_SERVICES_STATUS_USECASES_PROXY =
     'getUserServicesStatusUseCasesProxy';
+  static GET_USER_INFORMATION_USECASES_PROXY =
+    'getUserInformationUsecasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
@@ -66,8 +69,8 @@ export class UsecasesProxyModule {
   static UPDATE_MED_SERVICE_USECASES_PROXY = 'updateMedServiceUsecasesProxy';
   static GET_MED_SERVICES_BY_USER_USECASES_PROXY =
     'getMedServicesByUserUsecasesProxy';
-  static GET_USER_INFORMATION_USECASES_PROXY =
-    'getUserInformationUsecasesProxy';
+  static GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY =
+    'getMedServicesNumberOfPricing';
 
   static register(): DynamicModule {
     return {
@@ -184,6 +187,15 @@ export class UsecasesProxyModule {
             ),
         },
         {
+          inject: [DatabaseMedServiceRepository],
+          provide:
+            UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
+          useFactory: (medServiceRepository: DatabaseMedServiceRepository) =>
+            new UseCaseProxy(
+              new GetServicesNumberOfPricingUseCase(medServiceRepository),
+            ),
+        },
+        {
           inject: [LoggerService, DatabaseMedServiceRepository],
           provide: UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
           useFactory: (
@@ -233,6 +245,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
       ],
     };
   }

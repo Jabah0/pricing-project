@@ -301,5 +301,12 @@ exports.contract = c.router({
                 }),
             },
         },
+        numberOfPricing: {
+            method: "GET",
+            path: "/med-services/number-of-pricing",
+            responses: {
+                200: zod_1.z.number(),
+            },
+        },
     },
 }, { pathPrefix: "/api", strictStatusCodes: true });
