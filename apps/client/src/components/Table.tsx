@@ -225,7 +225,7 @@ export const Table = <T extends object>(props: Props<T>) => {
     <ContextMenu.Root>
       <ContextMenu.Trigger
         as="div"
-        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-lg
+        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-xl
         text-gray-400 relative"
       >
         <table class="w-full">

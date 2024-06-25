@@ -66,5 +66,6 @@ export const dict: RawDictionary = {
   notPricedServices: "الخدمات غير المسعرة",
   numberOfPricing: "عدد مرات تسعير الخدمات",
   darkMode: "الوضع الليلي",
+  language: "اللغة",
   "": "",
 };
