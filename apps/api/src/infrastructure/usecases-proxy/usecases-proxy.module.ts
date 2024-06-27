@@ -34,6 +34,7 @@ import { AccessControlModule } from '../services/role/access-control.module';
 import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
 import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
+import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ export class UsecasesProxyModule {
     'getUserServicesStatusUseCasesProxy';
   static GET_USER_INFORMATION_USECASES_PROXY =
     'getUserInformationUsecasesProxy';
+  static UPDATE_MY_PASSWORD_USECASES_PROXY = 'updateMyPasswordUsecasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
@@ -131,6 +133,22 @@ export class UsecasesProxyModule {
           provide: UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
           useFactory: (userRepository: DatabaseUserRepository) =>
             new UseCaseProxy(new GetUserInformationUseCase(userRepository)),
+        },
+        {
+          inject: [LoggerService, DatabaseUserRepository, BcryptService],
+          provide: UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            userRepository: DatabaseUserRepository,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new UpdateMyPasswordUseCases(
+                logger,
+                userRepository,
+                bcryptService,
+              ),
+            ),
         },
         {
           inject: [
@@ -249,6 +267,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.GET_MED_SERVICES_USECASES_PROXY,
         UsecasesProxyModule.GET_MED_SERVICES_BY_USER_USECASES_PROXY,
         UsecasesProxyModule.POST_MED_SERVICE_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
         UsecasesProxyModule.DELETE_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.UPDATE_MED_SERVICE_USECASES_PROXY,
         UsecasesProxyModule.LOGIN_USECASES_PROXY,
@@ -256,12 +276,11 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.LOGOUT_USECASES_PROXY,
         UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
         UsecasesProxyModule.UPDATE_USER_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY,
-        UsecasesProxyModule.GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
-        UsecasesProxyModule.UPDATE_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
       ],
     };
   }

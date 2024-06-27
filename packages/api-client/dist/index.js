@@ -76,6 +76,15 @@ exports.contract = c.router({
                 }),
             },
         },
+        updateMyPassword: {
+            method: "PATCH",
+            path: "/update-password",
+            body: zod_1.z.object({ oldPassword: zod_1.z.string(), newPassword: zod_1.z.string() }),
+            responses: {
+                200: zod_1.z.object({ message: zod_1.z.string() }),
+                401: zod_1.z.object({ message: zod_1.z.string() }),
+            },
+        },
     },
     users: {
         getAll: {

@@ -28,4 +28,5 @@ export interface UserRepository {
   userStatus(
     id: number,
   ): Promise<{ pricedServices: number; totalServices: number }>;
+  updateMyPassword(id: number, newPassword: string): Promise<void>;
 }

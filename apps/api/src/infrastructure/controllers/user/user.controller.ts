@@ -13,6 +13,7 @@ import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
 import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
 import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
+import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
 
 @Controller()
 export class UserController {
@@ -26,7 +27,9 @@ export class UserController {
     @Inject(UsecasesProxyModule.UPDATE_USER_USECASES_PROXY)
     private readonly updateUserUsecaseProxy: UseCaseProxy<UpdateUserUseCases>,
     @Inject(UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY)
-    private readonly getUserServicesStatusProxy: UseCaseProxy<GetUserServicesStatusUseCase>,
+    private readonly getUserServicesStatusUsecaseProxy: UseCaseProxy<GetUserServicesStatusUseCase>,
+    @Inject(UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY)
+    private readonly updateMyPasswordUsecaseProxy: UseCaseProxy<UpdateMyPasswordUseCases>,
   ) {}
 
   @Roles(RolesEnum.ADMIN)
@@ -60,7 +63,7 @@ export class UserController {
   @TsRestHandler(contract.users.servicesStatus)
   async userServicesStatus(@Req() request: any) {
     return tsRestHandler(contract.users.servicesStatus, async () => {
-      const result = await this.getUserServicesStatusProxy
+      const result = await this.getUserServicesStatusUsecaseProxy
         .getInstance()
         .execute(request.user.id);
       return { status: 200, body: result };
@@ -87,6 +90,30 @@ export class UserController {
           .getInstance()
           .execute(id, body);
         return { status: 200, body: user };
+      },
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.auth.updateMyPassword)
+  async updateMyPassword(@Req() request: any) {
+    return tsRestHandler(
+      contract.auth.updateMyPassword,
+      async ({ body: { newPassword, oldPassword } }) => {
+        try {
+          await this.updateMyPasswordUsecaseProxy
+            .getInstance()
+            .execute(request.user.id, oldPassword, newPassword);
+          return {
+            status: 200,
+            body: { message: 'password updated successfully' },
+          };
+        } catch (err) {
+          return {
+            status: 401,
+            body: { message: 'passwords does not matches' },
+          };
+        }
       },
     );
   }

@@ -54,6 +54,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async getUser(id: number): Promise<UserM> {
+    console.log('getUser');
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -106,7 +107,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async addNewUser(
-    fullName,
+    fullName: string,
     username: string,
     password: string,
     role: Role,
@@ -175,6 +176,17 @@ export class DatabaseUserRepository implements UserRepository {
     });
 
     return { pricedServices, totalServices };
+  }
+
+  async updateMyPassword(id: number, newPassword: string): Promise<void> {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password: newPassword,
+      },
+    });
   }
 
   private toUser(adminUserEntity: User): UserM {

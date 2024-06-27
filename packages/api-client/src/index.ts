@@ -90,6 +90,15 @@ export const contract = c.router(
           }),
         },
       },
+      updateMyPassword: {
+        method: "PATCH",
+        path: "/update-password",
+        body: z.object({ oldPassword: z.string(), newPassword: z.string() }),
+        responses: {
+          200: z.object({ message: z.string() }),
+          401: z.object({ message: z.string() }),
+        },
+      },
     },
 
     users: {

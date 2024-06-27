@@ -170,6 +170,37 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        updateMyPassword: {
+            method: "PATCH";
+            body: z.ZodObject<{
+                oldPassword: z.ZodString;
+                newPassword: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                oldPassword: string;
+                newPassword: string;
+            }, {
+                oldPassword: string;
+                newPassword: string;
+            }>;
+            path: "/api/update-password";
+            responses: {
+                200: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+                401: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
     };
     users: {
         getAll: {

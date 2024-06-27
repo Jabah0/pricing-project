@@ -70,5 +70,6 @@ export const dict = {
   serviceUpdatedSuccessfully: "Service Updated Successfully!",
   updateNumberOfPricingSuccessfully: "Number Of Pricing Updated Successfully!",
   numberOfPricingNotUpdated: "Number Of Pricing Not Updated!",
+  changePassword: "Change Password",
   "": "",
 };
