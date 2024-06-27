@@ -66,5 +66,9 @@ export const dict = {
   darkMode: "Dark Mode",
   language: "Language",
   selectLanguage: "Select Language",
+  serviceUpdatedUnSuccessfully: "Service Not Updated!",
+  serviceUpdatedSuccessfully: "Service Updated Successfully!",
+  updateNumberOfPricingSuccessfully: "Number Of Pricing Updated Successfully!",
+  numberOfPricingNotUpdated: "Number Of Pricing Not Updated!",
   "": "",
 };

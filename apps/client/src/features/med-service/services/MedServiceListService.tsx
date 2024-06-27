@@ -7,10 +7,13 @@ import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient, InfiniteData } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { NumberFilter } from "@/components/Table";
+import { useLocale } from "@/features/locale/LocaleProvider";
 
 type MedServices = ClientInferResponses<typeof contract.medServices.getAll>;
 
 export const MedServiceListService = () => {
+  const locale = useLocale();
+
   const [isMy, setIsMy] = createSignal(false);
 
   const [serviceName, setServiceName] = createSignal<string>();
@@ -154,9 +157,6 @@ export const MedServiceListService = () => {
                 newService.body?.unitSize || targetService.unitSize;
             }
 
-            console.log("newService", newService);
-            console.log("old", old);
-
             return {
               ...old,
             };
@@ -174,7 +174,10 @@ export const MedServiceListService = () => {
         toast.custom((t) => (
           <ErrorToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={"servicePriceUpdatedUnSuccessfully"}
+            message={
+              locale.t("serviceUpdatedUnSuccessfully") ||
+              "serviceUpdatedUnSuccessfully"
+            }
           />
         ));
       },
@@ -182,7 +185,10 @@ export const MedServiceListService = () => {
         toast.custom((t) => (
           <SuccessToast
             onDismiss={() => toast.dismiss(t.id)}
-            message={"servicePriceUpdatedSuccessfully"}
+            message={
+              locale.t("serviceUpdatedSuccessfully") ||
+              "serviceUpdatedSuccessfully"
+            }
           />
         ));
       },

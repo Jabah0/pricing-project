@@ -67,5 +67,10 @@ export const dict: RawDictionary = {
   numberOfPricing: "عدد مرات تسعير الخدمات",
   darkMode: "الوضع الليلي",
   language: "اللغة",
+  selectLanguage: "اختر اللغة",
+  serviceUpdatedSuccessfully: "تم تحديث بيانات الخدمة بنجاح!",
+  serviceUpdatedUnSuccessfully: "فشل تحديث بيانات الخدمة!",
+  updateNumberOfPricingSuccessfully: "تم تحديث عدد مرات التسعير بنجاح!",
+  numberOfPricingNotUpdated: "فشل تحديث عدد مرات التسعير!",
   "": "",
 };

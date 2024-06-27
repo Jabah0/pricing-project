@@ -10,6 +10,8 @@ import { Match, Switch, createSignal } from "solid-js";
 import { apiClient } from "@/api/api-client";
 import toast from "solid-toast";
 import { useQueryClient } from "@tanstack/solid-query";
+import { SuccessToast } from "@/toasts/SuccessToast";
+import { ErrorToast } from "@/toasts/ErrorToast";
 
 export const ServicesSetting = () => {
   const locale = useLocale();
@@ -29,10 +31,26 @@ export const ServicesSetting = () => {
   const numberOfPricingMutation =
     apiClient.medServices.updateNumberOfPricing.createMutation({
       onError: () => {
-        toast.error("something wrong!");
+        toast.custom((t) => (
+          <ErrorToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={
+              locale.t("numberOfPricingNotUpdated") ||
+              "numberOfPricingNotUpdated"
+            }
+          />
+        ));
       },
       onSuccess: () => {
-        toast.success("updated successfully!");
+        toast.custom((t) => (
+          <SuccessToast
+            onDismiss={() => toast.dismiss(t.id)}
+            message={
+              locale.t("updateNumberOfPricingSuccessfully") ||
+              "updateNumberOfPricingSuccessfully"
+            }
+          />
+        ));
       },
       onSettled: () => {
         queryClient.invalidateQueries(["numberOfPricing"]);
