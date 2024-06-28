@@ -247,10 +247,19 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
       where: { id: serviceId },
     });
 
+    const userService = await this.prisma.userMedServices.findUnique({
+      where: {
+        medServiceId_userId: {
+          medServiceId: serviceId,
+          userId: userId,
+        },
+      },
+    });
+
     const updatedService = await this.prisma.medService.update({
       where: { id: serviceId },
       data: {
-        numberOfPricing: { increment: 1 },
+        numberOfPricing: { increment: userService ? 0 : 1 },
         users: {
           upsert: {
             create: {
