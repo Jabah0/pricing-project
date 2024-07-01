@@ -11,7 +11,7 @@ export const Login = () => {
       </div>
       <div
         class="flex flex-col justify-start items-center gap-20 lg:basis-1/3 bg-backgroundForm 
-      w-full h-full border-s border-textSecondary px-2"
+        w-full h-full shadow-xl px-2"
       >
         <div class="flex items-start justify-end gap-4 w-full px-2 py-3">
           <LanguageSwitcher />

@@ -73,5 +73,7 @@ export const dict: RawDictionary = {
   updateNumberOfPricingSuccessfully: "تم تحديث عدد مرات التسعير بنجاح!",
   numberOfPricingNotUpdated: "فشل تحديث عدد مرات التسعير!",
   changePassword: "تغيير كلمة السر",
+  newPassword: "كلمة السر الجديدة",
+  oldPassword: "كلمة السر القديمة",
   "": "",
 };

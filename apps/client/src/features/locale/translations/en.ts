@@ -71,5 +71,7 @@ export const dict = {
   updateNumberOfPricingSuccessfully: "Number Of Pricing Updated Successfully!",
   numberOfPricingNotUpdated: "Number Of Pricing Not Updated!",
   changePassword: "Change Password",
+  newPassword: "The New Password",
+  oldPassword: "The Old Password",
   "": "",
 };

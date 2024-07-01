@@ -7,21 +7,61 @@ import {
 } from "@/assets/icons";
 import { useUser } from "@/features/auth/stores/UserStore";
 import { useLocale } from "@/features/locale/LocaleProvider";
-import { Match, Show, Switch, createSignal } from "solid-js";
+import { Match, Switch, createSignal } from "solid-js";
 
 export const Profile = () => {
   const locale = useLocale();
 
   const [isEditing, setIsEditing] = createSignal(false);
-  const [isEditPassword, setIsEditPassword] = createSignal(false);
 
   const [user, _setUser] = useUser();
 
   return (
-    <div class="flex justify-center items-center h-full bg-backPrimary">
-      <div class="flex flex-col gap-3 justify-center items-center bg-backgroundSec text-text rounded-md drop-shadow-xl py-4 px-4">
-        <div class="bg-backPrimary shadow-xl rounded-md">
-          <AccountIcon class="text-text h-[20rem] w-[25rem]" />
+    <div class="flex flex-wrap justify-center items-center gap-4 h-full bg-backPrimary overflow-auto py-4">
+      <div class="flex flex-col md:basis-1/3 h-full w-full gap-3 justify-between items-center bg-backgroundSec text-text rounded-md shadow-xl py-4 px-4 overflow-auto">
+        <div class="flex items-center justify-center gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md">
+          <div class="flex justify-center items-center gap-4 w-full py-1">
+            <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
+            <p class="text-2xl">{locale.t("changePassword")}</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 items-center justify-between">
+          <div class="flex items-center px-4 py-2 justify-between gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md text-2xl">
+            <input
+              class="bg-transparent"
+              placeholder={locale.t("oldPassword")}
+            />
+            <button>
+              <EyeOffIcon class="text-text h-[1.5rem] w-[1.5rem]" />
+            </button>
+          </div>
+          <div class="flex items-center px-4 py-2 justify-between gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md text-2xl">
+            <input
+              class="bg-transparent"
+              placeholder={locale.t("newPassword")}
+            />
+            <button>
+              <EyeOffIcon class="text-text h-[1.5rem] w-[1.5rem]" />
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center py-2 justify-between gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md text-2xl">
+          <button class="flex gap-4 items-center justify-center w-full">
+            <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
+            <p>Apply Change</p>
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col md:basis-1/3 h-full w-full gap-3 justify-center items-center bg-backgroundSec text-text rounded-md shadow-xl py-4 px-4 overflow-auto">
+        <div class="flex justify-center items-center grow bg-backPrimary shadow-xl rounded-md w-full">
+          <AccountIcon
+            class="text-text
+            xl:h-[10rem] xl:w-[22rem] 
+            lg:h-[9rem] lg:w-[20rem] 
+            sm:h-[8rem] sm:w-[19rem]
+            h-[10rem] w-[18rem]"
+          />
         </div>
 
         <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary drop-shadow-xl px-4 py-2 rounded-md text-2xl">
@@ -60,35 +100,6 @@ export const Profile = () => {
             </Switch>
           </div>
         </div>
-        <Show when={isEditing()}>
-          <Switch>
-            <Match when={isEditPassword()}>
-              <div class="flex items-center px-4 py-2 justify-between gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md text-2xl">
-                <input class="bg-transparent" placeholder="oldPassword" />
-                <button>
-                  <EyeOffIcon class="text-text h-[1.5rem] w-[1.5rem]" />
-                </button>
-              </div>
-              <div class="flex items-center px-4 py-2 justify-between gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md text-2xl">
-                <input class="bg-transparent" placeholder="newPassword" />
-                <button>
-                  <EyeOffIcon class="text-text h-[1.5rem] w-[1.5rem]" />
-                </button>
-              </div>
-            </Match>
-            <Match when={!isEditPassword()}>
-              <div class="flex items-center justify-center gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md">
-                <button
-                  class="flex justify-center items-center gap-4 w-full py-1"
-                  onClick={() => setIsEditPassword(true)}
-                >
-                  <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
-                  <p class="text-2xl">{locale.t("changePassword")}</p>
-                </button>
-              </div>
-            </Match>
-          </Switch>
-        </Show>
         <div class="flex items-center justify-center gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md">
           <Switch>
             <Match when={!isEditing()}>
@@ -106,7 +117,6 @@ export const Profile = () => {
               <button
                 class="bg-backgroundForm my-1 rounded-md drop-shadow-lg"
                 onClick={() => {
-                  setIsEditPassword(false);
                   setIsEditing(false);
                 }}
               >

@@ -9,7 +9,7 @@ export const Home = () => {
       <div class="flex flex-wrap gap-20">
         <div>
           <SolidApexCharts
-            width={700}
+            width={service.chartWidth()}
             type="donut"
             options={service.options()}
             series={service.series()}
