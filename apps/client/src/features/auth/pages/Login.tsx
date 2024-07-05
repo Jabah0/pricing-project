@@ -6,7 +6,7 @@ import { LanguageSwitcher } from "@/features/layout/components/LanguageSwitcher"
 export const Login = () => {
   return (
     <div class="flex flex-wrap justify-center items-center w-full h-full">
-      <div class="lg:basis-2/3 flex justify-center items-center">
+      <div class="lg:basis-2/3 lg:flex hidden justify-center items-center">
         <img src={loginImage} class="w-[40rem] sm:w-[30rem]" />
       </div>
       <div
