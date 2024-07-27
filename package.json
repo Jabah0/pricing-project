@@ -13,6 +13,7 @@
     "start": "node apps/api/dist/src/main"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-solid": "^0.0.9",
     "bcrypt": "^5.1.1",
     "date-fns": "^3.6.0"
   }
