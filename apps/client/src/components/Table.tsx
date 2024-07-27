@@ -115,6 +115,10 @@ export const Table = <T extends object>(props: Props<T>) => {
   const [rowSelection, setRowSelection] = createSignal<RowSelectionState>({});
   const [rowEdit, setRowEdit] = createSignal<EditState<T>[]>([]);
 
+  const locale = useLocale();
+
+  const dir = () => locale.locale().dir;
+
   const editColumn: ColumnDef<T> = {
     id: "action",
     header: "",
@@ -185,6 +189,8 @@ export const Table = <T extends object>(props: Props<T>) => {
         return rowEdit();
       },
     },
+    columnResizeDirection: dir(),
+    columnResizeMode: "onChange",
     getRowId: props.getRowId,
     onEditChange: setRowEdit,
     onSortingChange: (newSorting) => handleSorting(newSorting),
@@ -219,8 +225,6 @@ export const Table = <T extends object>(props: Props<T>) => {
     return () => observer.disconnect();
   });
 
-  const locale = useLocale();
-
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger
@@ -232,40 +236,38 @@ export const Table = <T extends object>(props: Props<T>) => {
           <thead class="sticky top-0 bg-backPrimary z-40">
             <For each={table.getHeaderGroups()}>
               {(headerGroup) => (
-                <tr class="shadow-lg h-10 py-4">
+                <tr class="flex shadow-lg h-10 py-4">
                   <For each={headerGroup.headers}>
                     {(header) => {
                       return (
-                        <th
+                        <TableHeader
+                          resizeHandler={() => {
+                            header.getResizeHandler();
+                          }}
                           colSpan={header.colSpan}
-                          class={`text-start border-e border-gray-600 px-[0.5rem]`}
-                        >
-                          <TableHeader
-                            isSorted={header.column.getIsSorted()}
-                            hide={() => header.column.toggleVisibility()}
-                            title={locale.t(
-                              header.column.columnDef.meta?.headerTitle || ""
-                            )}
-                            isSortable={header.column.getCanSort()}
-                            toggleSort={() => header.column.toggleSorting()}
-                            setFilter={(val) => {
-                              handleFiltering({
-                                id: header.column.id,
-                                value: val,
-                              });
-                            }}
-                            filter={
-                              columnFilters().find(
-                                (item) => item.id === header.column.id
-                              )?.value
-                            }
-                            filterType={header.column.columnDef?.meta?.type}
-                            filterOptions={
-                              header.column.columnDef.meta?.options
-                            }
-                            isFilterable={header.column.getCanFilter()}
-                          />
-                        </th>
+                          size={header.getSize()}
+                          isSorted={header.column.getIsSorted()}
+                          hide={() => header.column.toggleVisibility()}
+                          title={locale.t(
+                            header.column.columnDef.meta?.headerTitle || ""
+                          )}
+                          isSortable={header.column.getCanSort()}
+                          toggleSort={() => header.column.toggleSorting()}
+                          setFilter={(val) => {
+                            handleFiltering({
+                              id: header.column.id,
+                              value: val,
+                            });
+                          }}
+                          filter={
+                            columnFilters().find(
+                              (item) => item.id === header.column.id
+                            )?.value
+                          }
+                          filterType={header.column.columnDef?.meta?.type}
+                          filterOptions={header.column.columnDef.meta?.options}
+                          isFilterable={header.column.getCanFilter()}
+                        />
                       );
                     }}
                   </For>

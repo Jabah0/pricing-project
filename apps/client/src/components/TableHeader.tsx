@@ -44,22 +44,27 @@ type Props = {
   filter: number | string | NumberFilterType | undefined;
   filterType?: FilterType;
   filterOptions?: FilterOptions;
+  size: number;
+  resizeHandler: () => void;
+  colSpan: number;
 };
 
 export const TableHeader = (props: Props) => {
   const [filterWay, setFilterWay] = createSignal<FilterWay>("equals");
 
   return (
-    <div class="flex flex-col gap-2 py-2 px-1 group text-text">
+    <th
+      colSpan={props.colSpan}
+      class={`flex flex-col px-1 group text-text text-start border-e border-gray-600`}
+      style={{ width: `${props.size}px` }}
+    >
       <div
-        class="flex items-center justify-between gap-4 w-full"
+        class="items-center justify-between gap-4"
         classList={{ "hover:cursor-pointer": props.isSortable }}
         onClick={props.isSortable ? props.toggleSort : undefined}
       >
-        <div class="flex gap-2">
-          <p>{props.title}</p>
-        </div>
-        <div class="flex items-center">
+        <p>{props.title}</p>
+        <div class="flex items-center group">
           {{
             asc: (
               <SortAscendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
@@ -81,7 +86,14 @@ export const TableHeader = (props: Props) => {
           <MoreOptions hide={props.hide} />
         </div>
       </div>
-    </div>
+      <div
+        class={`
+          w-1 h-full absolute end-0 top-0
+          cursor-col-resize select-none touch-none bg-red-600 hover:opacity-100`}
+        onMouseDown={() => props.resizeHandler()}
+        onTouchStart={() => props.resizeHandler()}
+      />
+    </th>
   );
 };
 
@@ -414,7 +426,7 @@ const MoreOptions = (props: { hide: () => void }) => {
   return (
     <DropdownMenu.Root placement="bottom-end">
       <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
-        <MenuIcon />
+        <MenuIcon class="invisible group-hover:visible" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
