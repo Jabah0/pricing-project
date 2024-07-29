@@ -15,7 +15,7 @@ export const Columns: ColumnDef<MedService>[] = [
     accessorKey: "id",
     header: () => <Header title="id" />,
     meta: { title: "id", headerTitle: "id", type: "string" },
-    size: 6 / 1,
+
     enableColumnFilter: false,
   },
   {
@@ -23,21 +23,18 @@ export const Columns: ColumnDef<MedService>[] = [
     accessorKey: "name",
     header: () => <Header title="service" />,
     meta: { title: "service", headerTitle: "service", type: "string" },
-    size: 6 / 1,
   },
   {
     id: "code",
     accessorKey: "code",
     header: () => <Header title="serviceCode" />,
     meta: { title: "serviceCode", headerTitle: "serviceCode", type: "string" },
-    size: 6 / 1,
   },
   {
     id: "dalilCode",
     accessorKey: "dalilCode",
     header: () => <Header title="dalilCode" />,
     meta: { title: "dalilCode", headerTitle: "dalilCode", type: "string" },
-    size: 6 / 1,
   },
   {
     id: "nationalCode",
@@ -48,14 +45,13 @@ export const Columns: ColumnDef<MedService>[] = [
       headerTitle: "nationalCode",
       type: "string",
     },
-    size: 6 / 1,
   },
   {
     id: "price",
     accessorKey: "price",
     header: () => <Header title="price" />,
     meta: { title: "price", headerTitle: "price", type: "number" },
-    size: 6 / 1,
+
     enableColumnFilter: true,
     cell: ({ row }) => (
       <EditableCell
@@ -70,7 +66,7 @@ export const Columns: ColumnDef<MedService>[] = [
     accessorKey: "unitSize",
     header: () => <Header title="unitSize" />,
     meta: { title: "unitSize", headerTitle: "unitSize", type: "number" },
-    size: 6 / 1,
+
     cell: ({ row }) => (
       <EditableCell
         row={row}

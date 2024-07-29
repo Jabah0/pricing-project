@@ -18,6 +18,7 @@
     "@solidjs/router": "^0.13.1",
     "@tanstack/solid-query": "^4.35.7",
     "@tanstack/solid-table": "^8.16.1",
+    "@thisbeyond/solid-dnd": "^0.7.5",
     "@ts-rest/core": "^3.40.1",
     "@ts-rest/solid-query": "^3.39.1",
     "apexcharts": "^3.49.1",

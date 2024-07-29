@@ -45,8 +45,7 @@ type Props = {
   filterType?: FilterType;
   filterOptions?: FilterOptions;
   size: number;
-  resizeHandler: () => void;
-  colSpan: number;
+  resizeHandler: (context?: Document) => (event: unknown) => void;
 };
 
 export const TableHeader = (props: Props) => {
@@ -54,44 +53,47 @@ export const TableHeader = (props: Props) => {
 
   return (
     <th
-      colSpan={props.colSpan}
-      class={`flex flex-col px-1 group text-text text-start border-e border-gray-600`}
+      class={`text-start border-e border-gray-600 px-[0.5rem] relative`}
       style={{ width: `${props.size}px` }}
     >
-      <div
-        class="items-center justify-between gap-4"
-        classList={{ "hover:cursor-pointer": props.isSortable }}
-        onClick={props.isSortable ? props.toggleSort : undefined}
-      >
-        <p>{props.title}</p>
-        <div class="flex items-center group">
-          {{
-            asc: (
-              <SortAscendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
-            ),
-            desc: (
-              <SortDescendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
-            ),
-          }[props.isSorted as string] ?? null}
-          <Show when={props.isFilterable}>
-            <Filter
-              filter={props.filter}
-              setFilter={props.setFilter}
-              filterType={props.filterType || "string"}
-              filterWay={filterWay()}
-              setFilterWay={(way) => setFilterWay(way)}
-              filterOptions={props.filterOptions}
-            />
-          </Show>
-          <MoreOptions hide={props.hide} />
+      <div class="flex flex-col gap-2 py-2 px-1 group text-text">
+        <div
+          class="flex items-center justify-between gap-4 w-full"
+          classList={{ "hover:cursor-pointer": props.isSortable }}
+          onClick={props.isSortable ? props.toggleSort : undefined}
+        >
+          <div class="flex gap-2">
+            <p>{props.title}</p>
+          </div>
+          <div class="flex items-center">
+            {{
+              asc: (
+                <SortAscendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
+              ),
+              desc: (
+                <SortDescendingIcon class="text-primary h-6 w-6 drop-shadow scale-150" />
+              ),
+            }[props.isSorted as string] ?? null}
+            <Show when={props.isFilterable}>
+              <Filter
+                filter={props.filter}
+                setFilter={props.setFilter}
+                filterType={props.filterType || "string"}
+                filterWay={filterWay()}
+                setFilterWay={(way) => setFilterWay(way)}
+                filterOptions={props.filterOptions}
+              />
+            </Show>
+            <MoreOptions hide={props.hide} />
+          </div>
         </div>
       </div>
       <div
         class={`
-          w-1 h-full absolute end-0 top-0
-          cursor-col-resize select-none touch-none bg-red-600 hover:opacity-100`}
-        onMouseDown={() => props.resizeHandler()}
-        onTouchStart={() => props.resizeHandler()}
+          w-1 h-full absolute end-0 top-0 bg-gray-500
+          cursor-col-resize select-none touch-none opacity-0 hover:opacity-100`}
+        onMouseDown={props.resizeHandler()}
+        onTouchStart={props.resizeHandler()}
       />
     </th>
   );
@@ -426,7 +428,7 @@ const MoreOptions = (props: { hide: () => void }) => {
   return (
     <DropdownMenu.Root placement="bottom-end">
       <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
-        <MenuIcon class="invisible group-hover:visible" />
+        <MenuIcon />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

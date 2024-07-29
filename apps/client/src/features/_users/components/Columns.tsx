@@ -11,7 +11,6 @@ export const Columns: () => ColumnDef<User>[] = () => {
       accessorKey: "id",
       header: () => locale.t("id"),
       meta: { title: "id", headerTitle: "id", type: "string" },
-      size: 6 / 1,
     },
     {
       id: "username",
@@ -19,7 +18,6 @@ export const Columns: () => ColumnDef<User>[] = () => {
       header: () => locale.t("username"),
       cell: (param) => <p>{param.row.original.username}</p>,
       meta: { title: "username", headerTitle: "username", type: "string" },
-      size: 6 / 1,
     },
     {
       id: "fullName",
@@ -27,7 +25,6 @@ export const Columns: () => ColumnDef<User>[] = () => {
       header: () => locale.t("fullName"),
       cell: (param) => <p>{param.row.original.fullName}</p>,
       meta: { title: "fullName", headerTitle: "fullName", type: "string" },
-      size: 6 / 1,
     },
     {
       id: "role",
@@ -43,7 +40,6 @@ export const Columns: () => ColumnDef<User>[] = () => {
           { value: "USER", label: "USER" },
         ],
       },
-      size: 6 / 1,
     },
   ];
 };

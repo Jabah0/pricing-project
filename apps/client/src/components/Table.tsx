@@ -5,36 +5,26 @@ import {
   ColumnDef,
   createSolidTable,
   Updater,
-  Column,
   ColumnFiltersState,
   RowSelectionState,
   Row,
 } from "@tanstack/solid-table";
 
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  For,
-  Match,
-  Show,
-  Switch,
-} from "solid-js";
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
 import { EditFeature, type EditState } from "./solid-table";
 import { TableHeader } from "./TableHeader";
 import { ContextMenu } from "@kobalte/core";
 
 import { useLocale } from "@/features/locale/LocaleProvider";
-import { RawDictionary } from "@/features/locale";
 import {
   EditIcon,
   SpinnersBlocksShuffleIcon,
   ConfirmIcon,
   CancelIcon,
-  ColumnsIcon,
   DotsRotateIcon,
-  FilterIcon,
 } from "@/assets/icons";
+import { ColumnsChooser } from "./ColumnChooser";
+import { TableContext } from "./TableContext";
 
 type Props<T> = {
   columns: Array<ColumnDef<T>>;
@@ -130,7 +120,6 @@ export const Table = <T extends object>(props: Props<T>) => {
       headerTitle: "",
       type: "string",
     },
-    size: 6 / 1,
   };
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
@@ -189,8 +178,6 @@ export const Table = <T extends object>(props: Props<T>) => {
         return rowEdit();
       },
     },
-    columnResizeDirection: dir(),
-    columnResizeMode: "onChange",
     getRowId: props.getRowId,
     onEditChange: setRowEdit,
     onSortingChange: (newSorting) => handleSorting(newSorting),
@@ -199,6 +186,8 @@ export const Table = <T extends object>(props: Props<T>) => {
     manualFiltering: true,
     manualSorting: true,
     enableMultiRowSelection: false,
+    columnResizeDirection: dir(),
+    columnResizeMode: "onChange",
   });
 
   const hiddenHeaders = createMemo(() =>
@@ -229,22 +218,19 @@ export const Table = <T extends object>(props: Props<T>) => {
     <ContextMenu.Root>
       <ContextMenu.Trigger
         as="div"
-        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-xl
+        class="px-1 pb-1 w-full h-full overflow-auto bg-backPrimary rounded-sm drop-shadow-lg
         text-gray-400 relative"
       >
         <table class="w-full">
-          <thead class="sticky top-0 bg-backPrimary z-30">
+          <thead class="sticky top-0 bg-backPrimary z-40">
             <For each={table.getHeaderGroups()}>
               {(headerGroup) => (
-                <tr class="flex shadow-lg h-10 py-4">
+                <tr class="shadow-lg h-10 py-4">
                   <For each={headerGroup.headers}>
                     {(header) => {
                       return (
                         <TableHeader
-                          resizeHandler={() => {
-                            header.getResizeHandler();
-                          }}
-                          colSpan={header.colSpan}
+                          resizeHandler={header.getResizeHandler}
                           size={header.getSize()}
                           isSorted={header.column.getIsSorted()}
                           hide={() => header.column.toggleVisibility()}
@@ -332,90 +318,6 @@ export const Table = <T extends object>(props: Props<T>) => {
         </ContextMenu.Content>
       </ContextMenu.Portal>
     </ContextMenu.Root>
-  );
-};
-
-const ColumnsChooser = <T extends object>(props: {
-  columns: Column<T, unknown>[];
-  close: () => void;
-}) => {
-  const locale = useLocale();
-
-  return (
-    <div
-      class="sticky bottom-0 end-0 h-[20rem] w-[15rem] bg-elementBack border 
-      border-gray-600 drop-shadow-lg z-50"
-    >
-      <div class="flex flex-col gap-2 h-full w-full px-2 py-2">
-        <div class="flex items-center justify-start">
-          <button onClick={props.close}>
-            <CancelIcon class="h-4 w-4 text-red-700" />
-          </button>
-        </div>
-        <Switch>
-          <Match when={props.columns.length === 0}>
-            <div class="flex flex-col justify-center items-center h-full">
-              <p class="text-lg font-bold text-center">
-                {locale.t("noHiddenColumns")}
-              </p>
-            </div>
-          </Match>
-          <Match when={props.columns.length > 0}>
-            <For each={props.columns}>
-              {(column) => (
-                <button
-                  class="flex items-center justify-start w-full px-2 rounded-sm bg-buttonBack 
-                  shadow-lg hover:bg-opacity-50"
-                  onClick={() => column.toggleVisibility()}
-                >
-                  <p>
-                    {locale.t(
-                      column.columnDef.meta?.title as keyof RawDictionary
-                    ) || ""}
-                  </p>
-                </button>
-              )}
-            </For>
-          </Match>
-        </Switch>
-      </div>
-    </div>
-  );
-};
-
-const TableContext = (props: {
-  showChooser: () => void;
-  exportExcel: () => void;
-  clearFiltering: () => void;
-  isFiltering: boolean;
-}) => {
-  const locale = useLocale();
-
-  return (
-    <div
-      class="flex flex-col gap-2 h-fit w-fit border border-gray-600 bg-backPrimary px-2 py-4 
-      text-text"
-    >
-      <button
-        class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
-        shadow-lg"
-        onClick={() => props.showChooser()}
-      >
-        <ColumnsIcon class="text-blue-700" />
-        <p>{locale.t("columnsChooser")}</p>
-      </button>
-
-      <Show when={props.isFiltering}>
-        <button
-          class="flex items-center justify-start gap-2 w-full px-2 bg-backgroundSec 
-          shadow-lg"
-          onClick={() => props.clearFiltering()}
-        >
-          <FilterIcon class="text-blue-700" />
-          <p>{locale.t("disableFiltering")}</p>
-        </button>
-      </Show>
-    </div>
   );
 };
 
