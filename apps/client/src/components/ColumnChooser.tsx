@@ -58,11 +58,9 @@ const HiddenColumn = <T extends object>({
 }) => {
   const locale = useLocale();
 
-  const droppable = createDraggable(column.id);
+  const draggable = createDraggable(column.id);
   return (
     <div
-      use:droppable
-      draggable
       class="flex items-center justify-start w-full px-2 rounded-sm bg-buttonBack 
       shadow-lg hover:bg-opacity-50"
       onClick={() => column.toggleVisibility()}
