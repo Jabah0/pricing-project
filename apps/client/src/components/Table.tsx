@@ -233,7 +233,7 @@ export const Table = <T extends object>(props: Props<T>) => {
         text-gray-400 relative"
       >
         <table class="w-full">
-          <thead class="sticky top-0 bg-backPrimary z-40">
+          <thead class="sticky top-0 bg-backPrimary z-30">
             <For each={table.getHeaderGroups()}>
               {(headerGroup) => (
                 <tr class="flex shadow-lg h-10 py-4">
