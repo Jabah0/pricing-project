@@ -1,5 +1,6 @@
 import { DarkModeSetting } from "./DarkModeSetting";
 import { LanguageSettings } from "./LanguageSettings";
+import { ProfileSetting } from "./ProfileSetting";
 import { ServicesSetting } from "./ServicesSetting";
 
 export const Settings = () => {
@@ -8,9 +9,12 @@ export const Settings = () => {
       class="flex flex-wrap gap-4 items-center justify-center py-2 px-2 overflow-auto
       h-full bg-backPrimary drop-shadow-xl rounded-sm"
     >
+      <ProfileSetting />
       <ServicesSetting />
-      <DarkModeSetting />
-      <LanguageSettings />
+      <div class="flex flex-col gap-2">
+        <LanguageSettings />
+        <DarkModeSetting />
+      </div>
     </div>
   );
 };

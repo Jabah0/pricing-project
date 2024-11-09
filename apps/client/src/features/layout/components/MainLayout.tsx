@@ -23,10 +23,10 @@ export const MainLayout: ParentComponent = (props) => {
       <Sidebar>
         <div class="flex flex-col gap-y-8 w-full">
           <div class="flex justify-center">
-            <LogoIcon class="drop-shadow-lg" />
+            <LogoIcon class="drop-shadow-lg scale-90" />
           </div>
           <div class="flex flex-col gap-4 h-full w-full justify-between">
-            <div class="flex flex-col justify-center items-center gap-4 w-full">
+            <div class="flex flex-col justify-center items-center gap-1 w-full">
               <SidebarElement
                 path="/"
                 active={location.pathname === "/"}
@@ -47,12 +47,6 @@ export const MainLayout: ParentComponent = (props) => {
                   icon={UsersIcon}
                 />
               </RoleGuard>
-              <SidebarElement
-                active={location.pathname.includes("/profile")}
-                path="/profile"
-                title={locale.t("profile") || ""}
-                icon={PersonFilledIcon}
-              />
             </div>
             <div class="flex flex-col justify-center items-center gap-4 w-full">
               <SidebarElement

@@ -7,7 +7,7 @@ export const LanguageSettings = () => {
 
   return (
     <CardWrapper>
-      <div class="flex flex-col gap-4 min-w-[20rem] min-h-[20rem] px-2">
+      <div class="flex flex-col justify-center gap-4 min-w-[20rem] min-h-[19rem] px-2">
         <div class="flex justify-center items-center bg-backPrimary h-full drop-shadow-xl rounded-md">
           <p class="text-2xl text-text">{locale.locale().title}</p>
         </div>

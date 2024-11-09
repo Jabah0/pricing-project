@@ -53,7 +53,7 @@ export const TableHeader = (props: Props) => {
 
   return (
     <th
-      class={`text-start border-e border-gray-600 px-[0.5rem] relative`}
+      class={`text-start border-e border-gray-600 last:border-none px-[0.5rem] relative`}
       style={{ width: `${props.size}px` }}
     >
       <div class="flex flex-col gap-2 py-2 px-1 group text-text">
@@ -428,7 +428,7 @@ const MoreOptions = (props: { hide: () => void }) => {
   return (
     <DropdownMenu.Root placement="bottom-end">
       <DropdownMenu.Trigger as="button" onClick={(e) => e.stopPropagation()}>
-        <MenuIcon />
+        <MenuIcon class="invisible group-hover:visible" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

@@ -9,7 +9,6 @@ import { RouteGuard } from "./features/auth/components/RouteGuard";
 import { MedServicesList } from "./features/med-service/components/MedServicesList";
 import { Home } from "./features/home/components/Home";
 import { Settings } from "./features/settings/components/settings";
-import { Profile } from "./features/profile/components/Profile";
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
         <Route component={RouteGuard}>
           <Route path="/" component={Home} info={{ label: "Home" }} />
           <Route path="/services" component={MedServicesList} />
-          <Route path="/profile" component={Profile} />
         </Route>
         <Route
           component={(props) => (

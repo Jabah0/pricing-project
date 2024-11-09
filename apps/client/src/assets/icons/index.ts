@@ -31,3 +31,4 @@ export * from "./SpinnersBlocksIcon.tsx";
 export * from "./UsersIcon.tsx";
 export * from "./WatchIcon.tsx";
 export * from "./WatchOffIcon.tsx";
+export * from "./LockIcon.tsx";
