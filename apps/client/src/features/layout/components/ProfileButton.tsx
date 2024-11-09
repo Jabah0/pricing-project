@@ -1,15 +1,12 @@
 import { AccountIcon } from "@/assets/icons/AccountIcon";
 import { DropdownMenu } from "@kobalte/core";
 import { ProfileLogoutButton } from "./LogoutButton";
-import { A, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 import { apiClient } from "@/api/api-client";
 import { useUser } from "@/features/auth/stores/UserStore";
 import { useQueryClient } from "@tanstack/solid-query";
-import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const ProfileButton = () => {
-  const locale = useLocale();
-
   const [user, setUser] = useUser();
 
   const navigator = useNavigate();
@@ -55,14 +52,6 @@ export const ProfileButton = () => {
                 <p class="text-gray-400 text-ellipsis">{user()?.username}</p>
               </div>
             </div>
-            <A href="/profile" class="w-full">
-              <button
-                class="text-text rounded-sm border border-gray-700 w-full h-[2.5rem] 
-                shadow-lg bg-backgroundSec hover:bg-opacity-40"
-              >
-                {locale.t("manageAccount")}
-              </button>
-            </A>
             <ProfileLogoutButton onClick={onLogout} />
           </div>
         </DropdownMenu.Content>

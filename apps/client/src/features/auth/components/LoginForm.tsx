@@ -5,7 +5,6 @@ import toast from "solid-toast";
 import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import { useUser } from "../stores/UserStore";
-import { SuccessToast } from "@/toasts/SuccessToast";
 import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const LoginForm = () => {
@@ -27,15 +26,14 @@ export const LoginForm = () => {
 
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
-      toast.error(locale.t("loginFailed"));
+      toast.error(locale.t("loginFailed"), {
+        style: {
+          background: "#292E4E",
+          color: "#d1d5db",
+        },
+      });
     },
     onSuccess: async () => {
-      toast.custom((t) => (
-        <SuccessToast
-          message={locale.t("loginSuccess") || ""}
-          onDismiss={() => toast.dismiss(t.id)}
-        />
-      ));
       const { data } = await getUserInfoQuery.refetch();
       setUser(() => data?.body);
       navigator("/");
