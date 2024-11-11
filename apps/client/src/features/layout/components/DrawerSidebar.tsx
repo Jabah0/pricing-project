@@ -4,7 +4,6 @@ import {
   HomeIcon,
   LogoIcon,
   MedicalServicesIcon,
-  PersonFilledIcon,
   SettingsIcon,
   UsersIcon,
 } from "@/assets/icons";
@@ -13,6 +12,8 @@ import { Drawer } from "corvu/drawer";
 import { DrawerSidebarElement } from "./DrawerSidebarElement";
 import { useLocation } from "@solidjs/router";
 import { createSignal } from "solid-js";
+import { RoleGuard } from "@/features/auth/components/RoleGuard";
+import { Roles } from "@/features/auth/enums/Roles.enum";
 
 export const DrawerSidebar = () => {
   const locale = useLocale();
@@ -30,7 +31,7 @@ export const DrawerSidebar = () => {
     <Drawer velocityFunction={() => 1} side={direct()} open={isDrawerOpen()}>
       <Drawer.Trigger
         as="button"
-        class="flex lg:hidden items-center justify-center h-9 w-9 bg-primary rounded-full drop-shadow-lg"
+        class="flex lg:hidden items-center justify-center h-9 w-9 bg-primary rounded-full shadow-lg"
         onClick={() => setIsDrawerOpen(true)}
       >
         <CloseToMenuIcon class="text-white h-6 w-6" />
@@ -72,22 +73,16 @@ export const DrawerSidebar = () => {
                   icon={MedicalServicesIcon}
                 />
               </button>
-              <button onClick={closeDrawer}>
-                <DrawerSidebarElement
-                  active={location.pathname.includes("/users")}
-                  path="/users"
-                  title={locale.t("users") || ""}
-                  icon={UsersIcon}
-                />
-              </button>
-              <button onClick={closeDrawer}>
-                <DrawerSidebarElement
-                  active={location.pathname.includes("/profile")}
-                  path="/profile"
-                  title={locale.t("profile") || ""}
-                  icon={PersonFilledIcon}
-                />
-              </button>
+              <RoleGuard role={Roles.ADMIN}>
+                <button onClick={closeDrawer}>
+                  <DrawerSidebarElement
+                    active={location.pathname.includes("/users")}
+                    path="/users"
+                    title={locale.t("users") || ""}
+                    icon={UsersIcon}
+                  />
+                </button>
+              </RoleGuard>
               <button onClick={closeDrawer}>
                 <DrawerSidebarElement
                   active={location.pathname.includes("/settings")}

@@ -10,26 +10,43 @@ import { useLocale } from "@/features/locale/LocaleProvider";
 import { createSignal, Match, Switch } from "solid-js";
 import toast from "solid-toast";
 
-export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
+export const ChangePasswordModal = (props: { onClose: () => void }) => {
   const locale = useLocale();
 
   const [oldPassword, setOldPassword] = createSignal("");
   const [newPassword, setNewPassword] = createSignal("");
 
+  const onChangePassword = apiClient.auth.updateMyPassword.createMutation({
+    onError: () =>
+      toast.error("error", {
+        style: {
+          "background-color": "#292E4E",
+          color: "#696b6e",
+        },
+      }),
+    onSuccess: () => props.onClose(),
+  });
+
   const onSubmit = () => {
-    console.log("executed");
+    if (oldPassword().trim() === "" || newPassword().trim() === "")
+      return toast.error("error", {
+        style: {
+          "background-color": "#292E4E",
+          color: "#696b6e",
+        },
+      });
 
-    if (oldPassword() === "" || newPassword() === "")
-      return toast.error("error");
-
-    apiClient.auth.updateMyPassword.mutation({
-      body: { newPassword: newPassword(), oldPassword: oldPassword() },
+    onChangePassword.mutate({
+      body: {
+        newPassword: newPassword().trim(),
+        oldPassword: oldPassword().trim(),
+      },
     });
   };
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={() => onSubmit()}
       class="flex flex-col md:basis-1/3 h-full w-[28rem] gap-3 justify-between 
         items-center bg-backgroundSec text-text rounded-sm shadow-xl py-4 px-4"
     >
@@ -39,7 +56,7 @@ export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
           <p class="text-2xl">{locale.t("changePassword")}</p>
         </div>
       </div>
-      <div class="flex flex-col gap-4 items-center justify-between">
+      <div class="flex flex-col gap-4 items-center justify-between w-full">
         <PasswordInput
           placeholder={locale.t("oldPassword")}
           value={oldPassword()}
@@ -55,7 +72,7 @@ export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
       <div class="flex items-center justify-center py-2 gap-4 w-full">
         <button
           class="flex bg-backPrimary gap-4 items-center justify-center rounded-md py-1 px-2 shadow-xl"
-          onClick={onClose}
+          onClick={props.onClose}
         >
           <p>{locale.t("cancel")}</p>
           <CancelIcon class="text-rose-600 h-[2rem] w-[2rem]" />
@@ -63,6 +80,7 @@ export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
         <button
           type="submit"
           class="flex bg-backPrimary gap-4 items-center justify-center rounded-md py-1 px-2 shadow-xl"
+          onClick={onSubmit}
         >
           <p>{locale.t("save")}</p>
           <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
@@ -80,7 +98,7 @@ const PasswordInput = (props: {
   const [isVisible, setIsVisible] = createSignal<Boolean>(false);
 
   return (
-    <div class="flex items-center px-4 py-2 justify-between gap-2 bg-backPrimary shadow-xl rounded-md text-2xl">
+    <div class="flex items-center px-4 py-2 justify-between gap-2 bg-backPrimary shadow-xl rounded-md text-2xl w-full">
       <input
         class="bg-transparent"
         placeholder={props.placeholder}

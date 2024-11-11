@@ -2,7 +2,6 @@ import { ParentComponent } from "solid-js";
 import { Sidebar } from "./Sidebar";
 import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
-import { Toaster } from "solid-toast";
 import { UsersIcon } from "@/assets/icons/UsersIcon";
 import { useLocation } from "@solidjs/router";
 import { SettingsIcon } from "@/assets/icons/SettingsIcon";
@@ -64,7 +63,6 @@ export const MainLayout: ParentComponent = (props) => {
           <div class="flex-1 py-2 overflow-auto">{props.children}</div>
         </div>
       </div>
-      <Toaster position="bottom-right" />
     </div>
   );
 };
