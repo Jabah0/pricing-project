@@ -75,5 +75,6 @@ export const dict: RawDictionary = {
   changePassword: "تغيير كلمة السر",
   newPassword: "كلمة السر الجديدة",
   oldPassword: "كلمة السر القديمة",
+  editData: "تعديل البيانات",
   "": "",
 };

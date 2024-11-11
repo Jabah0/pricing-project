@@ -1,4 +1,10 @@
-import { AccountIcon, CancelIcon, ConfirmIcon, EditIcon } from "@/assets/icons";
+import {
+  AccountIcon,
+  CancelIcon,
+  ConfirmIcon,
+  EditIcon,
+  LockIcon,
+} from "@/assets/icons";
 import { useUser } from "@/features/auth/stores/UserStore";
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { ChangePasswordModal } from "@/features/settings/components/ChangePasswordModal";
@@ -12,9 +18,10 @@ const ChangePassword = () => {
   return (
     <>
       <button
-        class="flex justify-center items-center w-full py-1"
+        class="flex gap-4 justify-center items-center w-full py-1"
         onClick={() => openModal()}
       >
+        <LockIcon class="text-primary h-[2rem] w-[2rem]" />
         <p>{locale.t("changePassword")}</p>
       </button>
       <Modal />
@@ -41,11 +48,11 @@ export const ProfileSetting = () => {
         />
       </div>
 
-      <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary drop-shadow-xl px-4 py-2 rounded-md text-2xl">
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm drop-shadow-xl px-4 text-2xl">
+      <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary shadow-xl px-4 py-2 rounded-md text-2xl">
+        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
           <p>{locale.t("fullName")}</p>
         </div>
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm drop-shadow-xl px-4 text-2xl">
+        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
           <Switch>
             <Match when={!isEditing()}>
               <p>{user()?.fullName}</p>
@@ -59,11 +66,11 @@ export const ProfileSetting = () => {
           </Switch>
         </div>
       </div>
-      <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary drop-shadow-xl px-4 py-2 rounded-md text-2xl">
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm drop-shadow-xl px-4 text-2xl">
+      <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary shadow-xl px-4 py-2 rounded-md text-2xl">
+        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
           <p class="">{locale.t("username")}</p>
         </div>
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm drop-shadow-xl px-4 text-2xl">
+        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
           <Switch>
             <Match when={!isEditing()}>
               <p>{user()?.username}</p>
@@ -77,22 +84,23 @@ export const ProfileSetting = () => {
           </Switch>
         </div>
       </div>
-      <div class="flex items-center justify-center gap-4 w-full bg-backPrimary drop-shadow-xl rounded-md">
+      <div class="flex items-center justify-center gap-4 w-full bg-backPrimary shadow-xl rounded-md">
         <Switch>
           <Match when={!isEditing()}>
             <button
-              class="flex justify-center items-center w-full py-1"
+              class="flex gap-4 justify-center items-center w-full py-1"
               onClick={() => setIsEditing(true)}
             >
               <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
+              <p>{locale.t("editData")}</p>
             </button>
           </Match>
           <Match when={isEditing()}>
-            <button class="bg-backgroundForm my-1 rounded-md drop-shadow-lg">
+            <button class="bg-backgroundForm my-1 rounded-md shadow-lg">
               <ConfirmIcon class="text-green-600 h-[2rem] w-[2rem]" />
             </button>
             <button
-              class="bg-backgroundForm my-1 rounded-md drop-shadow-lg"
+              class="bg-backgroundForm my-1 rounded-md shadow-lg"
               onClick={() => {
                 setIsEditing(false);
               }}
@@ -102,7 +110,7 @@ export const ProfileSetting = () => {
           </Match>
         </Switch>
       </div>
-      <div class="flex items-center justify-center gap-4 p-1 w-full bg-backPrimary drop-shadow-xl rounded-md">
+      <div class="flex items-center justify-center gap-4 p-1 w-full bg-backPrimary shadow-xl rounded-md">
         <ChangePassword />
       </div>
     </div>

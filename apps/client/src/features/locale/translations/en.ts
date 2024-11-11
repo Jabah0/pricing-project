@@ -73,5 +73,6 @@ export const dict = {
   changePassword: "Change Password",
   newPassword: "The New Password",
   oldPassword: "The Old Password",
+  editData: "Edit Data",
   "": "",
 };

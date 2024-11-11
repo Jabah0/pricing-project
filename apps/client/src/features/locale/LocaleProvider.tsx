@@ -19,7 +19,7 @@ interface LocaleContextType {
 
 export const languages: LocaleType[] = [
   {
-    title: "Arabic",
+    title: "العربية",
     short: "AR",
     value: "ar",
     dir: "rtl",

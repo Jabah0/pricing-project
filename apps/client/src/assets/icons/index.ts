@@ -32,3 +32,4 @@ export * from "./UsersIcon.tsx";
 export * from "./WatchIcon.tsx";
 export * from "./WatchOffIcon.tsx";
 export * from "./LockIcon.tsx";
+export * from "./EyeOnIcon.tsx";

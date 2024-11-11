@@ -7,7 +7,6 @@ import { UsersIcon } from "@/assets/icons/UsersIcon";
 import { useLocation } from "@solidjs/router";
 import { SettingsIcon } from "@/assets/icons/SettingsIcon";
 import { MedicalServicesIcon } from "@/assets/icons/MedicalServicesIcon";
-import { PersonFilledIcon } from "@/assets/icons/PersonFilledIcon";
 import { HomeIcon } from "@/assets/icons/HomeIcon";
 import { RoleGuard } from "@/features/auth/components/RoleGuard";
 import { Roles } from "@/features/auth/enums/Roles.enum";
