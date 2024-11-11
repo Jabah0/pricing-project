@@ -1,3 +1,4 @@
+import { apiClient } from "@/api/api-client";
 import {
   CancelIcon,
   EditIcon,
@@ -7,12 +8,28 @@ import {
 } from "@/assets/icons";
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { createSignal, Match, Switch } from "solid-js";
+import toast from "solid-toast";
 
 export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
   const locale = useLocale();
 
+  const [oldPassword, setOldPassword] = createSignal("");
+  const [newPassword, setNewPassword] = createSignal("");
+
+  const onSubmit = () => {
+    console.log("executed");
+
+    if (oldPassword() === "" || newPassword() === "")
+      return toast.error("error");
+
+    apiClient.auth.updateMyPassword.mutation({
+      body: { newPassword: newPassword(), oldPassword: oldPassword() },
+    });
+  };
+
   return (
-    <div
+    <form
+      onSubmit={onSubmit}
       class="flex flex-col md:basis-1/3 h-full w-[28rem] gap-3 justify-between 
         items-center bg-backgroundSec text-text rounded-sm shadow-xl py-4 px-4"
     >
@@ -23,8 +40,16 @@ export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
         </div>
       </div>
       <div class="flex flex-col gap-4 items-center justify-between">
-        <PasswordInput placeholder={locale.t("oldPassword")} />
-        <PasswordInput placeholder={locale.t("newPassword")} />
+        <PasswordInput
+          placeholder={locale.t("oldPassword")}
+          value={oldPassword()}
+          onInput={(val) => setOldPassword(val)}
+        />
+        <PasswordInput
+          placeholder={locale.t("newPassword")}
+          value={newPassword()}
+          onInput={(val) => setNewPassword(val)}
+        />
       </div>
 
       <div class="flex items-center justify-center py-2 gap-4 w-full">
@@ -35,19 +60,22 @@ export const ChangePasswordModal = ({ onClose }: { onClose: () => void }) => {
           <p>{locale.t("cancel")}</p>
           <CancelIcon class="text-rose-600 h-[2rem] w-[2rem]" />
         </button>
-        <button class="flex bg-backPrimary gap-4 items-center justify-center rounded-md py-1 px-2 shadow-xl">
+        <button
+          type="submit"
+          class="flex bg-backPrimary gap-4 items-center justify-center rounded-md py-1 px-2 shadow-xl"
+        >
           <p>{locale.t("save")}</p>
           <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
 const PasswordInput = (props: {
   placeholder?: string;
   value?: string | number;
-  onInput?: () => void;
+  onInput?: (value: string) => void;
 }) => {
   const [isVisible, setIsVisible] = createSignal<Boolean>(false);
 
@@ -57,7 +85,7 @@ const PasswordInput = (props: {
         class="bg-transparent"
         placeholder={props.placeholder}
         value={props.value ? props.value : ""}
-        onInput={props.onInput}
+        onInput={(e) => props.onInput?.(e.currentTarget.value)}
         type={isVisible() ? "text" : "password"}
       />
       <button onClick={() => setIsVisible((pre) => !pre)}>
