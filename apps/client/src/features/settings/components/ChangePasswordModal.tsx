@@ -18,18 +18,26 @@ export const ChangePasswordModal = (props: { onClose: () => void }) => {
 
   const onChangePassword = apiClient.auth.updateMyPassword.createMutation({
     onError: () =>
-      toast.error("error", {
+      toast.error(locale.t("updatePasswordError"), {
         style: {
           "background-color": "#292E4E",
           color: "#696b6e",
         },
       }),
-    onSuccess: () => props.onClose(),
+    onSuccess: () => {
+      toast.error(locale.t("updatePasswordSuccess"), {
+        style: {
+          "background-color": "#292E4E",
+          color: "#696b6e",
+        },
+      }),
+        props.onClose();
+    },
   });
 
   const onSubmit = () => {
     if (oldPassword().trim() === "" || newPassword().trim() === "")
-      return toast.error("error", {
+      return toast.success("error", {
         style: {
           "background-color": "#292E4E",
           color: "#696b6e",

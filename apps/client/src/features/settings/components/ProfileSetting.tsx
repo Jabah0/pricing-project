@@ -1,3 +1,4 @@
+import { apiClient } from "@/api/api-client";
 import {
   AccountIcon,
   CancelIcon,
@@ -9,6 +10,7 @@ import { useUser } from "@/features/auth/stores/UserStore";
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { ChangePasswordModal } from "@/features/settings/components/ChangePasswordModal";
 import { createModal } from "@/lib/createModal";
+import { User } from "api-contract";
 import { createSignal, Match, Switch } from "solid-js";
 
 const ChangePassword = () => {
@@ -34,7 +36,30 @@ export const ProfileSetting = () => {
 
   const [isEditing, setIsEditing] = createSignal(false);
 
-  const [user, _setUser] = useUser();
+  const [user, setUser] = useUser();
+
+  const prevUser = user();
+
+  const onUpdateFullName = (val: string) => {
+    setUser((pre) => {
+      if (!pre) return;
+      return { ...pre, fullName: val };
+    });
+  };
+
+  const onUpdateUserMutation = apiClient.users.patch.createMutation({
+    onError: () => {},
+    onSuccess: () => {
+      setIsEditing(true);
+    },
+  });
+
+  const onUpdateUser = () => {
+    onUpdateUserMutation.mutate({
+      body: { username: user()?.username, fullName: user()?.fullName },
+      params: { id: 2 },
+    });
+  };
 
   return (
     <div class="flex flex-col md:basis-1/3 h-full w-full gap-3 justify-center items-center bg-backgroundSec text-text rounded-md shadow-xl py-4 px-4 overflow-auto">
@@ -61,6 +86,7 @@ export const ProfileSetting = () => {
               <input
                 value={user()?.fullName}
                 class="bg-transparent text-center"
+                onInput={(e) => onUpdateFullName(e.currentTarget.value)}
               />
             </Match>
           </Switch>
@@ -103,6 +129,7 @@ export const ProfileSetting = () => {
               class="bg-backgroundForm my-1 rounded-md shadow-lg"
               onClick={() => {
                 setIsEditing(false);
+                setUser(prevUser);
               }}
             >
               <CancelIcon class="text-red-600 h-[2rem] w-[2rem]" />

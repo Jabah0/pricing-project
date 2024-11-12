@@ -12,13 +12,13 @@ export const Settings = () => {
       h-full bg-backPrimary shadow-xl rounded-sm"
     >
       <ProfileSetting />
-      <RoleGuard role={Roles.ADMIN}>
-        <ServicesSetting />
-      </RoleGuard>
       <div class="flex flex-col gap-2 grow h-full">
         <LanguageSettings />
         <DarkModeSetting />
       </div>
+      <RoleGuard role={Roles.ADMIN}>
+        <ServicesSetting />
+      </RoleGuard>
     </div>
   );
 };
