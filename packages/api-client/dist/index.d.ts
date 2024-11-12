@@ -201,6 +201,44 @@ export declare const contract: {
             };
             strictStatusCodes: true;
         };
+        updateMyInfo: {
+            method: "PATCH";
+            body: z.ZodObject<Omit<{
+                id: z.ZodOptional<z.ZodNumber>;
+                username: z.ZodOptional<z.ZodString>;
+                fullName: z.ZodOptional<z.ZodString>;
+                role: z.ZodOptional<z.ZodEnum<["ADMIN", "USER"]>>;
+                password: z.ZodOptional<z.ZodString>;
+                createDate: z.ZodOptional<z.ZodOptional<z.ZodDate>>;
+                updatedDate: z.ZodOptional<z.ZodOptional<z.ZodDate>>;
+                lastLogin: z.ZodOptional<z.ZodOptional<z.ZodDate>>;
+                hashRefreshToken: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+            }, "password" | "id" | "role" | "createDate" | "updatedDate" | "lastLogin" | "hashRefreshToken">, "strip", z.ZodTypeAny, {
+                username?: string | undefined;
+                fullName?: string | undefined;
+            }, {
+                username?: string | undefined;
+                fullName?: string | undefined;
+            }>;
+            path: "/api/update-info";
+            responses: {
+                200: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+                401: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
     };
     users: {
         getAll: {

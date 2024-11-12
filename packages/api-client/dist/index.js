@@ -85,6 +85,23 @@ exports.contract = c.router({
                 401: zod_1.z.object({ message: zod_1.z.string() }),
             },
         },
+        updateMyInfo: {
+            method: "PATCH",
+            path: "/update-info",
+            body: exports.UserSchema.partial().omit({
+                id: true,
+                createDate: true,
+                updatedDate: true,
+                password: true,
+                lastLogin: true,
+                hashRefreshToken: true,
+                role: true,
+            }),
+            responses: {
+                200: zod_1.z.object({ message: zod_1.z.string() }),
+                401: zod_1.z.object({ message: zod_1.z.string() }),
+            },
+        },
     },
     users: {
         getAll: {

@@ -10,7 +10,7 @@ export const DarkModeSetting = () => {
 
   return (
     <CardWrapper>
-      <div class="flex flex-col justify-center gap-4 h-full w-full flex-1 px-4">
+      <div class="flex flex-col justify-center gap-4 h-full w-full flex-1 px-4 max-w-[25rem]">
         <div class="flex justify-center items-center bg-backPrimary h-full drop-shadow-xl rounded-md">
           <Switch>
             <Match when={service.isDarkMode()}>

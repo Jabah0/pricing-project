@@ -35,6 +35,7 @@ import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesS
 import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
 import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
+import { UpdateMyInfoUseCases } from 'src/usecases/user/updateMyInfo';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ export class UsecasesProxyModule {
   static GET_USER_INFORMATION_USECASES_PROXY =
     'getUserInformationUsecasesProxy';
   static UPDATE_MY_PASSWORD_USECASES_PROXY = 'updateMyPasswordUsecasesProxy';
+  static UPDATE_MY_INFO_USECASES_PROXY = 'updateMyInfoUsecasesProxy';
 
   // MedService
   static GET_MED_SERVICE_USECASES_PROXY = 'getMedServiceUsecasesProxy';
@@ -149,6 +151,15 @@ export class UsecasesProxyModule {
                 bcryptService,
               ),
             ),
+        },
+        {
+          inject: [LoggerService, DatabaseUserRepository],
+          provide: UsecasesProxyModule.UPDATE_MY_INFO_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            userRepository: DatabaseUserRepository,
+          ) =>
+            new UseCaseProxy(new UpdateMyInfoUseCases(logger, userRepository)),
         },
         {
           inject: [
@@ -277,6 +288,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.ADD_NEW_USER_USECASES_PROXY,
         UsecasesProxyModule.UPDATE_USER_USECASES_PROXY,
         UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY,
+        UsecasesProxyModule.UPDATE_MY_INFO_USECASES_PROXY,
         UsecasesProxyModule.GET_USERS_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,

@@ -14,6 +14,7 @@ import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { RoleGuard } from 'src/infrastructure/common/guards/role.guard';
 import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesStatus.usecase';
 import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
+import { UpdateMyInfoUseCases } from 'src/usecases/user/updateMyInfo';
 
 @Controller()
 export class UserController {
@@ -30,6 +31,8 @@ export class UserController {
     private readonly getUserServicesStatusUsecaseProxy: UseCaseProxy<GetUserServicesStatusUseCase>,
     @Inject(UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY)
     private readonly updateMyPasswordUsecaseProxy: UseCaseProxy<UpdateMyPasswordUseCases>,
+    @Inject(UsecasesProxyModule.UPDATE_MY_PASSWORD_USECASES_PROXY)
+    private readonly updateMyInfoUsecaseProxy: UseCaseProxy<UpdateMyInfoUseCases>,
   ) {}
 
   @Roles(RolesEnum.ADMIN)
@@ -116,5 +119,26 @@ export class UserController {
         }
       },
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @TsRestHandler(contract.auth.updateMyPassword)
+  async updateMyInfo(@Req() request: any) {
+    return tsRestHandler(contract.auth.updateMyInfo, async ({ body }) => {
+      try {
+        await this.updateMyInfoUsecaseProxy
+          .getInstance()
+          .execute(request.user.id, body);
+        return {
+          status: 200,
+          body: { message: 'password updated successfully' },
+        };
+      } catch (err) {
+        return {
+          status: 401,
+          body: { message: 'passwords does not matches' },
+        };
+      }
+    });
   }
 }

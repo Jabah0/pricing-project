@@ -99,6 +99,24 @@ export const contract = c.router(
           401: z.object({ message: z.string() }),
         },
       },
+
+      updateMyInfo: {
+        method: "PATCH",
+        path: "/update-info",
+        body: UserSchema.partial().omit({
+          id: true,
+          createDate: true,
+          updatedDate: true,
+          password: true,
+          lastLogin: true,
+          hashRefreshToken: true,
+          role: true,
+        }),
+        responses: {
+          200: z.object({ message: z.string() }),
+          401: z.object({ message: z.string() }),
+        },
+      },
     },
 
     users: {
