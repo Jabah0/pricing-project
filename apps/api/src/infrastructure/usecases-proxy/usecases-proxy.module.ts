@@ -35,7 +35,7 @@ import { GetUserServicesStatusUseCase } from 'src/usecases/user/getUserServicesS
 import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
 import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
-import { UpdateMyInfoUseCases } from 'src/usecases/user/updateMyInfo';
+import { UpdateMyInfoUseCases } from 'src/usecases/user/updateMyInfo.usecase';
 
 @Module({
   imports: [

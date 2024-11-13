@@ -10,8 +10,8 @@ import { useUser } from "@/features/auth/stores/UserStore";
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { ChangePasswordModal } from "@/features/settings/components/ChangePasswordModal";
 import { createModal } from "@/lib/createModal";
-import { User } from "api-contract";
 import { createSignal, Match, Switch } from "solid-js";
+import toast from "solid-toast";
 
 const ChangePassword = () => {
   const { Modal, openModal } = createModal({ modal: ChangePasswordModal });
@@ -42,22 +42,24 @@ export const ProfileSetting = () => {
 
   const onUpdateFullName = (val: string) => {
     setUser((pre) => {
-      if (!pre) return;
+      if (!pre) return pre;
       return { ...pre, fullName: val };
     });
   };
 
-  const onUpdateUserMutation = apiClient.users.patch.createMutation({
-    onError: () => {},
+  const onUpdateUserMutation = apiClient.auth.updateMyInfo.createMutation({
+    onError: () => {
+      toast.success(locale.t("updateMyDataError"));
+    },
     onSuccess: () => {
-      setIsEditing(true);
+      setIsEditing(false);
+      toast.success(locale.t("updateMyDataSuccess"));
     },
   });
 
   const onUpdateUser = () => {
     onUpdateUserMutation.mutate({
       body: { username: user()?.username, fullName: user()?.fullName },
-      params: { id: 2 },
     });
   };
 
@@ -97,17 +99,7 @@ export const ProfileSetting = () => {
           <p class="">{locale.t("username")}</p>
         </div>
         <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
-          <Switch>
-            <Match when={!isEditing()}>
-              <p>{user()?.username}</p>
-            </Match>
-            <Match when={isEditing()}>
-              <input
-                value={user()?.username}
-                class="bg-transparent text-center"
-              />
-            </Match>
-          </Switch>
+          <p>{user()?.username}</p>
         </div>
       </div>
       <div class="flex items-center justify-center gap-4 w-full bg-backPrimary shadow-xl rounded-md">
@@ -122,7 +114,10 @@ export const ProfileSetting = () => {
             </button>
           </Match>
           <Match when={isEditing()}>
-            <button class="bg-backgroundForm my-1 rounded-md shadow-lg">
+            <button
+              class="bg-backgroundForm my-1 rounded-md shadow-lg"
+              onClick={() => onUpdateUser()}
+            >
               <ConfirmIcon class="text-green-600 h-[2rem] w-[2rem]" />
             </button>
             <button

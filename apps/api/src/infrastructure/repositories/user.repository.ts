@@ -54,7 +54,6 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async getUser(id: number): Promise<UserM> {
-    console.log('getUser');
     const user = await this.prisma.user.findUnique({
       where: {
         id,

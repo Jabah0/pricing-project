@@ -1,4 +1,4 @@
-import { ParentComponent } from "solid-js";
+import { onMount, ParentComponent } from "solid-js";
 import { Sidebar } from "./Sidebar";
 import { SidebarElement } from "./SidebarElement";
 import { Navbar } from "./Navbar";
@@ -11,10 +11,15 @@ import { RoleGuard } from "@/features/auth/components/RoleGuard";
 import { Roles } from "@/features/auth/enums/Roles.enum";
 import { LogoIcon } from "@/assets/icons/LogoIcon";
 import { useLocale } from "@/features/locale/LocaleProvider";
+import { useWhoAmI } from "@/features/auth/hooks/useWhoAmI";
 
 export const MainLayout: ParentComponent = (props) => {
   const locale = useLocale();
   const location = useLocation();
+
+  onMount(() => {
+    useWhoAmI();
+  });
 
   return (
     <div class="flex gap-6 w-screen h-screen">

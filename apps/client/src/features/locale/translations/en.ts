@@ -76,5 +76,7 @@ export const dict = {
   editData: "Edit Data",
   updatePasswordError: "Error occurred when try to update the password!",
   updatePasswordSuccess: "The password updated successfully",
+  updateMyDataSuccess: "Your data updated successfully",
+  updateMyDataError: "Error occurred when try to update your data!",
   "": "",
 };

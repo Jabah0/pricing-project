@@ -15,34 +15,18 @@ export const ChangePasswordModal = (props: { onClose: () => void }) => {
 
   const [oldPassword, setOldPassword] = createSignal("");
   const [newPassword, setNewPassword] = createSignal("");
+  const isFielded = () =>
+    oldPassword().trim() === "" || newPassword().trim() === "";
 
   const onChangePassword = apiClient.auth.updateMyPassword.createMutation({
-    onError: () =>
-      toast.error(locale.t("updatePasswordError"), {
-        style: {
-          "background-color": "#292E4E",
-          color: "#696b6e",
-        },
-      }),
+    onError: () => toast.error(locale.t("updatePasswordError")),
     onSuccess: () => {
-      toast.error(locale.t("updatePasswordSuccess"), {
-        style: {
-          "background-color": "#292E4E",
-          color: "#696b6e",
-        },
-      }),
-        props.onClose();
+      toast.error(locale.t("updatePasswordSuccess")), props.onClose();
     },
   });
 
   const onSubmit = () => {
-    if (oldPassword().trim() === "" || newPassword().trim() === "")
-      return toast.success("error", {
-        style: {
-          "background-color": "#292E4E",
-          color: "#696b6e",
-        },
-      });
+    if (isFielded()) return toast.success("fillFieldError");
 
     onChangePassword.mutate({
       body: {
@@ -88,7 +72,9 @@ export const ChangePasswordModal = (props: { onClose: () => void }) => {
         <button
           type="submit"
           class="flex bg-backPrimary gap-4 items-center justify-center rounded-md py-1 px-2 shadow-xl"
+          classList={{ "bg-gray-600 cursor-not-allowed": isFielded() }}
           onClick={onSubmit}
+          disabled={true}
         >
           <p>{locale.t("save")}</p>
           <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />

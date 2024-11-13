@@ -5,7 +5,15 @@ export const BaseLayout: ParentComponent = (props) => {
   return (
     <>
       {props.children}
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#292E4E",
+            color: "#d1d5db",
+          },
+        }}
+      />
     </>
   );
 };

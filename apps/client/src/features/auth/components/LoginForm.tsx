@@ -1,11 +1,11 @@
+import { createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import toast from "solid-toast";
+import { apiClient } from "@/api/api-client";
+import { useLocale } from "@/features/locale/LocaleProvider";
+import { useUser } from "../stores/UserStore";
 import { PasswordInput } from "./PasswordInput";
 import { UsernameInput } from "./UsernameInput";
-import { apiClient } from "@/api/api-client";
-import toast from "solid-toast";
-import { useNavigate } from "@solidjs/router";
-import { createSignal } from "solid-js";
-import { useUser } from "../stores/UserStore";
-import { useLocale } from "@/features/locale/LocaleProvider";
 
 export const LoginForm = () => {
   const locale = useLocale();
@@ -26,15 +26,10 @@ export const LoginForm = () => {
 
   const loginMutation = apiClient.auth.login.createMutation({
     onError: () => {
-      toast.error(locale.t("loginFailed"), {
-        style: {
-          background: "#292E4E",
-          color: "#d1d5db",
-        },
-      });
+      toast.error(locale.t("loginFailed"));
     },
     onSuccess: async () => {
-      const { data } = await getUserInfoQuery.refetch();
+      const { data } = await getUserInfoQuery.refetch({});
       setUser(() => data?.body);
       navigator("/");
     },
