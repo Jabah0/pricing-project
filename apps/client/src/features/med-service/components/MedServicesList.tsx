@@ -92,6 +92,7 @@ export const MedServicesList = () => {
           isFetchingNextPage={service.servicesQuery().isFetchingNextPage}
           isFetchSuccess={service.servicesQuery().isSuccess}
           getRowId={(row: MedService) => row.id}
+          SubRow={() => <div> Test SubRow </div>}
         />
       </div>
     </div>

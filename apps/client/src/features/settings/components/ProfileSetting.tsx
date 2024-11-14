@@ -75,21 +75,53 @@ export const ProfileSetting = () => {
         />
       </div>
 
-      <div class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary shadow-xl px-4 py-2 rounded-md text-2xl">
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
+      <div
+        class="flex flex-col gap-3 items-start justify-center w-full bg-backPrimary shadow-xl 
+            px-4 py-2 rounded-md text-2xl"
+      >
+        <div
+          class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 
+              text-2xl"
+        >
           <p>{locale.t("fullName")}</p>
         </div>
-        <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
+        <div
+          class="flex items-center justify-center gap-4 w-full bg-backgroundForm 
+              shadow-xl px-4 text-2xl group"
+        >
           <Switch>
             <Match when={!isEditing()}>
               <p>{user()?.fullName}</p>
+              <button
+                class="flex gap-4 justify-center items-center py-1 invisible group-hover:visible"
+                onClick={() => setIsEditing(true)}
+              >
+                <EditIcon class="text-yellow-700" />
+              </button>
             </Match>
             <Match when={isEditing()}>
               <input
                 value={user()?.fullName}
-                class="bg-transparent text-center"
+                class="bg-transparent w-full"
                 onInput={(e) => onUpdateFullName(e.currentTarget.value)}
               />
+              <div class="flex gap-1">
+                <button
+                  class="bg-backPrimary my-1 rounded-md shadow-lg"
+                  onClick={() => onUpdateUser()}
+                >
+                  <ConfirmIcon class="text-green-600" />
+                </button>
+                <button
+                  class="bg-backPrimary my-1 rounded-md shadow-lg"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setUser(prevUser);
+                  }}
+                >
+                  <CancelIcon class="text-red-600" />
+                </button>
+              </div>
             </Match>
           </Switch>
         </div>
@@ -101,36 +133,6 @@ export const ProfileSetting = () => {
         <div class="flex flex-col items-center justify-center w-full bg-backgroundForm shadow-xl px-4 text-2xl">
           <p>{user()?.username}</p>
         </div>
-      </div>
-      <div class="flex items-center justify-center gap-4 w-full bg-backPrimary shadow-xl rounded-md">
-        <Switch>
-          <Match when={!isEditing()}>
-            <button
-              class="flex gap-4 justify-center items-center w-full py-1"
-              onClick={() => setIsEditing(true)}
-            >
-              <EditIcon class="text-yellow-700 h-[2rem] w-[2rem]" />
-              <p>{locale.t("editData")}</p>
-            </button>
-          </Match>
-          <Match when={isEditing()}>
-            <button
-              class="bg-backgroundForm my-1 rounded-md shadow-lg"
-              onClick={() => onUpdateUser()}
-            >
-              <ConfirmIcon class="text-green-600 h-[2rem] w-[2rem]" />
-            </button>
-            <button
-              class="bg-backgroundForm my-1 rounded-md shadow-lg"
-              onClick={() => {
-                setIsEditing(false);
-                setUser(prevUser);
-              }}
-            >
-              <CancelIcon class="text-red-600 h-[2rem] w-[2rem]" />
-            </button>
-          </Match>
-        </Switch>
       </div>
       <div class="flex items-center justify-center gap-4 p-1 w-full bg-backPrimary shadow-xl rounded-md">
         <ChangePassword />

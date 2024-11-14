@@ -6,3 +6,9 @@ export const RoleGuard: ParentComponent<{ role: string }> = (props) => {
 
   return user()?.role === props.role ? <>{props.children}</> : null;
 };
+
+export const useRoleGuard = (props: { element: any; role: string }) => {
+  const [user, _setUser] = useUser();
+
+  return user()?.role === props.role ? props.element : null;
+};

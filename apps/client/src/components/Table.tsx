@@ -10,7 +10,14 @@ import {
   Row,
 } from "@tanstack/solid-table";
 
-import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  JSX,
+  Show,
+} from "solid-js";
 import { EditFeature, type EditState } from "./solid-table";
 import { TableHeader } from "./TableHeader";
 import { ContextMenu } from "@kobalte/core";
@@ -22,6 +29,8 @@ import {
   ConfirmIcon,
   CancelIcon,
   DotsRotateIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
 } from "@/assets/icons";
 import { ColumnsChooser } from "./ColumnChooser";
 import { TableContext } from "./TableContext";
@@ -32,6 +41,7 @@ type Props<T> = {
   isFetching?: boolean;
   isFetchingNextPage?: boolean;
   isFetchSuccess?: boolean;
+  SubRow?: (props: { row: Row<T> }) => JSX.Element;
   onFetchNextData?: () => void;
   onSort?: (sortBy?: string, sortDirection?: "asc" | "desc") => void;
   onFilter?: (filters: ColumnFiltersState) => void;
@@ -124,6 +134,29 @@ export const Table = <T extends object>(props: Props<T>) => {
 
   const [chooserIsVisible, setChooserIsVisible] = createSignal(false);
 
+  const ExpandColumn: ColumnDef<T> = {
+    id: "expand",
+    header: "",
+    enableColumnFilter: false,
+    enableSorting: false,
+    cell: ({ row }) => (
+      <button onClick={() => row.toggleExpanded()}>
+        {row.getIsExpanded() ? (
+          <ChevronUpIcon class="h-6 w-6 text-gray-500" />
+        ) : (
+          <ChevronDownIcon class="h-6 w-6 text-gray-500" />
+        )}
+      </button>
+    ),
+    size: 0.5,
+    maxSize: 0.5,
+    meta: {
+      title: "",
+      headerTitle: "",
+      type: "string",
+    },
+  };
+
   const handleSorting = (newSorting: Updater<SortingState>) => {
     setSorting(newSorting);
     if (!sorting()[0]) {
@@ -159,13 +192,22 @@ export const Table = <T extends object>(props: Props<T>) => {
     props.onSelect && props.onSelect(row.original);
   };
 
+  const _columns = () =>
+    props.SubRow
+      ? props.onUpdate
+        ? [ExpandColumn, ...props.columns, editColumn]
+        : [ExpandColumn, ...props.columns]
+      : props.onUpdate
+        ? [...props.columns, editColumn]
+        : props.columns;
+
   const table = createSolidTable({
     _features: [EditFeature],
     get data() {
       return props.data;
     },
     get columns() {
-      return props.onUpdate ? [...props.columns, editColumn] : props.columns;
+      return _columns();
     },
     state: {
       get sorting() {
@@ -264,25 +306,34 @@ export const Table = <T extends object>(props: Props<T>) => {
           <tbody>
             <For each={table.getRowModel().rows}>
               {(row) => (
-                <tr
-                  class={`h-10 border-y border-y-background text-text
+                <>
+                  <tr
+                    class={`h-10 border-y border-y-background text-text
                   hover:bg-backgroundSec
                   ${row.getIsSelected() && "bg-opacity-75"}
                   ${props.onSelect && "cursor-pointer"}
                   `}
-                  onClick={() => onSelectRow(row)}
-                >
-                  <For each={row.getVisibleCells()}>
-                    {(cell) => (
-                      <td class="px-[0.5rem]">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                    onClick={() => onSelectRow(row)}
+                  >
+                    <For each={row.getVisibleCells()}>
+                      {(cell) => (
+                        <td class="px-[0.5rem]">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      )}
+                    </For>
+                  </tr>
+                  {row.getIsExpanded() && props.SubRow && (
+                    <tr>
+                      <td colSpan={row.getVisibleCells().length}>
+                        {<props.SubRow row={row} />}
                       </td>
-                    )}
-                  </For>
-                </tr>
+                    </tr>
+                  )}
+                </>
               )}
             </For>
           </tbody>
