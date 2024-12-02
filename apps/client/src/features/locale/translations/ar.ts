@@ -80,5 +80,6 @@ export const dict: RawDictionary = {
   updatePasswordSuccess: "تم تحديث كلمة السر بنجاح",
   updateMyDataSuccess: "تم تحديث بياناتك بنجاح",
   updateMyDataError: "حدث خطأ في محاولة تحديث بياناتك!",
+  noServicePrices: "الخدمة غير مسعرة من قبل!",
   "": "",
 };

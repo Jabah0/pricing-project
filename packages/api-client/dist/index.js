@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contract = exports.CredentialSchema = exports.MedServiceSchema = exports.UserSchema = exports.RolesSchema = void 0;
+exports.contract = exports.CredentialSchema = exports.MedServicesPricesSchema = exports.MedServiceSchema = exports.UserSchema = exports.RolesSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var c = (0, core_1.initContract)();
@@ -27,6 +27,15 @@ exports.MedServiceSchema = zod_1.z.object({
     price: zod_1.z.number(),
     numberOfPricing: zod_1.z.number().default(0),
     limitNumberOfPricing: zod_1.z.number().default(0),
+    unitSize: zod_1.z.number(),
+});
+exports.MedServicesPricesSchema = zod_1.z.object({
+    user: zod_1.z.object({
+        id: zod_1.z.number(),
+        username: zod_1.z.string(),
+        fullName: zod_1.z.string(),
+    }),
+    price: zod_1.z.number(),
     unitSize: zod_1.z.number(),
 });
 exports.CredentialSchema = zod_1.z.object({
@@ -339,6 +348,19 @@ exports.contract = c.router({
             path: "/med-services-update-number-of-pricing",
             body: zod_1.z.object({ limit: zod_1.z.number() }),
             responses: { 200: zod_1.z.object({ message: zod_1.z.string() }) },
+        },
+        getMedServicePrices: {
+            method: "GET",
+            path: "/get-med-service-prices/:id",
+            pathParams: zod_1.z.object({
+                id: zod_1.z.coerce.string(),
+            }),
+            responses: {
+                200: exports.MedServicesPricesSchema.array(),
+                404: zod_1.z.object({
+                    message: zod_1.z.string(),
+                }),
+            },
         },
     },
 }, { pathPrefix: "/api", strictStatusCodes: true });

@@ -1,5 +1,5 @@
 import { PaginatedResult } from '../model/apiResponse';
-import { MedService } from '../model/medService';
+import { MedService, MedServicePrices } from '../model/medService';
 
 export type PriceFilter = {
   equals?: number;
@@ -54,4 +54,6 @@ export interface MedServiceRepository {
   numberOfPricing(): Promise<number>;
 
   updateNumberOfPricing(limit: number): Promise<void>;
+
+  medServicePrices(serviceId: string): Promise<MedServicePrices[]>;
 }

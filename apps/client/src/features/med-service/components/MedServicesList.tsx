@@ -5,6 +5,8 @@ import { ColumnFiltersState } from "@tanstack/solid-table";
 import { EditState } from "@/components/solid-table";
 import { MedService } from "api-contract";
 import { useLocale } from "@/features/locale/LocaleProvider";
+import { MedServicePricesTable } from "./MedServicePricesTable";
+import { isAuth } from "@/features/auth/components/RoleGuard";
 
 export const MedServicesList = () => {
   const locale = useLocale();
@@ -92,7 +94,7 @@ export const MedServicesList = () => {
           isFetchingNextPage={service.servicesQuery().isFetchingNextPage}
           isFetchSuccess={service.servicesQuery().isSuccess}
           getRowId={(row: MedService) => row.id}
-          SubRow={() => <div> Test SubRow </div>}
+          SubRow={isAuth("ADMIN") ? MedServicePricesTable : undefined}
         />
       </div>
     </div>

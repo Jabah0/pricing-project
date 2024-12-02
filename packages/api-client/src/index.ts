@@ -41,6 +41,18 @@ export const MedServiceSchema = z.object({
 
 export type MedService = z.infer<typeof MedServiceSchema>;
 
+export const MedServicesPricesSchema = z.object({
+  user: z.object({
+    id: z.number(),
+    username: z.string(),
+    fullName: z.string(),
+  }),
+  price: z.number(),
+  unitSize: z.number(),
+});
+
+export type MedServicePrices = z.infer<typeof MedServicesPricesSchema>;
+
 export const CredentialSchema = z.object({
   username: z.string(),
   password: z.string(),
@@ -361,6 +373,20 @@ export const contract = c.router(
         path: "/med-services-update-number-of-pricing",
         body: z.object({ limit: z.number() }),
         responses: { 200: z.object({ message: z.string() }) },
+      },
+
+      getMedServicePrices: {
+        method: "GET",
+        path: "/get-med-service-prices/:id",
+        pathParams: z.object({
+          id: z.coerce.string(),
+        }),
+        responses: {
+          200: MedServicesPricesSchema.array(),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
   },

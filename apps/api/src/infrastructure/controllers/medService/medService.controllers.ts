@@ -15,6 +15,7 @@ import { Roles } from 'src/infrastructure/common/decorators/roles.decorator';
 import { Roles as RolesEnum } from 'src/infrastructure/common/enums/role.enum';
 import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getServicesNumberOfPricing';
 import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
+import { GetMedServicePricesUseCase } from 'src/usecases/medService/getMedServicePrices.usecase';
 @Controller()
 export class MedServiceController {
   constructor(
@@ -38,6 +39,8 @@ export class MedServiceController {
       UsecasesProxyModule.UPDATE_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY,
     )
     private readonly updateServicesNumberOfPricingUseCaseProxy: UseCaseProxy<UpdateNumberOfPricingUseCase>,
+    @Inject(UsecasesProxyModule.GET_MED_SERVICES_PRICES_USECASES_PROXY)
+    private readonly getServicePricesUseCaseProxy: UseCaseProxy<GetMedServicePricesUseCase>,
   ) {}
 
   @Roles(RolesEnum.ADMIN)
@@ -239,6 +242,25 @@ export class MedServiceController {
         return {
           status: 200,
           body: { message: 'The number of pricing updated successfully' },
+        };
+      },
+    );
+  }
+
+  @Roles(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @TsRestHandler(contract.medServices.getMedServicePrices)
+  async getServicePrices() {
+    return tsRestHandler(
+      contract.medServices.getMedServicePrices,
+      async ({ params: { id } }) => {
+        const data = await this.getServicePricesUseCaseProxy
+          .getInstance()
+          .execute(id);
+
+        return {
+          status: 200,
+          body: data,
         };
       },
     );

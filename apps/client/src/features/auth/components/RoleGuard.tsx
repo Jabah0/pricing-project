@@ -12,3 +12,9 @@ export const useRoleGuard = (props: { element: any; role: string }) => {
 
   return user()?.role === props.role ? props.element : null;
 };
+
+export const isAuth = (role: string) => {
+  const [user, _setUser] = useUser();
+
+  return user()?.role === role ? true : false;
+};

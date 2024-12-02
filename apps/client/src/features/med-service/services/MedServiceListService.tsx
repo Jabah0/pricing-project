@@ -3,7 +3,6 @@ import toast from "solid-toast";
 import { contract } from "api-contract";
 import { apiClient } from "@/api/api-client";
 import { ErrorToast } from "@/toasts/ErrorToast";
-import { SuccessToast } from "@/toasts/SuccessToast";
 import { useQueryClient, InfiniteData } from "@tanstack/solid-query";
 import { ClientInferResponses } from "@ts-rest/core";
 import { NumberFilter } from "@/components/Table";
@@ -182,15 +181,7 @@ export const MedServiceListService = () => {
         ));
       },
       onSuccess: () => {
-        toast.custom((t) => (
-          <SuccessToast
-            onDismiss={() => toast.dismiss(t.id)}
-            message={
-              locale.t("serviceUpdatedSuccessfully") ||
-              "serviceUpdatedSuccessfully"
-            }
-          />
-        ));
+        toast.success(locale.t("serviceUpdatedSuccessfully"));
       },
       onSettled: () => {
         queryClient.invalidateQueries(ServiceQueryKey());
@@ -209,7 +200,6 @@ export const MedServiceListService = () => {
     id: string,
     body?: Partial<{ price: number; unitSize: number }>
   ) => {
-    console.log("body", body);
     updateMedServiceMutation.mutate({
       params: { id },
       body: { ...body },

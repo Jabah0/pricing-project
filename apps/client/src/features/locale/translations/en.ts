@@ -78,5 +78,6 @@ export const dict = {
   updatePasswordSuccess: "The password updated successfully",
   updateMyDataSuccess: "Your data updated successfully",
   updateMyDataError: "Error occurred when try to update your data!",
+  noServicePrices: "The service is not priced yet!",
   "": "",
 };

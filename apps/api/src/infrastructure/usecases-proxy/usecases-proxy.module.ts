@@ -36,6 +36,7 @@ import { GetServicesNumberOfPricingUseCase } from 'src/usecases/medService/getSe
 import { UpdateNumberOfPricingUseCase } from 'src/usecases/medService/updateNumberOfPricing';
 import { UpdateMyPasswordUseCases } from 'src/usecases/user/updateMyPassword.usecase';
 import { UpdateMyInfoUseCases } from 'src/usecases/user/updateMyInfo.usecase';
+import { GetMedServicePricesUseCase } from 'src/usecases/medService/getMedServicePrices.usecase';
 
 @Module({
   imports: [
@@ -77,7 +78,9 @@ export class UsecasesProxyModule {
   static GET_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY =
     'getMedServicesNumberOfPricing';
   static UPDATE_MED_SERVICES_NUMBER_OF_PRICING_USECASES_PROXY =
-    'updateMedServicesNumberOfPricing';
+    'updateMedServicesNumberOfPricingUsecasesProxy';
+  static GET_MED_SERVICES_PRICES_USECASES_PROXY =
+    'getMedServicesPricesUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -272,6 +275,17 @@ export class UsecasesProxyModule {
               new UpdateMedServiceUseCase(logger, medServiceRepository),
             ),
         },
+        {
+          inject: [LoggerService, DatabaseMedServiceRepository],
+          provide: UsecasesProxyModule.GET_MED_SERVICES_PRICES_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            medServiceRepository: DatabaseMedServiceRepository,
+          ) =>
+            new UseCaseProxy(
+              new GetMedServicePricesUseCase(medServiceRepository),
+            ),
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_MED_SERVICE_USECASES_PROXY,
@@ -293,6 +307,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.GET_USER_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_INFORMATION_USECASES_PROXY,
         UsecasesProxyModule.GET_USER_SERVICES_STATUS_USECASES_PROXY,
+        UsecasesProxyModule.GET_MED_SERVICES_PRICES_USECASES_PROXY,
       ],
     };
   }

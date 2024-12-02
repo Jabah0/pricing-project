@@ -148,8 +148,8 @@ export const Table = <T extends object>(props: Props<T>) => {
         )}
       </button>
     ),
-    size: 0.5,
-    maxSize: 0.5,
+    size: 1,
+    maxSize: 1,
     meta: {
       title: "",
       headerTitle: "",

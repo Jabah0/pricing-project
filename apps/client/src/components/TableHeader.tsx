@@ -53,7 +53,7 @@ export const TableHeader = (props: Props) => {
 
   return (
     <th
-      class={`text-start border-e border-gray-600 last:border-none px-[0.5rem] relative`}
+      class={`text-start px-[0.5rem] relative group`}
       style={{ width: `${props.size}px` }}
     >
       <div class="flex flex-col gap-2 py-2 px-1 group text-text">
@@ -90,8 +90,8 @@ export const TableHeader = (props: Props) => {
       </div>
       <div
         class={`
-          w-1 h-full absolute end-0 top-0 bg-gray-500
-          cursor-col-resize select-none touch-none opacity-0 hover:opacity-100`}
+          w-1 h-full absolute end-0 top-0 bg-gray-500 group-hover:opacity-100
+          cursor-col-resize select-none touch-none opacity-0`}
         onMouseDown={props.resizeHandler()}
         onTouchStart={props.resizeHandler()}
       />

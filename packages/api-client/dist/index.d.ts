@@ -95,6 +95,40 @@ export declare const MedServiceSchema: z.ZodObject<{
     limitNumberOfPricing?: number | undefined;
 }>;
 export type MedService = z.infer<typeof MedServiceSchema>;
+export declare const MedServicesPricesSchema: z.ZodObject<{
+    user: z.ZodObject<{
+        id: z.ZodNumber;
+        username: z.ZodString;
+        fullName: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        username: string;
+        id: number;
+        fullName: string;
+    }, {
+        username: string;
+        id: number;
+        fullName: string;
+    }>;
+    price: z.ZodNumber;
+    unitSize: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    price: number;
+    unitSize: number;
+    user: {
+        username: string;
+        id: number;
+        fullName: string;
+    };
+}, {
+    price: number;
+    unitSize: number;
+    user: {
+        username: string;
+        id: number;
+        fullName: string;
+    };
+}>;
+export type MedServicePrices = z.infer<typeof MedServicesPricesSchema>;
 export declare const CredentialSchema: z.ZodObject<{
     username: z.ZodString;
     password: z.ZodString;
@@ -1171,6 +1205,60 @@ export declare const contract: {
             path: "/api/med-services-update-number-of-pricing";
             responses: {
                 200: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+            strictStatusCodes: true;
+        };
+        getMedServicePrices: {
+            pathParams: z.ZodObject<{
+                id: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                id: string;
+            }, {
+                id: string;
+            }>;
+            method: "GET";
+            path: "/api/get-med-service-prices/:id";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    user: z.ZodObject<{
+                        id: z.ZodNumber;
+                        username: z.ZodString;
+                        fullName: z.ZodString;
+                    }, "strip", z.ZodTypeAny, {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                    }, {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                    }>;
+                    price: z.ZodNumber;
+                    unitSize: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    price: number;
+                    unitSize: number;
+                    user: {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                    };
+                }, {
+                    price: number;
+                    unitSize: number;
+                    user: {
+                        username: string;
+                        id: number;
+                        fullName: string;
+                    };
+                }>, "many">;
+                404: z.ZodObject<{
                     message: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     message: string;

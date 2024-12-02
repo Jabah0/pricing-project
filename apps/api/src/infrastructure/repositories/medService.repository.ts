@@ -1,4 +1,4 @@
-import { MedService } from 'src/domain/model/medService';
+import { MedService, MedServicePrices } from 'src/domain/model/medService';
 import {
   MedServiceRepository,
   PriceFilter,
@@ -297,6 +297,25 @@ export class DatabaseMedServiceRepository implements MedServiceRepository {
     });
 
     return pricing.limitNumberOfPricing;
+  }
+
+  async medServicePrices(serviceId: string): Promise<MedServicePrices[]> {
+    return await this.prisma.userMedServices.findMany({
+      where: {
+        medServiceId: serviceId,
+      },
+      select: {
+        price: true,
+        unitSize: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            fullName: true,
+          },
+        },
+      },
+    });
   }
 
   async updateNumberOfPricing(limit: number): Promise<void> {

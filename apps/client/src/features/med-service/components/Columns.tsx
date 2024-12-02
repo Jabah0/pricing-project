@@ -1,5 +1,4 @@
 import { EditableCell } from "@/components/Table";
-import { useRoleGuard } from "@/features/auth/components/RoleGuard";
 import { RawDictionary } from "@/features/locale";
 import { useLocale } from "@/features/locale/LocaleProvider";
 import { ColumnDef } from "@tanstack/solid-table";
@@ -16,7 +15,6 @@ export const Columns: ColumnDef<MedService>[] = [
     accessorKey: "id",
     header: () => <Header title="id" />,
     meta: { title: "id", headerTitle: "id", type: "string" },
-
     enableColumnFilter: false,
   },
   {
